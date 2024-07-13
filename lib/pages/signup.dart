@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-class SignUp extends StatelessWidget {
+class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
   @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-        home: Scaffold(
-      backgroundColor: Color.fromARGB(255, 159, 73, 73),
-    ));
+    return const Scaffold();
   }
 }

@@ -5,22 +5,28 @@ class Button extends StatelessWidget {
   final Color bgColor;
   final Color textColor;
 
-  const Button(
-      {super.key,
-      required this.text,
-      required this.bgColor,
-      required this.textColor});
+  const Button({
+    super.key,
+    required this.text,
+    required this.bgColor,
+    required this.textColor,
+  });
 
   @override
   Widget build(BuildContext build) {
     return Container(
+      height: 42.0,
+      width: 500.0,
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(45),
+        borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 130),
-        child: Text(text),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
+        child: Text(
+          text,
+          style: TextStyle(color: textColor),
+        ),
       ),
     );
   }

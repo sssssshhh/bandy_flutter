@@ -1,3 +1,4 @@
+import 'package:bandy_flutter/pages/SignUpSignIn/signUpSignIn.dart';
 import 'package:bandy_flutter/pages/ai_test.dart';
 import 'package:bandy_flutter/pages/onboarding.dart';
 import 'package:bandy_flutter/widgets/Button.dart';
@@ -7,12 +8,29 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: OnBoarding());
+    return MaterialApp(
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+            backgroundColor: const Color.fromARGB(255, 114, 117, 122),
+          ),
+          cardColor: const Color(0xFFF4EDDB),
+          textTheme: const TextTheme(
+            titleLarge: TextStyle(
+              color: Colors.red,
+            ),
+          ),
+        ),
+        home: const SignUpSignIn());
   }
 }
     // return const MaterialApp(
