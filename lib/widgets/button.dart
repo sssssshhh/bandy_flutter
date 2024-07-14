@@ -1,3 +1,4 @@
+import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
@@ -14,22 +15,24 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext build) {
-    return Container(
-      height: 40.0,
-      width: 300.0,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            text,
-            style: TextStyle(color: textColor),
+    return FractionallySizedBox(
+      widthFactor: 1,
+      child: AnimatedContainer(
+          padding: const EdgeInsets.symmetric(
+            vertical: Sizes.size14,
           ),
-        ],
-      ),
+          duration: const Duration(microseconds: 500),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: bgColor,
+          ),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: textColor,
+            ),
+          )),
     );
   }
 }

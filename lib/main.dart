@@ -1,5 +1,5 @@
-import 'package:bandy_flutter/pages/authentication/sign_up.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up_or_sign_in.dart';
+import 'package:bandy_flutter/pages/authentication/sign_up/select_auth_or_self.dart';
+import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.dart';
 import 'package:bandy_flutter/pages/ai_test.dart';
 import 'package:bandy_flutter/pages/onboarding.dart';
 import 'package:bandy_flutter/widgets/Button.dart';
@@ -21,16 +21,13 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white, // bgColor for all pages
           colorScheme: ColorScheme.fromSwatch(
             backgroundColor: Colors.white,
           ),
-          cardColor: const Color(0xFFF4EDDB),
-          textTheme: const TextTheme(
-            titleLarge:
-                TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
+          primaryColor: Colors.amber[500], // TODO: check RGB from pigma
         ),
-        home: const SignUp());
+        home: const SelectSignUp());
   }
 }
     // return const MaterialApp(
