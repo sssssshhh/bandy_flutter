@@ -15,18 +15,20 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext build) {
     return Container(
-      height: 42.0,
-      width: 500.0,
+      height: 40.0,
+      width: 300.0,
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
-        child: Text(
-          text,
-          style: TextStyle(color: textColor),
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            text,
+            style: TextStyle(color: textColor),
+          ),
+        ],
       ),
     );
   }
