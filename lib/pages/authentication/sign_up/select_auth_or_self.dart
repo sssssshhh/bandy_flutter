@@ -1,7 +1,7 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_email.dart';
+import 'package:bandy_flutter/pages/authentication/sign_up/use_email.dart';
 import 'package:bandy_flutter/pages/authentication/widget/auth_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

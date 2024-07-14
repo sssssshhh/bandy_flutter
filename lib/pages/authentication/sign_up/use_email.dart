@@ -1,52 +1,51 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up/create_password.dart';
+import 'package:bandy_flutter/pages/authentication/sign_up/create_Account_name.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:flutter/material.dart';
 
-class CreateNickname extends StatefulWidget {
-  const CreateNickname({super.key});
+class SignUpEmail extends StatefulWidget {
+  const SignUpEmail({super.key});
 
   @override
-  State<CreateNickname> createState() => _CreateNicknameSignInState();
+  State<SignUpEmail> createState() => _SignUpEmailSignInState();
 }
 
-class _CreateNicknameSignInState extends State<CreateNickname> {
-  final TextEditingController _nicknameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
+class _SignUpEmailSignInState extends State<SignUpEmail> {
+  final TextEditingController _emailController = TextEditingController();
 
-  String _nickname = '';
+  String _email = '';
 
   void _onAccountTap(BuildContext context) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const CreatePassword()));
+        .push(MaterialPageRoute(builder: (context) => const CreateAccount()));
   }
 
   @override
   void initState() {
     super.initState();
 
-    _nicknameController.addListener(() {
+    _emailController.addListener(() {
       setState(() {
-        _nickname = _nicknameController.text;
+        _email = _emailController.text;
       });
     });
   }
 
   @override
   void dispose() {
-    _nicknameController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
-  String? _isnicknameValid() {
-    if (_nickname.isEmpty) return "your nick name please";
-    return null;
-  }
-
-  String? _isLastNameValid() {
-    if (_nickname.isEmpty) return "your last name please";
+  String? _isEmailValid() {
+    if (_email.isEmpty) return null;
+    final regExp = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    if (!regExp.hasMatch(_email)) {
+      return "Email not valid";
+    }
     return null;
   }
 
@@ -70,21 +69,22 @@ class _CreateNicknameSignInState extends State<CreateNickname> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Create Nickname',
+                          'Use Your Email',
                           style: Fonts.titleLarge,
                         ),
                         Gaps.v8,
                         const Text(
-                          'Nickname',
+                          'Email',
                           style: Fonts.titleSmall,
                         ),
+                        Gaps.v8,
                         TextField(
-                          controller: _nicknameController,
-                          keyboardType: TextInputType.name,
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
                           autocorrect: false,
                           decoration: InputDecoration(
-                            hintText: 'Enter your nickname',
-                            errorText: _isnicknameValid(),
+                            hintText: 'Enter your Email Address',
+                            errorText: _isEmailValid(),
                             enabledBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.grey,
@@ -103,7 +103,7 @@ class _CreateNicknameSignInState extends State<CreateNickname> {
                           onTap: () => _onAccountTap(context),
                           child: FormButton(
                             text: 'Continue',
-                            disabled: _nickname.isEmpty,
+                            disabled: _email.isEmpty || _isEmailValid() != null,
                           ),
                         ),
                       ],

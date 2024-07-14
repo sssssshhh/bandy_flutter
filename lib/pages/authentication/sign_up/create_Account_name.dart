@@ -5,18 +5,18 @@ import 'package:bandy_flutter/pages/authentication/sign_up/create_password.dart'
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:flutter/material.dart';
 
-class CreateNickname extends StatefulWidget {
-  const CreateNickname({super.key});
+class CreateAccount extends StatefulWidget {
+  const CreateAccount({super.key});
 
   @override
-  State<CreateNickname> createState() => _CreateNicknameSignInState();
+  State<CreateAccount> createState() => _CreateAccountSignInState();
 }
 
-class _CreateNicknameSignInState extends State<CreateNickname> {
-  final TextEditingController _nicknameController = TextEditingController();
+class _CreateAccountSignInState extends State<CreateAccount> {
+  final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
 
-  String _nickname = '';
+  String _firstName = '';
 
   void _onAccountTap(BuildContext context) {
     Navigator.of(context)
@@ -27,26 +27,26 @@ class _CreateNicknameSignInState extends State<CreateNickname> {
   void initState() {
     super.initState();
 
-    _nicknameController.addListener(() {
+    _firstNameController.addListener(() {
       setState(() {
-        _nickname = _nicknameController.text;
+        _firstName = _firstNameController.text;
       });
     });
   }
 
   @override
   void dispose() {
-    _nicknameController.dispose();
+    _firstNameController.dispose();
     super.dispose();
   }
 
-  String? _isnicknameValid() {
-    if (_nickname.isEmpty) return "your nick name please";
+  String? _isFirstNameValid() {
+    if (_firstName.isEmpty) return "your first name please";
     return null;
   }
 
   String? _isLastNameValid() {
-    if (_nickname.isEmpty) return "your last name please";
+    if (_firstName.isEmpty) return "your last name please";
     return null;
   }
 
@@ -70,21 +70,46 @@ class _CreateNicknameSignInState extends State<CreateNickname> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Create Nickname',
+                          'Create Account',
                           style: Fonts.titleLarge,
                         ),
                         Gaps.v8,
                         const Text(
-                          'Nickname',
+                          'First Name',
                           style: Fonts.titleSmall,
                         ),
                         TextField(
-                          controller: _nicknameController,
+                          controller: _firstNameController,
                           keyboardType: TextInputType.name,
                           autocorrect: false,
                           decoration: InputDecoration(
-                            hintText: 'Enter your nickname',
-                            errorText: _isnicknameValid(),
+                            hintText: 'Enter your first name',
+                            errorText: _isFirstNameValid(),
+                            enabledBorder: const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
+                          cursorColor: Theme.of(context).primaryColor,
+                        ),
+                        Gaps.v8,
+                        const Text(
+                          'Last Name',
+                          style: Fonts.titleSmall,
+                        ),
+                        TextField(
+                          controller: _lastNameController,
+                          keyboardType: TextInputType.name,
+                          autocorrect: false,
+                          decoration: InputDecoration(
+                            hintText: 'Enter your last name',
+                            errorText: _isLastNameValid(),
                             enabledBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.grey,
@@ -103,7 +128,7 @@ class _CreateNicknameSignInState extends State<CreateNickname> {
                           onTap: () => _onAccountTap(context),
                           child: FormButton(
                             text: 'Continue',
-                            disabled: _nickname.isEmpty,
+                            disabled: _firstName.isEmpty,
                           ),
                         ),
                       ],

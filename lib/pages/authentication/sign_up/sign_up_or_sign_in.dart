@@ -1,5 +1,4 @@
 import 'package:bandy_flutter/constants/fonts.dart';
-import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
