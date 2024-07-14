@@ -1,26 +1,20 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up/create_account.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:flutter/material.dart';
 
-class SignUpEmail extends StatefulWidget {
-  const SignUpEmail({super.key});
+class CreateAccount extends StatefulWidget {
+  const CreateAccount({super.key});
 
   @override
-  State<SignUpEmail> createState() => _SignUpEmailSignInState();
+  State<CreateAccount> createState() => _CreateAccountSignInState();
 }
 
-class _SignUpEmailSignInState extends State<SignUpEmail> {
+class _CreateAccountSignInState extends State<CreateAccount> {
   final TextEditingController _emailController = TextEditingController();
 
   String _email = '';
-
-  void _onAccountTap(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const CreateAccount()));
-  }
 
   @override
   void initState() {
@@ -31,6 +25,11 @@ class _SignUpEmailSignInState extends State<SignUpEmail> {
         _email = _emailController.text;
       });
     });
+  }
+
+  void _onNicknameTap(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const CreateAccount()));
   }
 
   @override
@@ -47,19 +46,19 @@ class _SignUpEmailSignInState extends State<SignUpEmail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Use Your Email',
+                      'Create Your Account',
                       style: Fonts.titleLarge,
                     ),
                     Gaps.v8,
                     const Text(
-                      'Email',
+                      'First name',
                       style: Fonts.titleSmall,
                     ),
                     Gaps.v8,
                     TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                        hintText: 'Enter your Email Address',
+                        hintText: 'Enter your first name',
                         enabledBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.grey,
@@ -82,7 +81,7 @@ class _SignUpEmailSignInState extends State<SignUpEmail> {
       ),
       bottomNavigationBar: BottomAppBar(
         child: GestureDetector(
-          onTap: () => _onAccountTap(context),
+          onTap: () => _onNicknameTap(context),
           child: FormButton(
             text: 'Continue',
             disabled: _email.isEmpty,

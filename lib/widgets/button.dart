@@ -21,7 +21,7 @@ class Button extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
             vertical: Sizes.size14,
           ),
-          duration: const Duration(microseconds: 500),
+          duration: const Duration(microseconds: 1000),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(50),
             color: bgColor,
