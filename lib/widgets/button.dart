@@ -31,6 +31,7 @@ class Button extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: textColor,
+              fontWeight: FontWeight.bold,
             ),
           )),
     );
