@@ -1,11 +1,15 @@
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AuthButton extends StatelessWidget {
   final String text;
+  final FaIcon icon;
+
   const AuthButton({
     super.key,
     required this.text,
+    required this.icon,
   });
 
   @override
@@ -22,9 +26,16 @@ class AuthButton extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(15),
         ),
-        child: Text(
-          textAlign: TextAlign.center,
-          text,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon,
+            const SizedBox(width: 8),
+            Text(
+              textAlign: TextAlign.center,
+              text,
+            ),
+          ],
         ),
       ),
     );

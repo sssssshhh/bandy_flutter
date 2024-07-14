@@ -3,6 +3,7 @@ import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/widget/auth_button.dart';
 import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -36,9 +37,18 @@ class _SignUpSignInState extends State<SignUp> {
                         'Lighting Up Your Korean Learning Journey',
                         style: Fonts.titleSmall,
                       ),
-                      AuthButton(text: 'Continue with Apple'),
-                      AuthButton(text: 'Continue with Google'),
-                      AuthButton(text: 'Continue with Facebook'),
+                      AuthButton(
+                        text: 'Continue with Apple',
+                        icon: FaIcon(FontAwesomeIcons.apple),
+                      ),
+                      AuthButton(
+                        text: 'Continue with Google',
+                        icon: FaIcon(FontAwesomeIcons.google),
+                      ),
+                      AuthButton(
+                        text: 'Continue with Facebook',
+                        icon: FaIcon(FontAwesomeIcons.facebook),
+                      ),
                     ]),
               ),
             ],
