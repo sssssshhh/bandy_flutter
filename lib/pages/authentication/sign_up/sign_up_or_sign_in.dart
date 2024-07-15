@@ -61,7 +61,7 @@ class _SignUpOrSignInState extends State<SignUpOrSignIn> {
               GestureDetector(
                 onTap: () => _onSelectSignUpTap(context),
                 child: const Button(
-                  text: 'Sing up for free',
+                  text: 'Sing up for fred',
                   bgColor: Colors.orange, // TODO: Colors.orange[200]
                   textColor: Colors.white,
                 ),

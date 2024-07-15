@@ -1,8 +1,4 @@
-import 'package:bandy_flutter/pages/authentication/sign_up/select_auth_or_self.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.dart';
-import 'package:bandy_flutter/pages/ai_test.dart';
-import 'package:bandy_flutter/pages/onboarding.dart';
-import 'package:bandy_flutter/widgets/Button.dart';
+import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -27,6 +23,6 @@ class _MyAppState extends State<MyApp> {
           ),
           primaryColor: Colors.amber[500], // TODO: check RGB from pigma
         ),
-        home: const SignUpOrSignIn());
+        home: const Lecture());
   }
 }
