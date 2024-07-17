@@ -1,6 +1,3 @@
-import 'dart:ffi';
-
-import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 

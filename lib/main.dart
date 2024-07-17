@@ -1,3 +1,6 @@
+import 'package:bandy_flutter/pages/onBoarding/onBoarding.dart';
+import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.dart';
+import 'package:bandy_flutter/pages/lectures/ai_test.dart';
 import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +26,6 @@ class _MyAppState extends State<MyApp> {
           ),
           primaryColor: Colors.amber[500], // TODO: check RGB from pigma
         ),
-        home: const Lecture());
+        home: const Tutorial());
   }
 }

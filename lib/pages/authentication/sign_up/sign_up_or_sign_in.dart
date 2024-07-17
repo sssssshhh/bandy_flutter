@@ -1,7 +1,7 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/Sign_in/Sign_in_auth.dart';
+import 'package:bandy_flutter/pages/authentication/sign_in/Sign_in_auth.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/select_auth_or_self.dart';
 import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -61,8 +61,8 @@ class _SignUpOrSignInState extends State<SignUpOrSignIn> {
               GestureDetector(
                 onTap: () => _onSelectSignUpTap(context),
                 child: const Button(
-                  text: 'Sing up for fred',
-                  bgColor: Colors.orange, // TODO: Colors.orange[200]
+                  text: 'Sing up for free',
+                  bgColor: Colors.yellow, // TODO: Colors.orange[200]
                   textColor: Colors.white,
                 ),
               ),
