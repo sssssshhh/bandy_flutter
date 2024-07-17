@@ -1,4 +1,6 @@
 import 'package:bandy_flutter/constants/sizes.dart';
+import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.dart';
+import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class Tutorial extends StatefulWidget {
@@ -9,15 +11,24 @@ class Tutorial extends StatefulWidget {
 }
 
 class _TutorialState extends State<Tutorial> {
+  void _onSignInSignUpTap(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const SignUpOrSignIn(),
+      ),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        body: const SafeArea(
+        body: SafeArea(
           child: TabBarView(
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(Sizes.size40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +52,7 @@ class _TutorialState extends State<Tutorial> {
                   ],
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(Sizes.size40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,27 +77,45 @@ class _TutorialState extends State<Tutorial> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: Sizes.size20,
-                  vertical: Sizes.size40,
+                padding: const EdgeInsets.fromLTRB(
+                  Sizes.size20, // Left
+                  Sizes.size40, // Top,
+                  Sizes.size20, // Right
+                  0, // Bottom
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Have fun learning with experts',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                    const SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Have fun learning with experts',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            'Listen to lectures and complete quizzes',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w100,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Text(
-                      'Listen to lectures and complete quizzes',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w100,
+                    GestureDetector(
+                      onTap: () => _onSignInSignUpTap(context),
+                      child: const Button(
+                        text: 'Get Started',
+                        bgColor: Colors.orange, // TODO: Colors.orange[200]
+                        textColor: Colors.white,
                       ),
                     ),
                   ],
@@ -95,18 +124,15 @@ class _TutorialState extends State<Tutorial> {
             ],
           ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          child: Container(
-            padding: const EdgeInsets.all(0.6),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TabPageSelector(
-                  color: Colors.white,
-                  selectedColor: Colors.amberAccent,
-                ),
-              ],
-            ),
+        bottomNavigationBar: const BottomAppBar(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TabPageSelector(
+                color: Colors.white,
+                selectedColor: Colors.amberAccent,
+              ),
+            ],
           ),
         ),
       ),
