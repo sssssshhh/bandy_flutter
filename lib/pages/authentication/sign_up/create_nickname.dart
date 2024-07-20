@@ -1,32 +1,26 @@
-import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up/create_password.dart';
+import 'package:bandy_flutter/pages/authentication/view_model/signup_view_model.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CreateNickname extends StatefulWidget {
+class CreateNickname extends ConsumerStatefulWidget {
   const CreateNickname({super.key});
 
   @override
-  State<CreateNickname> createState() => _CreateNicknameSignInState();
+  ConsumerState<CreateNickname> createState() => _CreateNicknameState();
 }
 
-class _CreateNicknameSignInState extends State<CreateNickname> {
+class _CreateNicknameState extends ConsumerState<CreateNickname> {
   final TextEditingController _nicknameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
 
-  String _nickname = '';
-
-  void _onAccountTap(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const CreatePassword()));
-  }
+  String _nickname = "";
 
   @override
   void initState() {
     super.initState();
-
     _nicknameController.addListener(() {
       setState(() {
         _nickname = _nicknameController.text;
@@ -40,79 +34,62 @@ class _CreateNicknameSignInState extends State<CreateNickname> {
     super.dispose();
   }
 
-  String? _isnicknameValid() {
-    if (_nickname.isEmpty) return "your nick name please";
-    return null;
-  }
-
-  String? _isLastNameValid() {
-    if (_nickname.isEmpty) return "your last name please";
-    return null;
-  }
-
-  void _onScaffoldTap() {
-    FocusScope.of(context).unfocus();
+  void _onNextTap() {
+    ref.read(signUpProvider.notifier).signUp();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: _onScaffoldTap,
-        child: Scaffold(
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(Sizes.size40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Create Nickname',
-                          style: Fonts.titleLarge,
-                        ),
-                        Gaps.v8,
-                        const Text(
-                          'Nickname',
-                          style: Fonts.titleSmall,
-                        ),
-                        TextField(
-                          controller: _nicknameController,
-                          keyboardType: TextInputType.name,
-                          autocorrect: false,
-                          decoration: InputDecoration(
-                            hintText: 'Enter your nickname',
-                            errorText: _isnicknameValid(),
-                            enabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                              ),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                          ),
-                          cursorColor: Theme.of(context).primaryColor,
-                        ),
-                        Gaps.v28,
-                        GestureDetector(
-                          onTap: () => _onAccountTap(context),
-                          child: FormButton(
-                            text: 'Continue',
-                            disabled: _nickname.isEmpty,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Sign up",
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.size36,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Gaps.v40,
+            const Text(
+              "Create Your nickname",
+              style: TextStyle(
+                fontSize: Sizes.size24,
+                fontWeight: FontWeight.w700,
               ),
             ),
-          ),
-        ));
+            Gaps.v16,
+            TextField(
+              enabled: false,
+              controller: _nicknameController,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+              ),
+              cursorColor: Theme.of(context).primaryColor,
+            ),
+            Gaps.v28,
+            GestureDetector(
+              onTap: _onNextTap,
+              child: FormButton(
+                text: 'Continue',
+                disabled: ref.watch(signUpProvider).isLoading,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

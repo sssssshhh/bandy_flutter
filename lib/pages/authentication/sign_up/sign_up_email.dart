@@ -2,17 +2,22 @@ import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/create_Account_name.dart';
+import 'package:bandy_flutter/pages/authentication/sign_up/create_password.dart';
+import 'package:bandy_flutter/pages/authentication/view_model/signup_view_model.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignUpEmail extends StatefulWidget {
+class SignUpEmail extends ConsumerStatefulWidget {
+//  final String username;
+
   const SignUpEmail({super.key});
 
   @override
-  State<SignUpEmail> createState() => _SignUpEmailSignInState();
+  ConsumerState<SignUpEmail> createState() => _SignUpEmailSignInState();
 }
 
-class _SignUpEmailSignInState extends State<SignUpEmail> {
+class _SignUpEmailSignInState extends ConsumerState<SignUpEmail> {
   final TextEditingController _emailController = TextEditingController();
 
   String _email = '';
@@ -53,6 +58,17 @@ class _SignUpEmailSignInState extends State<SignUpEmail> {
     FocusScope.of(context).unfocus();
   }
 
+  void _onSubmit() {
+    if (_email.isEmpty || _isEmailValid() != null) return;
+    ref.read(signUpForm.notifier).state = {"email": _email};
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CreatePassword(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -81,6 +97,7 @@ class _SignUpEmailSignInState extends State<SignUpEmail> {
                         TextField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
+                          onEditingComplete: _onSubmit,
                           autocorrect: false,
                           decoration: InputDecoration(
                             hintText: 'Enter your Email Address',
@@ -100,7 +117,7 @@ class _SignUpEmailSignInState extends State<SignUpEmail> {
                         ),
                         Gaps.v28,
                         GestureDetector(
-                          onTap: () => _onAccountTap(context),
+                          onTap: _onSubmit,
                           child: FormButton(
                             text: 'Continue',
                             disabled: _email.isEmpty || _isEmailValid() != null,

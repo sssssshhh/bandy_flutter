@@ -18,7 +18,6 @@ class _LecturesState extends State<Lectures> {
 
   @override
   void dispose() {
-    print(_clicks);
     super.dispose();
   }
 
