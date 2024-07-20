@@ -3,14 +3,14 @@ import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.da
 import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
 
-class Tutorial extends StatefulWidget {
-  const Tutorial({super.key});
+class Onboarding extends StatefulWidget {
+  const Onboarding({super.key});
 
   @override
-  State<Tutorial> createState() => _TutorialState();
+  State<Onboarding> createState() => _OnboardingState();
 }
 
-class _TutorialState extends State<Tutorial> {
+class _OnboardingState extends State<Onboarding> {
   void _onSignInSignUpTap(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
