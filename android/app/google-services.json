@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1089546592497",
+    "project_id": "bandy-suhyeon",
+    "storage_bucket": "bandy-suhyeon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089546592497:android:1e8646a8e5b123c5408950",
+        "android_client_info": {
+          "package_name": "com.bandy.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBPzAvbrD4ioXy2wwqBosQoNKaUEjm5Jo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

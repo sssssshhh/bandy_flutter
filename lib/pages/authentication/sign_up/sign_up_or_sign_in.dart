@@ -7,6 +7,8 @@ import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class SignUpOrSignIn extends StatefulWidget {
+  static String routeName = "signupsignin";
+  static String routeURL = "/signupsignin";
   const SignUpOrSignIn({super.key});
 
   @override

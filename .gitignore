@@ -44,3 +44,6 @@ app.*.map.json
 
 # flutter_dotenv
 *.env
+
+# temp
+/lib/pages/making/*
