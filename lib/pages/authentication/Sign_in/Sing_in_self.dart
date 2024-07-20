@@ -15,6 +15,7 @@ class SignInEmail extends ConsumerStatefulWidget {
 
 class _SignInEmailState extends ConsumerState<SignInEmail> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final bool _obscureText = true;
 
   Map<String, String> formData = {};
 
@@ -77,6 +78,7 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
                     ),
                     Gaps.v16,
                     TextFormField(
+                      obscureText: _obscureText,
                       decoration: InputDecoration(
                         hintText: 'Password',
                         enabledBorder: UnderlineInputBorder(

@@ -24,11 +24,6 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
   final String _confirmPassword = '';
   bool _obscureText = true;
 
-  // void _onAccountTap(BuildContext context) {
-  //   Navigator.of(context)
-  //       .push(MaterialPageRoute(builder: (context) => const CreateNickname()));
-  // }
-
   @override
   void initState() {
     super.initState();

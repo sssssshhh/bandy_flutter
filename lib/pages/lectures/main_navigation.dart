@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
+  static String routeName = "mainNavigation";
+  static String routeURL = "/mainNavigation";
 
   @override
   State<MainNavigation> createState() => _MainNavigationState();

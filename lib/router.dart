@@ -21,6 +21,10 @@ final routerProvider = Provider((ref) {
         GoRoute(
             path: SignUpOrSignIn.routeURL,
             name: SignUpOrSignIn.routeName,
-            builder: (context, state) => const SignUpOrSignIn())
+            builder: (context, state) => const SignUpOrSignIn()),
+        GoRoute(
+            path: MainNavigation.routeURL,
+            name: MainNavigation.routeName,
+            builder: (context, state) => const MainNavigation()),
       ]);
 });
