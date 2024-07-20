@@ -1,49 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Leuctures extends StatefulWidget {
-  const Leuctures({super.key});
+class Lectures extends StatefulWidget {
+  const Lectures({super.key});
 
   @override
-  State<Leuctures> createState() => _LeucturesState();
+  State<Lectures> createState() => _LecturesState();
 }
 
-class _LeucturesState extends State<Leuctures> {
-  int _selectedIndex = 0;
+class _LecturesState extends State<Lectures> {
+  int _clicks = 0;
 
-  final screens = [
-    const Center(
-      child: Text("home"),
-    ),
-    const Center(
-      child: Text("search"),
-    )
-  ];
-
-  void _onTap(int index) {
+  void _increase() {
     setState(() {
-      _selectedIndex = index;
+      _clicks = _clicks + 1;
     });
   }
 
   @override
+  void dispose() {
+    print(_clicks);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: screens[_selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onTap,
-          selectedItemColor: Colors.black,
-          items: const [
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.house),
-              label: "home",
-            ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.searchengin),
-              label: "serach",
-            )
-          ],
-        ));
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "$_clicks",
+            style: const TextStyle(fontSize: 48),
+          ),
+          TextButton(
+            onPressed: _increase,
+            child: const Text('+'),
+          )
+        ],
+      ),
+    );
   }
 }
