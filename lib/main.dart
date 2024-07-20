@@ -44,12 +44,3 @@ class MyApp extends ConsumerWidget {
     );
   }
 }
-
-//  theme: ThemeData(
-//           scaffoldBackgroundColor: Colors.white, // bgColor for all pages
-//           colorScheme: ColorScheme.fromSwatch(
-//             backgroundColor: Colors.white,
-//           ),
-//           primaryColor: Colors.amber[500], // TODO: check RGB from pigma
-//         ),
-//         home: const MainNavigation());

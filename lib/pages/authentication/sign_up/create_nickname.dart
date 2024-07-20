@@ -35,7 +35,7 @@ class _CreateNicknameState extends ConsumerState<CreateNickname> {
   }
 
   void _onNextTap() {
-    ref.read(signUpProvider.notifier).signUp();
+    ref.read(signUpProvider.notifier).signUp(context);
   }
 
   @override

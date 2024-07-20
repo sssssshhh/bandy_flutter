@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bandy_flutter/pages/authentication/repos/authentication_repo.dart';
+import 'package:bandy_flutter/utils.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SignUpViewModel extends AsyncNotifier<void> {
@@ -11,7 +13,7 @@ class SignUpViewModel extends AsyncNotifier<void> {
     _authRepo = ref.read(authRepo);
   }
 
-  Future<void> signUp() async {
+  Future<void> signUp(BuildContext context) async {
     state = const AsyncValue.loading();
     final form = ref.read(signUpForm);
     state = await AsyncValue.guard(
@@ -20,6 +22,9 @@ class SignUpViewModel extends AsyncNotifier<void> {
         form["password"],
       ),
     );
+    if (state.hasError) {
+      showFirebaseErrorSnack(context, state.error);
+    }
   }
 }
 

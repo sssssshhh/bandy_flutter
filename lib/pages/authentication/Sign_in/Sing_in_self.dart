@@ -1,17 +1,19 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
+import 'package:bandy_flutter/pages/authentication/view_model/login_view_model.dart';
 import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SignInEmail extends StatefulWidget {
+class SignInEmail extends ConsumerStatefulWidget {
   const SignInEmail({super.key});
 
   @override
-  State<SignInEmail> createState() => _SignInEmailState();
+  ConsumerState<SignInEmail> createState() => _SignInEmailState();
 }
 
-class _SignInEmailState extends State<SignInEmail> {
+class _SignInEmailState extends ConsumerState<SignInEmail> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Map<String, String> formData = {};
@@ -20,6 +22,11 @@ class _SignInEmailState extends State<SignInEmail> {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
+        ref.read(loginProvider.notifier).login(
+              formData["email"]!,
+              formData["password"]!,
+              context,
+            );
       }
     }
   }
