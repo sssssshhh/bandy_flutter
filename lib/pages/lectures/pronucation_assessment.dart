@@ -23,7 +23,7 @@ class _PronunciationAssessmentState extends State<PronunciationAssessment> {
 
   final record = AudioRecorder();
 
-  String? recordingPath;
+  String recordingPath = "";
   bool isRecording = false;
 
   @override
@@ -34,14 +34,16 @@ class _PronunciationAssessmentState extends State<PronunciationAssessment> {
 
   Future<void> fetchAndSendAudio() async {
     try {
-      final request = http.Request('POST', Uri.parse(apiUrl))
-        ..headers['Content-Type'] = 'application/json';
-
-      final response = await http.get(Uri.parse(s3FileUrl));
-      final audioBytes = response.bodyBytes;
+      // 로컬 파일에서 바이트 읽기
+      final File file = File(recordingPath);
+      print("recordingPath");
+      print(recordingPath);
+      final audioBytes = await file.readAsBytes();
       final base64Audio = base64Encode(audioBytes);
 
-      request.body = jsonEncode({'audio': base64Audio});
+      final request = http.Request('POST', Uri.parse(apiUrl))
+        ..headers['Content-Type'] = 'application/json'
+        ..body = jsonEncode({'audio': base64Audio});
 
       final apiResponse = await http.Response.fromStream(await request.send());
 
@@ -50,7 +52,6 @@ class _PronunciationAssessmentState extends State<PronunciationAssessment> {
         print('API Response: $responseData');
         // 여기서 화면을 전환할 때는 이 작업이 완료된 후에 수행하는 것이 좋습니다.
         // if (mounted) {
-        //   // 위젯이 활성 상태일 때만 상태 변경
         //   Navigator.pushNamed(context, '/your-next-route'); // 다음 화면으로 이동
         // }
       } else {
@@ -75,11 +76,9 @@ class _PronunciationAssessmentState extends State<PronunciationAssessment> {
       width: MediaQuery.sizeOf(context).width,
       child: Column(
         children: [
-          if (recordingPath != null)
-            MaterialButton(
-                onPressed: fetchAndSendAudio,
-                color: const Color.fromARGB(255, 111, 29, 126)),
-          if (recordingPath == null) const Text("no recording found"),
+          MaterialButton(
+              onPressed: fetchAndSendAudio,
+              color: const Color.fromARGB(255, 111, 29, 126)),
         ],
       ),
     );
@@ -87,35 +86,39 @@ class _PronunciationAssessmentState extends State<PronunciationAssessment> {
 
   Widget recordingButton() {
     return FloatingActionButton(
-        onPressed: () async {
-          if (isRecording) {
-            String? filePath = await audioRecorder.stop();
-            if (filePath != null) {
-              setState(() {
-                isRecording = false;
-                recordingPath = filePath;
-              });
-            }
-          } else {
-            if (await audioRecorder.hasPermission()) {
-              final Directory appDocumentDir =
-                  await getApplicationDocumentsDirectory();
-              final String filePath =
-                  p.join(appDocumentDir.path, "recording.carf");
-              await audioRecorder.start(
-                  const RecordConfig(
-                    sampleRate: 16000, // 16khz
-                  ),
-                  path: filePath);
-              setState(() {
-                isRecording = true;
-                recordingPath = null;
-              });
-            }
+      onPressed: () async {
+        if (isRecording) {
+          String? filePath = await audioRecorder.stop();
+          if (filePath != null) {
+            setState(() {
+              isRecording = false;
+              recordingPath = filePath;
+            });
           }
-        },
-        child: Icon(
-          isRecording ? Icons.stop : Icons.mic,
-        ));
+        } else {
+          if (await audioRecorder.hasPermission()) {
+            final Directory appDocumentDir =
+                await getApplicationDocumentsDirectory();
+            final String filePath =
+                p.join(appDocumentDir.path, "recording.wav");
+            await audioRecorder.start(
+                const RecordConfig(
+                  sampleRate: 16000, // 16khz
+                  encoder: AudioEncoder.wav,
+                  bitRate: 64000,
+                ),
+                path: filePath);
+
+            setState(() {
+              isRecording = true;
+              recordingPath = "";
+            });
+          }
+        }
+      },
+      child: Icon(
+        isRecording ? Icons.stop : Icons.mic,
+      ),
+    );
   }
 }
