@@ -1,5 +1,6 @@
 import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:bandy_flutter/pages/lectures/lectures.dart';
+import 'package:bandy_flutter/pages/lectures/pronucation_assessment.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -30,7 +31,7 @@ class _MainNavigationState extends State<MainNavigation> {
         children: [
           Offstage(
             offstage: _selectedIndex != 0,
-            child: const Lectures(),
+            child: const PronunciationAssessment(),
           ),
           Offstage(
             offstage: _selectedIndex != 1,
@@ -56,22 +57,3 @@ class _MainNavigationState extends State<MainNavigation> {
     );
   }
 }
-      // body: screens.elementAt(_selectedIndex),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   currentIndex: _selectedIndex,
-      //   onTap: _onTap,
-      //   selectedItemColor: Colors.black,
-      //   items: const [
-      //     BottomNavigationBarItem(
-      //       icon: FaIcon(FontAwesomeIcons.house),
-      //       label: "home",
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: FaIcon(FontAwesomeIcons.searchengin),
-      //       label: "serach",
-      //     )
-      //   ],
-      // ),
-//     );
-//   }
-// }
