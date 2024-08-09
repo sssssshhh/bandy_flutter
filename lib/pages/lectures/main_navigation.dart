@@ -31,11 +31,11 @@ class _MainNavigationState extends State<MainNavigation> {
         children: [
           Offstage(
             offstage: _selectedIndex != 0,
-            child: const Lectures(),
+            child: const Lecture(),
           ),
           Offstage(
             offstage: _selectedIndex != 1,
-            child: const Lectures(),
+            child: const Lecture(),
           ),
         ],
       ),
