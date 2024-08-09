@@ -1,6 +1,7 @@
 import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:bandy_flutter/pages/lectures/lectures.dart';
 import 'package:bandy_flutter/pages/lectures/pronucation_assessment.dart';
+import 'package:bandy_flutter/pages/lectures/puzzle.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -31,11 +32,11 @@ class _MainNavigationState extends State<MainNavigation> {
         children: [
           Offstage(
             offstage: _selectedIndex != 0,
-            child: const Lecture(),
+            child: const Puzzle(),
           ),
           Offstage(
             offstage: _selectedIndex != 1,
-            child: const Lecture(),
+            child: const Puzzle(),
           ),
         ],
       ),
