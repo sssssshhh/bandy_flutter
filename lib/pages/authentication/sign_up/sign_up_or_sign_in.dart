@@ -36,46 +36,41 @@ class _SignUpOrSignInState extends State<SignUpOrSignIn> {
             vertical: Sizes.size40,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const SizedBox(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: []),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 200,
-                    horizontal: 140,
-                  ),
-                ),
-              ),
               const Text(
                 'Lighting Up Your Korean Learning Journey',
-                style: Fonts.titleSmall,
+                style: TextStyle(
+                  fontSize: Sizes.size24,
+                ),
               ),
               Gaps.v2,
-              GestureDetector(
-                onTap: () => _onSelectSignUpTap(context),
-                child: const Button(
-                  text: 'Sing up for free',
-                  bgColor: Colors.yellow, // TODO: Colors.orange[200]
-                  textColor: Colors.white,
-                ),
-              ),
-              Gaps.v4,
-              GestureDetector(
-                onTap: () => _onSelectSignInTap(context),
-                child: const Button(
-                  text: 'Already Sign up? Log in',
-                  bgColor: Colors.orange, // TODO: Colors.orange[200]
-                  textColor: Colors.white,
-                ),
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () => _onSelectSignUpTap(context),
+                    child: const Button(
+                      text: 'Sing up for free',
+                      bgColor: Colors.orange, // TODO: Colors.orange[200]
+                      textColor: Colors.white,
+                    ),
+                  ),
+                  Gaps.v4,
+                  GestureDetector(
+                    onTap: () => _onSelectSignInTap(context),
+                    child: const Button(
+                      text: 'Already Sign up? Log in',
+                      bgColor: Colors.orange, // TODO: Colors.orange[200]
+                      textColor: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
