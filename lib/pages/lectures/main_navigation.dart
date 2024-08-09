@@ -31,11 +31,11 @@ class _MainNavigationState extends State<MainNavigation> {
         children: [
           Offstage(
             offstage: _selectedIndex != 0,
-            child: const PronunciationAssessment(),
+            child: const Lectures(),
           ),
           Offstage(
             offstage: _selectedIndex != 1,
-            child: const Lecture(),
+            child: const Lectures(),
           ),
         ],
       ),
@@ -50,7 +50,7 @@ class _MainNavigationState extends State<MainNavigation> {
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.searchengin),
-            label: "serach",
+            label: "search",
           )
         ],
       ),

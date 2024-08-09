@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -39,6 +40,12 @@ class _LectureState extends State<Lecture> {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String uid = user.uid; // <-- User ID
+      String? email = user.email; // <-- Their email
+    }
     return Stack(
       children: [
         Positioned.fill(

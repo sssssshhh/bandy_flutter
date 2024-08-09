@@ -1,5 +1,10 @@
+import 'package:bandy_flutter/constants/fonts.dart';
+import 'package:bandy_flutter/constants/gaps.dart';
+import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Lectures extends StatefulWidget {
   const Lectures({super.key});
@@ -11,12 +16,20 @@ class Lectures extends StatefulWidget {
 class _LecturesState extends State<Lectures> {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  int _clicks = 0;
+  // Future<Map<String, dynamic>?> findDB() async {
+  //   final doc = await _db
+  //       .collection('lectures')
+  //       .doc('Confused_Korean')
+  //       .collection('main')
+  //       .doc('1')
+  //       .get();
+  //   print(doc.data());
+  //   return doc.data();
+  // }
 
-  void _increase() {
-    setState(() {
-      _clicks = _clicks + 1;
-    });
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -24,53 +37,307 @@ class _LecturesState extends State<Lectures> {
     super.dispose();
   }
 
-  Future<Map<String, dynamic>?> findDB() async {
-    final doc = await _db
-        .collection('lectures')
-        .doc('Confused_Korean')
-        .collection('main')
-        .doc('1')
-        .get();
-    print(doc.data());
-    return doc.data();
-  }
-
   @override
   Widget build(BuildContext context) {
-    findDB();
-    const title = 'Horizontal List';
-    return MaterialApp(
-      title: title,
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(title),
-        ),
-        body: Container(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
           margin: const EdgeInsets.symmetric(vertical: 20),
-          height: 200,
-          child: ListView(
-            // This next line does the trick.
-            scrollDirection: Axis.horizontal,
-            children: <Widget>[
-              Container(
-                width: 160,
-                color: Colors.red,
-              ),
-              Container(
-                width: 160,
-                color: Colors.blue,
-              ),
-              Container(
-                width: 160,
-                color: Colors.green,
-              ),
-              Container(
-                width: 160,
-                color: Colors.yellow,
-              ),
-              Container(
-                width: 160,
-                color: Colors.orange,
+          width: 500,
+          height: 1000,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.size28,
+                  vertical: Sizes.size5,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Hi, Sue',
+                          style: Fonts.titleLarge,
+                        ),
+                        Gaps.v20,
+                        const Text(
+                          'Recommendation',
+                          style: Fonts.titleLMedium,
+                        ),
+                        const Text(
+                          'Recommended Courses for A1',
+                          style: Fonts.titleSmall,
+                        ),
+                        Gaps.v10,
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 50,
+                              horizontal: 50,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Gaps.v20,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Korean Podcast',
+                          style: Fonts.titleLMedium,
+                        ),
+                        Gaps.v10,
+                        SizedBox(
+                          height: 100, // ListView의 높이 지정
+                          child: ListView(
+                            scrollDirection: Axis.horizontal, // 가로 스크롤 설정
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Gaps.v20,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Confused Korean',
+                          style: Fonts.titleLMedium,
+                        ),
+                        Gaps.v10,
+                        SizedBox(
+                          height: 100, // ListView의 높이 지정
+                          child: ListView(
+                            scrollDirection: Axis.horizontal, // 가로 스크롤 설정
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Gaps.v20,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Bitesize Story',
+                          style: Fonts.titleLMedium,
+                        ),
+                        Gaps.v10,
+                        SizedBox(
+                          height: 100, // ListView의 높이 지정
+                          child: ListView(
+                            scrollDirection: Axis.horizontal, // 가로 스크롤 설정
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 50,
+                                    horizontal: 50,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
