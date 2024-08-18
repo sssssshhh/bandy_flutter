@@ -35,6 +35,11 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Sign In",
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(Sizes.size40),

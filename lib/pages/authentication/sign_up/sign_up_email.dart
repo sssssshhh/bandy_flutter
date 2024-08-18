@@ -1,7 +1,6 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up/create_Account_name.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/create_password.dart';
 import 'package:bandy_flutter/pages/authentication/view_model/signup_view_model.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
@@ -21,11 +20,6 @@ class _SignUpEmailSignInState extends ConsumerState<SignUpEmail> {
   final TextEditingController _emailController = TextEditingController();
 
   String _email = '';
-
-  void _onAccountTap(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const CreateAccount()));
-  }
 
   @override
   void initState() {
@@ -74,6 +68,11 @@ class _SignUpEmailSignInState extends ConsumerState<SignUpEmail> {
     return GestureDetector(
         onTap: _onScaffoldTap,
         child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              "Sign up",
+            ),
+          ),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(Sizes.size40),

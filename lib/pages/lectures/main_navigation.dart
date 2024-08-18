@@ -32,7 +32,7 @@ class _MainNavigationState extends State<MainNavigation> {
         children: [
           Offstage(
             offstage: _selectedIndex != 0,
-            child: const Puzzle(),
+            child: const Lecture(),
           ),
           Offstage(
             offstage: _selectedIndex != 1,
