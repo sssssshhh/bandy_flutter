@@ -42,6 +42,7 @@ class _PuzzleState extends State<Puzzle> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: Sizes.size24),
         child: Column(

@@ -1,6 +1,9 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
+import 'package:bandy_flutter/pages/lectures/lecture.dart';
+import 'package:bandy_flutter/pages/lectures/pronucation_assessment.dart';
+import 'package:bandy_flutter/pages/lectures/puzzle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -175,7 +178,7 @@ class _LecturesState extends State<Lectures> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Confused Korean',
+                          'Korean Pronunciation Test',
                           style: Fonts.titleLMedium,
                         ),
                         Gaps.v10,
@@ -184,70 +187,29 @@ class _LecturesState extends State<Lectures> {
                           child: ListView(
                             scrollDirection: Axis.horizontal, // 가로 스크롤 설정
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PronunciationAssessment()),
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 50,
+                                      horizontal: 50,
+                                    ),
                                   ),
                                 ),
                               ),
                               Gaps.h10,
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),
@@ -258,79 +220,77 @@ class _LecturesState extends State<Lectures> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Bitesize Story',
+                          'Puzzles',
                           style: Fonts.titleLMedium,
                         ),
                         Gaps.v10,
                         SizedBox(
-                          height: 100, // ListView의 높이 지정
+                          height: 100,
                           child: ListView(
-                            scrollDirection: Axis.horizontal, // 가로 스크롤 설정
+                            scrollDirection: Axis.horizontal,
                             children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Puzzle()),
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 50,
+                                      horizontal: 50,
+                                    ),
                                   ),
                                 ),
                               ),
                               Gaps.h10,
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Video',
+                          style: Fonts.titleLMedium,
+                        ),
+                        Gaps.v10,
+                        SizedBox(
+                          height: 100,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Lecture()),
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 50,
+                                      horizontal: 50,
+                                    ),
                                   ),
                                 ),
                               ),
                               Gaps.h10,
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),

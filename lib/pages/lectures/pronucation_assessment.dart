@@ -67,6 +67,7 @@ class _PronunciationAssessmentState extends State<PronunciationAssessment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       floatingActionButton: recordingButton(),
       body: buildUI(),
     );
