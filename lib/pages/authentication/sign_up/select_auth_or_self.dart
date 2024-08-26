@@ -41,25 +41,25 @@ class SelectSignUp extends StatelessWidget {
                       style: Fonts.titleSmall,
                     ),
                     Gaps.v8,
-                    const AuthButton(
-                      text: 'Continue with Apple',
-                      icon: FaIcon(FontAwesomeIcons.apple),
-                    ),
-                    Gaps.v8,
-                    const AuthButton(
-                      text: 'Continue with Google',
-                      icon: FaIcon(FontAwesomeIcons.google),
-                    ),
-                    Gaps.v8,
-                    const AuthButton(
-                      text: 'Continue with Facebook',
-                      icon: FaIcon(FontAwesomeIcons.facebook),
-                    ),
-                    Gaps.v40,
+                    // const AuthButton(
+                    //   text: 'Continue with Apple',
+                    //   icon: FaIcon(FontAwesomeIcons.apple),
+                    // ),
+                    // Gaps.v8,
+                    // const AuthButton(
+                    //   text: 'Continue with Google',
+                    //   icon: FaIcon(FontAwesomeIcons.google),
+                    // ),
+                    // Gaps.v8,
+                    // const AuthButton(
+                    //   text: 'Continue with Facebook',
+                    //   icon: FaIcon(FontAwesomeIcons.facebook),
+                    // ),
+                    // Gaps.v40,
                     GestureDetector(
                       onTap: () => _onEmailTap(context),
                       child: const AuthButton(
-                        text: 'Or use your email',
+                        text: 'Use your email', // Or use your email
                         icon: FaIcon(FontAwesomeIcons.user),
                       ),
                     ),
@@ -67,7 +67,7 @@ class SelectSignUp extends StatelessWidget {
                     const Column(
                       children: [
                         Text(
-                          'By signing up, you accept Bandys',
+                          'By signing up, you accept BANDY',
                           textAlign: TextAlign.center,
                         ),
                         Text('Terms of Service and Privacy Policy')

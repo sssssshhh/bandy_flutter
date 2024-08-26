@@ -26,7 +26,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       routerConfig: ref.watch(routerProvider),
       debugShowCheckedModeBanner: false,
-      title: 'Bandy',
+      title: 'BANDY',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white, // bgColor for all pages
         colorScheme: ColorScheme.fromSwatch(
