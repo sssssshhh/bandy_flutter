@@ -50,6 +50,14 @@ dependencies:
   go_router: ^14.2.1
   archive: ^3.6.1
   flutter_native_splash: ^2.4.1
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  image_path: assets/images/launcher/bandy_launcher.png
+  remove_alpha_ios: true
+  android: true
+  ios: true
+
 flutter_native_splash:
   color: "#FFFFFF"
   image: assets/images/splash/bandy.png
