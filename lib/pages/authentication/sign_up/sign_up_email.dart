@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SignUpEmail extends ConsumerStatefulWidget {
-//  final String username;
-
   const SignUpEmail({super.key});
 
   @override

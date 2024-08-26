@@ -192,8 +192,10 @@ class _LecturesState extends State<Lectures> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            const PronunciationAssessment()),
+                                        builder: (context) => const Puzzle()),
+
+                                    // (context) =>
+                                    //     const PronunciationAssessment()),
                                   );
                                 },
                                 child: Container(

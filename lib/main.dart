@@ -1,11 +1,4 @@
-import 'package:azure_speech_assessment/azure_speech_assessment.dart';
 import 'package:bandy_flutter/firebase_options.dart';
-import 'package:bandy_flutter/pages/making/azure_speech_assessment.dart';
-import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
-import 'package:bandy_flutter/pages/onBoarding/onBoarding.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.dart';
-import 'package:bandy_flutter/pages/making/ai_test.dart';
-import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:bandy_flutter/router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
