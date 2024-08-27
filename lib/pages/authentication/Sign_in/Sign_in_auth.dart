@@ -1,7 +1,7 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/sign_in/Sing_in_email.dart';
+import 'package:bandy_flutter/pages/authentication/sign_in/sign_in_email.dart';
 import 'package:bandy_flutter/pages/authentication/widget/auth_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -39,25 +39,25 @@ class SelectSignIn extends StatelessWidget {
                       style: Fonts.titleSmall,
                     ),
                     Gaps.v8,
-                    const AuthButton(
-                      text: 'Continue with Apple',
-                      icon: FaIcon(FontAwesomeIcons.apple),
-                    ),
-                    Gaps.v8,
-                    const AuthButton(
-                      text: 'Continue with Google',
-                      icon: FaIcon(FontAwesomeIcons.google),
-                    ),
-                    Gaps.v8,
-                    const AuthButton(
-                      text: 'Continue with Facebook',
-                      icon: FaIcon(FontAwesomeIcons.facebook),
-                    ),
-                    Gaps.v40,
+                    // const AuthButton(
+                    //   text: 'Continue with Apple',
+                    //   icon: FaIcon(FontAwesomeIcons.apple),
+                    // ),
+                    // Gaps.v8,
+                    // const AuthButton(
+                    //   text: 'Continue with Google',
+                    //   icon: FaIcon(FontAwesomeIcons.google),
+                    // ),
+                    // Gaps.v8,
+                    // const AuthButton(
+                    //   text: 'Continue with Facebook',
+                    //   icon: FaIcon(FontAwesomeIcons.facebook),
+                    // ),
+                    // Gaps.v40,
                     GestureDetector(
                       onTap: () => _onSingInEmailTap(context),
                       child: const AuthButton(
-                        text: 'Or use your email',
+                        text: 'Use your email', // Or use your email
                         icon: FaIcon(FontAwesomeIcons.user),
                       ),
                     ),
