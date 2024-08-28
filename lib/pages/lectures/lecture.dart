@@ -12,13 +12,17 @@ class Lecture extends StatefulWidget {
 
 class _LectureState extends State<Lecture> {
   final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset('assets/videos/test.mp4');
+      VideoPlayerController.network(
+    'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+  );
+  // final VideoPlayerController _videoPlayerController =
+  //     VideoPlayerController.asset('assets/videos/test.mp4');
 
   bool _isPaused = false;
 
   void _initVideoPlayer() async {
     await _videoPlayerController.initialize();
-    _videoPlayerController.play();
+    _videoPlayerController.pause();
     setState(() {});
   }
 
@@ -47,11 +51,29 @@ class _LectureState extends State<Lecture> {
         children: [
           Expanded(
             flex: 1,
-            child: _videoPlayerController.value.isInitialized
-                ? VideoPlayer(_videoPlayerController)
-                : Container(
-                    color: Colors.amberAccent,
-                  ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                _videoPlayerController.value.isInitialized
+                    ? GestureDetector(
+                        onTap: _onTogglePause,
+                        child: VideoPlayer(_videoPlayerController),
+                      )
+                    : Container(
+                        color: Colors.white,
+                      ),
+                _videoPlayerController.value.isInitialized
+                    ? IconButton(
+                        iconSize: 64.0,
+                        icon: Icon(
+                          _isPaused ? Icons.play_arrow : Icons.pause,
+                          color: Colors.white,
+                        ),
+                        onPressed: _onTogglePause,
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            ),
           ),
           Expanded(
             flex: 1,
