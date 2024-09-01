@@ -71,12 +71,15 @@ class lectureContainer extends StatelessWidget {
 Widget _getPage(String page) {
   switch (page) {
     case 'puzzle':
-      return const Puzzle(); // Example page
-    case 'lecture':
+      return const Puzzle();
+    case 'confused_korean':
       return const Lecture(category: 'confused_korean', level: 'level_1');
+    case 'podcast':
+      return const Lecture(category: 'podcast', level: 'level_1');
+    case 'bitesize_story':
+      return const Lecture(category: 'bitesize_story', level: 'level_1');
     case 'pronunciationAssessment':
-      return const PronunciationAssessment(); // Example page
-    // Add more cases for other pages
+      return const PronunciationAssessment();
     default:
       return const Placeholder(); // Fallback page
   }

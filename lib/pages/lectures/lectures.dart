@@ -2,7 +2,6 @@ import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/widgets/lectureContainer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Lectures extends StatefulWidget {
@@ -13,7 +12,7 @@ class Lectures extends StatefulWidget {
 }
 
 class _LecturesState extends State<Lectures> {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  // final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // Future<Map<String, dynamic>?> findDB() async {
   //   final doc = await _db
@@ -38,6 +37,14 @@ class _LecturesState extends State<Lectures> {
 
   @override
   Widget build(BuildContext context) {
+    const String level_1 = '1';
+    const String level_2 = '2';
+    const String level_3 = '3';
+
+    const String confusedKorean = 'confused_korean';
+    const String podcast = 'podcast';
+    const String bitesizeStory = 'bitesize_story';
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -80,24 +87,24 @@ class _LecturesState extends State<Lectures> {
                             scrollDirection: Axis.horizontal,
                             children: const [
                               lectureContainer(
-                                page: 'lecture',
-                                level: '1',
+                                page: confusedKorean,
+                                level: level_1,
                                 thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/thumbnail/confused_lv1_1.png',
+                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/thumbnail/lv1_1.png',
                               ),
                               Gaps.h10,
                               lectureContainer(
-                                page: 'lecture',
-                                level: '2',
+                                page: confusedKorean,
+                                level: level_2,
                                 thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_2/thumbnail/confused_lv2_1.png',
+                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_2/thumbnail/lv2_1.png',
                               ),
                               Gaps.h10,
                               lectureContainer(
-                                page: 'lecture',
-                                level: '3',
+                                page: confusedKorean,
+                                level: level_3,
                                 thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_3/thumbnail/confused_lv3_1.png',
+                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_3/thumbnail/lv3_1.png',
                               ),
                             ],
                           ),

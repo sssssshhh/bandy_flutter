@@ -30,7 +30,7 @@ class _LectureState extends State<Lecture> {
 
   void _initializeVideoPlayer() {
     _videoPlayerController = VideoPlayerController.network(
-      'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/${widget.category}/${widget.level}/master/LV1_+($_currentLectureIndex).mp4',
+      'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/${widget.category}/${widget.level}/master/LV1_$_currentLectureIndex.mp4',
     )..initialize().then((_) {
         setState(() {
           _isInitialized = true;
@@ -73,7 +73,11 @@ class _LectureState extends State<Lecture> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          widget.category,
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -125,7 +129,7 @@ class _LectureState extends State<Lecture> {
                               border: Border.all(color: Colors.grey),
                               image: DecorationImage(
                                 image: NetworkImage(
-                                  'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/${widget.category}/${widget.level}/thumbnail/confused_lv1_${index + 1}.png',
+                                  'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/${widget.category}/${widget.level}/thumbnail/lv1_${index + 1}.png',
                                 ),
                                 fit: BoxFit.cover,
                               ),

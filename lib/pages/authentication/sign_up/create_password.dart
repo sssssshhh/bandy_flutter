@@ -1,7 +1,6 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up/create_nickname.dart';
 import 'package:bandy_flutter/pages/authentication/view_model/signup_view_model.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:flutter/material.dart';
