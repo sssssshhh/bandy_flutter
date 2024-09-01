@@ -39,20 +39,17 @@ class _MainNavigationState extends State<MainNavigation> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onTap,
-        selectedItemColor: Colors.black,
-        items: const [
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house),
-            label: "home",
+      bottomNavigationBar: const BottomAppBar(
+        child: Center(
+          heightFactor: 1,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              FaIcon(FontAwesomeIcons.house),
+              Text("home"),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.searchengin),
-            label: "search",
-          )
-        ],
+        ),
       ),
     );
   }

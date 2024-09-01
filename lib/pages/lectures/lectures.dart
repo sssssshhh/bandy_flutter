@@ -59,35 +59,36 @@ class _LecturesState extends State<Lectures> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
+                    Gaps.v20,
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Hi, Sue',
+                        Text(
+                          'Lets Start',
                           style: Fonts.titleLarge,
                         ),
                         Gaps.v20,
-                        const Text(
-                          'Recommendation',
-                          style: Fonts.titleLMedium,
-                        ),
-                        const Text(
-                          'Recommended Courses for A1',
-                          style: Fonts.titleSmall,
-                        ),
-                        Gaps.v10,
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 50,
-                              horizontal: 50,
-                            ),
-                          ),
-                        ),
+                        // const Text(
+                        //   'Recommendation',
+                        //   style: Fonts.titleLMedium,
+                        // ),
+                        // const Text(
+                        //   'Recommended Courses for A1',
+                        //   style: Fonts.titleSmall,
+                        // ),
+                        // Gaps.v10,
+                        // Container(
+                        //   decoration: BoxDecoration(
+                        //     color: Colors.grey[200],
+                        //     borderRadius: BorderRadius.circular(20),
+                        //   ),
+                        //   child: const Padding(
+                        //     padding: EdgeInsets.symmetric(
+                        //       vertical: 50,
+                        //       horizontal: 50,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                     Gaps.v20,
@@ -95,7 +96,7 @@ class _LecturesState extends State<Lectures> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Korean Podcast',
+                          'Podcast',
                           style: Fonts.titleLMedium,
                         ),
                         Gaps.v10,
@@ -105,6 +106,7 @@ class _LecturesState extends State<Lectures> {
                             scrollDirection: Axis.horizontal, // 가로 스크롤 설정
                             children: [
                               Container(
+                                // level 1
                                 decoration: BoxDecoration(
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(20),
@@ -118,6 +120,7 @@ class _LecturesState extends State<Lectures> {
                               ),
                               Gaps.h10,
                               Container(
+                                // level 2
                                 decoration: BoxDecoration(
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(20),
@@ -131,6 +134,7 @@ class _LecturesState extends State<Lectures> {
                               ),
                               Gaps.h10,
                               Container(
+                                // level 3
                                 decoration: BoxDecoration(
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(20),
@@ -143,31 +147,6 @@ class _LecturesState extends State<Lectures> {
                                 ),
                               ),
                               Gaps.h10,
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),
@@ -178,7 +157,7 @@ class _LecturesState extends State<Lectures> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Korean Pronunciation Test',
+                          'Bitesize Story',
                           style: Fonts.titleLMedium,
                         ),
                         Gaps.v10,
@@ -222,7 +201,7 @@ class _LecturesState extends State<Lectures> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Puzzles',
+                          'Confused Korean',
                           style: Fonts.titleLMedium,
                         ),
                         Gaps.v10,
@@ -237,46 +216,6 @@ class _LecturesState extends State<Lectures> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => const Puzzle()),
-                                  );
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 50,
-                                      horizontal: 50,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Video',
-                          style: Fonts.titleLMedium,
-                        ),
-                        Gaps.v10,
-                        SizedBox(
-                          height: 100,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Lecture()),
                                   );
                                 },
                                 child: Container(
