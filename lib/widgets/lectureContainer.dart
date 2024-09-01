@@ -1,3 +1,4 @@
+import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:bandy_flutter/pages/lectures/pronucation_assessment.dart';
 import 'package:bandy_flutter/pages/lectures/puzzle.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,8 @@ Widget _getPage(String page) {
   switch (page) {
     case 'puzzle':
       return const Puzzle(); // Example page
+    case 'lecture':
+      return const Lecture();
     case 'pronunciationAssessment':
       return const PronunciationAssessment(); // Example page
     // Add more cases for other pages

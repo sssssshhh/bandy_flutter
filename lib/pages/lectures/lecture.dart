@@ -1,4 +1,3 @@
-import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -11,22 +10,35 @@ class Lecture extends StatefulWidget {
 }
 
 class _LectureState extends State<Lecture> {
-  final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.network(
-    'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-  );
-  // final VideoPlayerController _videoPlayerController =
-  //     VideoPlayerController.asset('assets/videos/test.mp4');
+  late final VideoPlayerController _videoPlayerController;
+  bool _isPaused = true;
+  bool _isInitialized = false;
 
-  bool _isPaused = false;
+  @override
+  void initState() {
+    super.initState();
+    _videoPlayerController = VideoPlayerController.network(
+      'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/master/LV1_+(1).mp4',
+    )..initialize().then((_) {
+        setState(() {
+          _isInitialized = true;
+          _videoPlayerController.pause(); // Ensure video starts paused
+        });
+      }).catchError((error) {
+        // Handle errors here
+        print('Error initializing video player: $error');
+      });
+  }
 
-  void _initVideoPlayer() async {
-    await _videoPlayerController.initialize();
-    _videoPlayerController.pause();
-    setState(() {});
+  @override
+  void dispose() {
+    _videoPlayerController.dispose();
+    super.dispose();
   }
 
   void _onTogglePause() {
+    if (!_isInitialized) return;
+
     if (_videoPlayerController.value.isPlaying) {
       _videoPlayerController.pause();
     } else {
@@ -35,12 +47,6 @@ class _LectureState extends State<Lecture> {
     setState(() {
       _isPaused = !_isPaused;
     });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initVideoPlayer();
   }
 
   @override
@@ -54,20 +60,23 @@ class _LectureState extends State<Lecture> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                _videoPlayerController.value.isInitialized
+                _isInitialized
                     ? GestureDetector(
                         onTap: _onTogglePause,
                         child: VideoPlayer(_videoPlayerController),
                       )
                     : Container(
-                        color: Colors.white,
+                        color: Colors.grey,
+                        child: const Center(
+                            child:
+                                CircularProgressIndicator()), // Show loading indicator
                       ),
-                _videoPlayerController.value.isInitialized
+                _isInitialized
                     ? IconButton(
                         iconSize: 64.0,
                         icon: Icon(
                           _isPaused ? Icons.play_arrow : Icons.pause,
-                          color: Colors.white,
+                          color: Colors.grey,
                         ),
                         onPressed: _onTogglePause,
                       )
@@ -80,20 +89,38 @@ class _LectureState extends State<Lecture> {
             child: SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.all(16.0),
-                alignment: Alignment.topLeft,
                 color: Colors.white,
-                child: const Column(
-                  children: [
-                    Text(
-                      "Let's learn about folk remedies!",
-                      style: Fonts.titleLMedium,
+                child: Column(
+                  children: List.generate(
+                    10,
+                    (index) => Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 150,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            border: Border.all(color: Colors.grey),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/thumbnail/confused_lv1_${index + 1}.png',
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Gaps.h12,
+                        Expanded(
+                          child: Text(
+                            'Lecture ${index + 1}',
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.deepOrange),
+                          ),
+                        ),
+                      ],
                     ),
-                    Gaps.v16,
-                    Text(
-                      "In Korea, there are several folk remedies, These can be used to treat some minor ailments. For example, when you have a cold or a sore throat, you can boil ginger and cola together to make 'ginger cola.' When you drink it, your throat feels hot and it feels like drinking ginger tea. It can increase heat, warm the stomach, and has the effects of preventing colds and reducing phlegm.It is also effective for sore throats and tonsillitis caused by colds.Additionally, some people like iced sugar pears. Cut the pear, scoop out the inside, and then put rock sugar and dates in and steam it. This also helps to remove the cold.",
-                      style: Fonts.titleSmall,
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),

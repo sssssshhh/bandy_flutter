@@ -80,21 +80,21 @@ class _LecturesState extends State<Lectures> {
                             scrollDirection: Axis.horizontal,
                             children: const [
                               lectureContainer(
-                                page: 'puzzle',
+                                page: 'lecture',
                                 level: '1',
                                 thumbnailPath:
                                     'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/thumbnail/confused_lv1_1.png',
                               ),
                               Gaps.h10,
                               lectureContainer(
-                                page: 'puzzle',
+                                page: 'lecture',
                                 level: '2',
                                 thumbnailPath:
                                     'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_2/thumbnail/confused_lv2_1.png',
                               ),
                               Gaps.h10,
                               lectureContainer(
-                                page: 'puzzle',
+                                page: 'lecture',
                                 level: '3',
                                 thumbnailPath:
                                     'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_3/thumbnail/confused_lv3_1.png',
