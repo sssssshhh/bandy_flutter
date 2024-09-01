@@ -57,12 +57,13 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
       "password": _password,
     };
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CreateNickname(),
-      ),
-    );
+    ref.read(signUpProvider.notifier).signUp(context);
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => const CreateNickname(),
+    //   ),
+    // );
   }
 
   void _onClearTap() {
@@ -91,15 +92,11 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Gaps.v40,
               const Text(
-                "Password",
-                style: TextStyle(
-                  fontSize: Sizes.size24,
-                  fontWeight: FontWeight.w700,
-                ),
+                'Set Your Password',
+                style: Fonts.titleLarge,
               ),
-              Gaps.v16,
+              Gaps.v8,
               TextField(
                 controller: _passwordController,
                 onEditingComplete: _onSubmit,
@@ -162,7 +159,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                         : Colors.grey.shade400,
                   ),
                   Gaps.h5,
-                  const Text("8 to 20 characters")
+                  const Text("9 to 20 characters")
                 ],
               ),
               Gaps.v28,

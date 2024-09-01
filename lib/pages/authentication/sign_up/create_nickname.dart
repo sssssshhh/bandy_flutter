@@ -2,7 +2,6 @@ import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/view_model/signup_view_model.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,14 +15,14 @@ class CreateNickname extends ConsumerStatefulWidget {
 class _CreateNicknameState extends ConsumerState<CreateNickname> {
   final TextEditingController _nicknameController = TextEditingController();
 
-  String _nickname = "";
+  //  String _nickname = "";
 
   @override
   void initState() {
     super.initState();
     _nicknameController.addListener(() {
       setState(() {
-        _nickname = _nicknameController.text;
+        //_nickname = _nicknameController.text;
       });
     });
   }

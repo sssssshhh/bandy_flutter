@@ -86,11 +86,6 @@ class _SignUpEmailSignInState extends ConsumerState<SignUpEmail> {
                           style: Fonts.titleLarge,
                         ),
                         Gaps.v8,
-                        const Text(
-                          'Email',
-                          style: Fonts.titleSmall,
-                        ),
-                        Gaps.v8,
                         TextField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
