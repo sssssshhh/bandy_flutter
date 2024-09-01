@@ -3,31 +3,52 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class Lecture extends StatefulWidget {
-  const Lecture({super.key});
+  final String category;
+  final String level;
+
+  const Lecture({
+    super.key,
+    required this.category,
+    required this.level,
+  });
 
   @override
   State<Lecture> createState() => _LectureState();
 }
 
 class _LectureState extends State<Lecture> {
-  late final VideoPlayerController _videoPlayerController;
+  late VideoPlayerController _videoPlayerController;
   bool _isPaused = true;
   bool _isInitialized = false;
+  int _currentLectureIndex = 1;
 
   @override
   void initState() {
     super.initState();
+    _initializeVideoPlayer();
+  }
+
+  void _initializeVideoPlayer() {
     _videoPlayerController = VideoPlayerController.network(
-      'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/master/LV1_+(1).mp4',
+      'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/${widget.category}/${widget.level}/master/LV1_+($_currentLectureIndex).mp4',
     )..initialize().then((_) {
         setState(() {
           _isInitialized = true;
-          _videoPlayerController.pause(); // Ensure video starts paused
+          _videoPlayerController.pause();
         });
       }).catchError((error) {
-        // Handle errors here
         print('Error initializing video player: $error');
       });
+  }
+
+  void _loadVideoAtIndex(int index) {
+    setState(() {
+      _isInitialized = false;
+      _currentLectureIndex = index + 1;
+    });
+
+    _videoPlayerController.dispose(); // Dispose of the previous controller
+    _initializeVideoPlayer(); // Initialize a new controller with the new index
   }
 
   @override
@@ -67,9 +88,7 @@ class _LectureState extends State<Lecture> {
                       )
                     : Container(
                         color: Colors.grey,
-                        child: const Center(
-                            child:
-                                CircularProgressIndicator()), // Show loading indicator
+                        child: const Center(child: CircularProgressIndicator()),
                       ),
                 _isInitialized
                     ? IconButton(
@@ -93,32 +112,35 @@ class _LectureState extends State<Lecture> {
                 child: Column(
                   children: List.generate(
                     10,
-                    (index) => Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 150,
-                          height: 100,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8.0),
-                            border: Border.all(color: Colors.grey),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/thumbnail/confused_lv1_${index + 1}.png',
+                    (index) => GestureDetector(
+                      onTap: () => _loadVideoAtIndex(index),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 150,
+                            height: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              border: Border.all(color: Colors.grey),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/${widget.category}/${widget.level}/thumbnail/confused_lv1_${index + 1}.png',
+                                ),
+                                fit: BoxFit.cover,
                               ),
-                              fit: BoxFit.cover,
                             ),
                           ),
-                        ),
-                        Gaps.h12,
-                        Expanded(
-                          child: Text(
-                            'Lecture ${index + 1}',
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.deepOrange),
+                          Gaps.h12,
+                          Expanded(
+                            child: Text(
+                              'Lecture ${index + 1}',
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.deepOrange),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

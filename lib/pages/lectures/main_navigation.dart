@@ -1,6 +1,4 @@
-import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:bandy_flutter/pages/lectures/lectures.dart';
-import 'package:bandy_flutter/pages/lectures/puzzle.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -15,8 +13,6 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
-
-  final screens = [Lectures(key: GlobalKey()), Lecture(key: GlobalKey())];
 
   void _onTap(int index) {
     setState(() {
@@ -35,7 +31,7 @@ class _MainNavigationState extends State<MainNavigation> {
           ),
           Offstage(
             offstage: _selectedIndex != 1,
-            child: const Puzzle(),
+            child: const Lectures(),
           ),
         ],
       ),

@@ -73,7 +73,7 @@ Widget _getPage(String page) {
     case 'puzzle':
       return const Puzzle(); // Example page
     case 'lecture':
-      return const Lecture();
+      return const Lecture(category: 'confused_korean', level: 'level_1');
     case 'pronunciationAssessment':
       return const PronunciationAssessment(); // Example page
     // Add more cases for other pages
