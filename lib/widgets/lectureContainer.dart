@@ -27,7 +27,7 @@ class lectureContainer extends StatelessWidget {
         }
       },
       child: Container(
-        width: 180,
+        width: 130,
         height: 100,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),

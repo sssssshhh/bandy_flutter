@@ -122,7 +122,7 @@ class _LectureState extends State<Lecture> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                            width: 150,
+                            width: 130,
                             height: 100,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8.0),
