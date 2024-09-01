@@ -1,13 +1,9 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/lectures/lecture.dart';
-import 'package:bandy_flutter/pages/lectures/pronucation_assessment.dart';
-import 'package:bandy_flutter/pages/lectures/puzzle.dart';
+import 'package:bandy_flutter/widgets/lectureContainer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Lectures extends StatefulWidget {
   const Lectures({super.key});
@@ -67,133 +63,6 @@ class _LecturesState extends State<Lectures> {
                           'Lets Start',
                           style: Fonts.titleLarge,
                         ),
-                        Gaps.v20,
-                        // const Text(
-                        //   'Recommendation',
-                        //   style: Fonts.titleLMedium,
-                        // ),
-                        // const Text(
-                        //   'Recommended Courses for A1',
-                        //   style: Fonts.titleSmall,
-                        // ),
-                        // Gaps.v10,
-                        // Container(
-                        //   decoration: BoxDecoration(
-                        //     color: Colors.grey[200],
-                        //     borderRadius: BorderRadius.circular(20),
-                        //   ),
-                        //   child: const Padding(
-                        //     padding: EdgeInsets.symmetric(
-                        //       vertical: 50,
-                        //       horizontal: 50,
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                    Gaps.v20,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Podcast',
-                          style: Fonts.titleLMedium,
-                        ),
-                        Gaps.v10,
-                        SizedBox(
-                          height: 100, // ListView의 높이 지정
-                          child: ListView(
-                            scrollDirection: Axis.horizontal, // 가로 스크롤 설정
-                            children: [
-                              Container(
-                                // level 1
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                              Container(
-                                // level 2
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                              Container(
-                                // level 3
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    vertical: 50,
-                                    horizontal: 50,
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Gaps.v20,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Bitesize Story',
-                          style: Fonts.titleLMedium,
-                        ),
-                        Gaps.v10,
-                        SizedBox(
-                          height: 100, // ListView의 높이 지정
-                          child: ListView(
-                            scrollDirection: Axis.horizontal, // 가로 스크롤 설정
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Puzzle()),
-
-                                    // (context) =>
-                                    //     const PronunciationAssessment()),
-                                  );
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 50,
-                                      horizontal: 50,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Gaps.h10,
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                     Gaps.v20,
@@ -209,29 +78,27 @@ class _LecturesState extends State<Lectures> {
                           height: 100,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Puzzle()),
-                                  );
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: 50,
-                                      horizontal: 50,
-                                    ),
-                                  ),
-                                ),
+                            children: const [
+                              lectureContainer(
+                                page: 'puzzle',
+                                level: '1',
+                                thumbnailPath:
+                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/thumbnail/confused_lv1_1.png',
                               ),
                               Gaps.h10,
+                              lectureContainer(
+                                page: 'puzzle',
+                                level: '2',
+                                thumbnailPath:
+                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_2/thumbnail/confused_lv2_1.png',
+                              ),
+                              Gaps.h10,
+                              lectureContainer(
+                                page: 'puzzle',
+                                level: '3',
+                                thumbnailPath:
+                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_3/thumbnail/confused_lv3_1.png',
+                              ),
                             ],
                           ),
                         ),
