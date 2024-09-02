@@ -156,21 +156,21 @@ class _LecturesState extends State<Lectures> {
                                 page: bitesizeStory,
                                 level: level_1,
                                 thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_1/thumbnail/lv1_1.png',
+                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_1/thumbnail/lv1_1.png',
                               ),
                               Gaps.h10,
                               lectureContainer(
                                 page: bitesizeStory,
                                 level: level_2,
                                 thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_2/thumbnail/lv2_1.png',
+                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_2/thumbnail/lv2_1.png',
                               ),
                               Gaps.h10,
                               lectureContainer(
                                 page: bitesizeStory,
                                 level: level_3,
                                 thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_3/thumbnail/lv3_1.png',
+                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_3/thumbnail/lv3_1.png',
                               ),
                             ],
                           ),
