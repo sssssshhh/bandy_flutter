@@ -47,20 +47,6 @@ class lectureContainer extends StatelessWidget {
                 height: 100,
               ),
             ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Level $level',
-                  style: const TextStyle(
-                    color: Colors.deepOrange,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),

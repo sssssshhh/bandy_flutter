@@ -82,29 +82,48 @@ class _LecturesState extends State<Lectures> {
                         ),
                         Gaps.v10,
                         SizedBox(
-                          height: 100,
+                          height: 150,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
                             children: const [
-                              lectureContainer(
-                                page: confusedKorean,
-                                level: level_1,
-                                thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/thumbnail/lv1_1.png',
+                              Column(
+                                children: [
+                                  lectureContainer(
+                                    page: confusedKorean,
+                                    level: level_1,
+                                    thumbnailPath:
+                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/thumbnail/lv1_1.png',
+                                  ),
+                                  Gaps.h5,
+                                  Text('Level $level_1'),
+                                ],
                               ),
                               Gaps.h10,
-                              lectureContainer(
-                                page: confusedKorean,
-                                level: level_2,
-                                thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_2/thumbnail/lv2_1.png',
+                              Column(
+                                children: [
+                                  lectureContainer(
+                                    page: confusedKorean,
+                                    level: level_2,
+                                    thumbnailPath:
+                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_2/thumbnail/lv2_1.png',
+                                  ),
+                                  Gaps.h5,
+                                  Text('Level $level_2'),
+                                ],
                               ),
+                              Gaps.h5,
                               Gaps.h10,
-                              lectureContainer(
-                                page: confusedKorean,
-                                level: level_3,
-                                thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_3/thumbnail/lv3_1.png',
+                              Column(
+                                children: [
+                                  lectureContainer(
+                                    page: confusedKorean,
+                                    level: level_3,
+                                    thumbnailPath:
+                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_3/thumbnail/lv3_1.png',
+                                  ),
+                                  Gaps.h5,
+                                  Text('Level $level_3'),
+                                ],
                               ),
                             ],
                           ),
@@ -115,29 +134,47 @@ class _LecturesState extends State<Lectures> {
                         ),
                         Gaps.v10,
                         SizedBox(
-                          height: 100,
+                          height: 120,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
                             children: const [
-                              lectureContainer(
-                                page: podcast,
-                                level: level_1,
-                                thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_1/thumbnail/lv1_1.png',
+                              Column(
+                                children: [
+                                  lectureContainer(
+                                    page: podcast,
+                                    level: level_1,
+                                    thumbnailPath:
+                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_1/thumbnail/lv1_1.png',
+                                  ),
+                                  Gaps.h5,
+                                  Text('Level $level_1'),
+                                ],
                               ),
                               Gaps.h10,
-                              lectureContainer(
-                                page: podcast,
-                                level: level_2,
-                                thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_2/thumbnail/lv2_1.png',
+                              Column(
+                                children: [
+                                  lectureContainer(
+                                    page: podcast,
+                                    level: level_2,
+                                    thumbnailPath:
+                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_2/thumbnail/lv2_1.png',
+                                  ),
+                                  Gaps.h5,
+                                  Text('Level $level_2'),
+                                ],
                               ),
                               Gaps.h10,
-                              lectureContainer(
-                                page: podcast,
-                                level: level_3,
-                                thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_3/thumbnail/lv3_1.png',
+                              Column(
+                                children: [
+                                  lectureContainer(
+                                    page: podcast,
+                                    level: level_3,
+                                    thumbnailPath:
+                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_3/thumbnail/lv3_1.png',
+                                  ),
+                                  Gaps.h5,
+                                  Text('Level $level_3'),
+                                ],
                               ),
                             ],
                           ),
@@ -148,29 +185,47 @@ class _LecturesState extends State<Lectures> {
                         ),
                         Gaps.v10,
                         SizedBox(
-                          height: 100,
+                          height: 150,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
                             children: const [
-                              lectureContainer(
-                                page: bitesizeStory,
-                                level: level_1,
-                                thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_1/thumbnail/lv1_1.png',
+                              Column(
+                                children: [
+                                  lectureContainer(
+                                    page: bitesizeStory,
+                                    level: level_1,
+                                    thumbnailPath:
+                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_1/thumbnail/lv1_1.png',
+                                  ),
+                                  Gaps.h5,
+                                  Text('Level $level_1'),
+                                ],
                               ),
                               Gaps.h10,
-                              lectureContainer(
-                                page: bitesizeStory,
-                                level: level_2,
-                                thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_2/thumbnail/lv2_1.png',
+                              Column(
+                                children: [
+                                  lectureContainer(
+                                    page: bitesizeStory,
+                                    level: level_2,
+                                    thumbnailPath:
+                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_2/thumbnail/lv2_1.png',
+                                  ),
+                                  Gaps.h5,
+                                  Text('Level $level_2'),
+                                ],
                               ),
                               Gaps.h10,
-                              lectureContainer(
-                                page: bitesizeStory,
-                                level: level_3,
-                                thumbnailPath:
-                                    'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_3/thumbnail/lv3_1.png',
+                              Column(
+                                children: [
+                                  lectureContainer(
+                                    page: bitesizeStory,
+                                    level: level_3,
+                                    thumbnailPath:
+                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_3/thumbnail/lv3_1.png',
+                                  ),
+                                  Gaps.h5,
+                                  Text('Level $level_3'),
+                                ],
                               ),
                             ],
                           ),

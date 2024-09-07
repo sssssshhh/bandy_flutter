@@ -17,6 +17,11 @@ class SelectSignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Sign In",
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -30,10 +35,6 @@ class SelectSignIn extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Sign In',
-                      style: Fonts.titleLarge,
-                    ),
                     const Text(
                       'Lighting Up Your Korean Learning Journey',
                       style: Fonts.titleSmall,

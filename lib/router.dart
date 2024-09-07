@@ -5,10 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 final routerProvider = Provider((ref) {
-  ref.watch(authState);
+  final authStateCheck = ref.watch(authState);
   return GoRouter(
       initialLocation: SignUpOrSignIn.routeURL,
       redirect: (context, state) {
+        if (authStateCheck.isLoading) {
+          return null; // 현재 페이지에 머무름
+        }
         final isLoggedIn = ref.read(authRepo).isLoggedIn;
         if (!isLoggedIn) {
           if ((state.matchedLocation) != SignUpOrSignIn.routeURL) {
