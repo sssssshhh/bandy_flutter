@@ -12,7 +12,7 @@ final routerProvider = Provider((ref) {
         if (authStateCheck.isLoading) {
           return null; // 현재 페이지에 머무름
         }
-        final isLoggedIn = ref.read(authRepo).isLoggedIn;
+        final isLoggedIn = ref.watch(authRepo).isLoggedIn;
         if (!isLoggedIn) {
           if ((state.matchedLocation) != SignUpOrSignIn.routeURL) {
             return SignUpOrSignIn.routeURL;
