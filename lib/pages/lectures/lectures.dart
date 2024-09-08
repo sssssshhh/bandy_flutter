@@ -134,7 +134,7 @@ class _LecturesState extends State<Lectures> {
                         ),
                         Gaps.v10,
                         SizedBox(
-                          height: 120,
+                          height: 150,
                           child: ListView(
                             scrollDirection: Axis.horizontal,
                             children: const [
