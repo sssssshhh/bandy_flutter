@@ -43,7 +43,7 @@ dependencies:
   convert: ^3.1.1
   azure_speech_assessment: ^0.0.7
   firebase_core: ^2.24.2
-  firebase_auth: ^4.16.0
+  firebase_auth: ^4.20.0
   cloud_firestore: ^4.14.0
   firebase_storage: ^11.6.0
   flutter_riverpod: ^2.5.1
@@ -51,6 +51,7 @@ dependencies:
   archive: ^3.6.1
   flutter_native_splash: ^2.4.1
   flutter_launcher_icons: ^0.13.1
+  cached_network_image: ^3.4.0
 
 flutter_launcher_icons:
   image_path: assets/images/launcher/bandy_launcher.png

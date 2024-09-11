@@ -1,6 +1,7 @@
 import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:bandy_flutter/pages/lectures/pronucation_assessment.dart';
 import 'package:bandy_flutter/pages/lectures/puzzle.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class lectureContainer extends StatelessWidget {
@@ -40,8 +41,8 @@ class lectureContainer extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20.0),
-              child: Image.network(
-                thumbnailPath,
+              child: CachedNetworkImage(
+                imageUrl: thumbnailPath,
                 fit: BoxFit.cover,
                 width: 150,
                 height: 100,
