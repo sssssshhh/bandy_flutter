@@ -1,3 +1,4 @@
+import 'package:bandy_flutter/constants/cloudFrontPath.dart';
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
@@ -92,7 +93,7 @@ class _LecturesState extends State<Lectures> {
                                     page: confusedKorean,
                                     level: level_1,
                                     thumbnailPath:
-                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_1/thumbnail/lv1_1.png',
+                                        '${Cloudfrontpath.Domain}/confused_korean/level_1/thumbnail/lv1_1.png',
                                   ),
                                   Gaps.h5,
                                   Text('Level $level_1'),
@@ -105,7 +106,7 @@ class _LecturesState extends State<Lectures> {
                                     page: confusedKorean,
                                     level: level_2,
                                     thumbnailPath:
-                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_2/thumbnail/lv2_1.png',
+                                        '${Cloudfrontpath.Domain}/confused_korean/level_2/thumbnail/lv2_1.png',
                                   ),
                                   Gaps.h5,
                                   Text('Level $level_2'),
@@ -119,7 +120,7 @@ class _LecturesState extends State<Lectures> {
                                     page: confusedKorean,
                                     level: level_3,
                                     thumbnailPath:
-                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/confused_korean/level_3/thumbnail/lv3_1.png',
+                                        '${Cloudfrontpath.Domain}/confused_korean/level_3/thumbnail/lv3_1.png',
                                   ),
                                   Gaps.h5,
                                   Text('Level $level_3'),
@@ -144,7 +145,7 @@ class _LecturesState extends State<Lectures> {
                                     page: podcast,
                                     level: level_1,
                                     thumbnailPath:
-                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_1/thumbnail/lv1_1.png',
+                                        '${Cloudfrontpath.Domain}/podcast/level_1/thumbnail/lv1_1.png',
                                   ),
                                   Gaps.h5,
                                   Text('Level $level_1'),
@@ -157,7 +158,7 @@ class _LecturesState extends State<Lectures> {
                                     page: podcast,
                                     level: level_2,
                                     thumbnailPath:
-                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_2/thumbnail/lv2_1.png',
+                                        '${Cloudfrontpath.Domain}/podcast/level_2/thumbnail/lv2_1.png',
                                   ),
                                   Gaps.h5,
                                   Text('Level $level_2'),
@@ -170,7 +171,7 @@ class _LecturesState extends State<Lectures> {
                                     page: podcast,
                                     level: level_3,
                                     thumbnailPath:
-                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/podcast/level_3/thumbnail/lv3_1.png',
+                                        '${Cloudfrontpath.Domain}/podcast/level_3/thumbnail/lv3_1.png',
                                   ),
                                   Gaps.h5,
                                   Text('Level $level_3'),
@@ -195,7 +196,7 @@ class _LecturesState extends State<Lectures> {
                                     page: bitesizeStory,
                                     level: level_1,
                                     thumbnailPath:
-                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_1/thumbnail/lv1_1.png',
+                                        '${Cloudfrontpath.Domain}/bitesize_story/level_1/thumbnail/lv1_1.png',
                                   ),
                                   Gaps.h5,
                                   Text('Level $level_1'),
@@ -208,7 +209,7 @@ class _LecturesState extends State<Lectures> {
                                     page: bitesizeStory,
                                     level: level_2,
                                     thumbnailPath:
-                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_2/thumbnail/lv2_1.png',
+                                        '${Cloudfrontpath.Domain}/bitesize_story/level_2/thumbnail/lv2_1.png',
                                   ),
                                   Gaps.h5,
                                   Text('Level $level_2'),
@@ -221,7 +222,7 @@ class _LecturesState extends State<Lectures> {
                                     page: bitesizeStory,
                                     level: level_3,
                                     thumbnailPath:
-                                        'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/bitesize_story/level_3/thumbnail/lv3_1.png',
+                                        '${Cloudfrontpath.Domain}/bitesize_story/level_3/thumbnail/lv3_1.png',
                                   ),
                                   Gaps.h5,
                                   Text('Level $level_3'),

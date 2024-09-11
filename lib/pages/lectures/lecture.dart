@@ -1,3 +1,4 @@
+import 'package:bandy_flutter/constants/cloudFrontPath.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -30,7 +31,7 @@ class _LectureState extends State<Lecture> {
 
   void _initializeVideoPlayer() {
     _videoPlayerController = VideoPlayerController.network(
-      'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/${widget.category}/${widget.level}/master/LV1_$_currentLectureIndex.mp4',
+      '${Cloudfrontpath.Domain}/${widget.category}/${widget.level}/master/LV1_$_currentLectureIndex.mp4',
     )..initialize().then((_) {
         setState(() {
           _isInitialized = true;
@@ -129,7 +130,7 @@ class _LectureState extends State<Lecture> {
                               border: Border.all(color: Colors.grey),
                               image: DecorationImage(
                                 image: NetworkImage(
-                                  'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/${widget.category}/${widget.level}/thumbnail/lv1_${index + 1}.png',
+                                  '${Cloudfrontpath.Domain}/${widget.category}/${widget.level}/thumbnail/lv1_${index + 1}.png',
                                 ),
                                 fit: BoxFit.cover,
                               ),
