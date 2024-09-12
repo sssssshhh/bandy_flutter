@@ -1,6 +1,7 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
+import 'package:bandy_flutter/pages/authentication/sign_in/reset_password.dart';
 import 'package:bandy_flutter/pages/authentication/view_model/login_view_model.dart';
 import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,17 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
             );
       }
     }
+  }
+
+  void _onResetPasswordTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResetPassword(
+          email: formData["email"] ?? "",
+        ),
+      ),
+    );
   }
 
   @override
@@ -117,7 +129,23 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
                         bgColor: Colors.orange, // TODO: Colors.orange[200]
                         textColor: Colors.white,
                       ),
-                    )
+                    ),
+                    Gaps.v16,
+                    GestureDetector(
+                      onTap: _onResetPasswordTap,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Reset password',
+                              style: Fonts.titleSmall,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
