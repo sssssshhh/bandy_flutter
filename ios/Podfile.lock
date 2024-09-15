@@ -946,6 +946,8 @@ PODS:
     - abseil/meta/type_traits
     - abseil/xcprivacy
   - abseil/xcprivacy (1.20240116.2)
+  - audioplayers_darwin (0.0.1):
+    - Flutter
   - azure_speech_assessment (0.0.2):
     - Flutter
     - MicrosoftCognitiveServicesSpeech-iOS (~> 1.29.0)
@@ -1153,6 +1155,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - azure_speech_assessment (from `.symlinks/plugins/azure_speech_assessment/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
@@ -1191,6 +1194,8 @@ SPEC REPOS:
     - RecaptchaInterop
 
 EXTERNAL SOURCES:
+  audioplayers_darwin:
+    :path: ".symlinks/plugins/audioplayers_darwin/ios"
   azure_speech_assessment:
     :path: ".symlinks/plugins/azure_speech_assessment/ios"
   cloud_firestore:
@@ -1216,6 +1221,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: d121da9ef7e2ff4cab7666e76c5a3e0915ae08c3
+  audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   azure_speech_assessment: d1025acb1fccbbede0b91089c66fba396604e7a5
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
   cloud_firestore: 003d53b6b8b392600b7769acf9421cc4f23e5911

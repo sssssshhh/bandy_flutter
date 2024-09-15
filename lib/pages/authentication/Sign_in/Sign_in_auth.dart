@@ -58,7 +58,7 @@ class SelectSignIn extends StatelessWidget {
                     GestureDetector(
                       onTap: () => _onSingInEmailTap(context),
                       child: const AuthButton(
-                        text: 'Use your email', // Or use your email
+                        text: 'Use your email',
                         icon: FaIcon(FontAwesomeIcons.user),
                       ),
                     ),

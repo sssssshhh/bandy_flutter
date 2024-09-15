@@ -2,6 +2,7 @@ import 'package:bandy_flutter/constants/cloudFrontPath.dart';
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
+import 'package:bandy_flutter/pages/lectures/pronucation_assessment.dart';
 import 'package:bandy_flutter/widgets/lectureContainer.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,15 @@ class _LecturesState extends State<Lectures> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void _onTest() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PronunciationAssessment(),
+      ),
+    );
   }
 
   @override
@@ -74,6 +84,21 @@ class _LecturesState extends State<Lectures> {
                       ],
                     ),
                     Gaps.v20,
+                    GestureDetector(
+                      onTap: _onTest,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Reset password',
+                              style: Fonts.titleSmall,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

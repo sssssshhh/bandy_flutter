@@ -37,9 +37,7 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ResetPassword(
-          email: formData["email"] ?? "",
-        ),
+        builder: (context) => const ResetPassword(),
       ),
     );
   }
