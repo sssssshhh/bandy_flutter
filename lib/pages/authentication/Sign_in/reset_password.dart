@@ -23,11 +23,11 @@ class _ResetPasswordState extends State<ResetPassword> {
       try {
         await FirebaseAuth.instance.sendPasswordResetEmail(email: _email);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('비밀번호 재설정 이메일이 전송되었습니다.')),
+          const SnackBar(content: Text('Password reset email sent!')),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('오류 발생: $e')),
+          const SnackBar(content: Text('Something went wrong')),
         );
       }
     }
@@ -81,7 +81,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   onTap: _onResetPasswordTap,
                   child: const Button(
                     text: 'Send password reset Email',
-                    bgColor: Colors.orange, // TODO: Colors.orange[200]
+                    bgColor: Colors.orange,
                     textColor: Colors.white,
                   ),
                 ),

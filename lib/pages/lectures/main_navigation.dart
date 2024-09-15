@@ -1,4 +1,5 @@
 import 'package:bandy_flutter/pages/lectures/lectures.dart';
+import 'package:bandy_flutter/pages/setting/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -26,25 +27,44 @@ class _MainNavigationState extends State<MainNavigation> {
       body: Stack(
         children: [
           Offstage(
-            offstage: _selectedIndex != 0,
-            child: const Lectures(),
+            offstage: _selectedIndex == 0,
+            child: const Settings(),
           ),
           Offstage(
-            offstage: _selectedIndex != 1,
+            offstage: _selectedIndex == 1,
             child: const Lectures(),
           ),
         ],
       ),
-      bottomNavigationBar: const BottomAppBar(
-        child: Center(
-          heightFactor: 1,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FaIcon(FontAwesomeIcons.house),
-              Text("home"),
-            ],
-          ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () => _onTap(0),
+                    icon: const FaIcon(FontAwesomeIcons.house),
+                    tooltip: "Home",
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () => _onTap(1),
+                    icon: const FaIcon(FontAwesomeIcons.gear),
+                    tooltip: "Setting",
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
