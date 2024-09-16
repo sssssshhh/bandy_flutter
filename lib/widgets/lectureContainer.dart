@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 
 class lectureContainer extends StatelessWidget {
   final String page;
+  final String? level;
   final String thumbnailPath;
-  final String level;
 
   const lectureContainer({
     super.key,
     required this.page,
-    required this.level,
+    this.level,
     required this.thumbnailPath,
   });
 
@@ -65,7 +65,7 @@ Widget _getPage(String page) {
       return const Lecture(category: 'podcast', level: 'level_1');
     case 'bitesize_story':
       return const Lecture(category: 'bitesize_story', level: 'level_1');
-    case 'pronunciationAssessment':
+    case 'pronucation_assessment':
       return const PronunciationAssessment();
     default:
       return const Placeholder(); // Fallback page

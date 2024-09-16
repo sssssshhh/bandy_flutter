@@ -16,8 +16,6 @@ class PronunciationAssessment extends StatefulWidget {
 }
 
 class _PronunciationAssessmentState extends State<PronunciationAssessment> {
-  // final String s3FileUrl =
-  //     'https://bandy-contents.s3.ap-northeast-1.amazonaws.com/test.wav';
   final String apiUrl =
       'https://pronunciation-assessment.vercel.app/api/assessment'; // API URL을 실제로 사용 중인 URL로 변경하세요
   final AudioRecorder audioRecorder = AudioRecorder();

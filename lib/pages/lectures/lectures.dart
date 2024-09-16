@@ -55,6 +55,7 @@ class _LecturesState extends State<Lectures> {
     const String confusedKorean = 'confused_korean';
     const String podcast = 'podcast';
     const String bitesizeStory = 'bitesize_story';
+    const String pronucationAssessment = 'pronucation_assessment';
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -84,20 +85,29 @@ class _LecturesState extends State<Lectures> {
                       ],
                     ),
                     Gaps.v20,
-                    GestureDetector(
-                      onTap: _onTest,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Reset password',
-                              style: Fonts.titleSmall,
-                            ),
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Pronunciation Assessment',
+                          style: Fonts.titleLMedium,
+                        ),
+                        Gaps.v10,
+                        SizedBox(
+                          height: 150,
+                          child: Column(
+                            children: [
+                              lectureContainer(
+                                page: pronucationAssessment,
+                                thumbnailPath:
+                                    '${Cloudfrontpath.Domain}/pronunciation_assessment/thumbnail/pa.png',
+                              ),
+                              Gaps.h5,
+                              Text('Pronunciation Assessment in Korean'),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
