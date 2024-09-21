@@ -84,31 +84,31 @@ class _LecturesState extends State<Lectures> {
                         ),
                       ],
                     ),
-                    Gaps.v20,
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Pronunciation Assessment',
-                          style: Fonts.titleLMedium,
-                        ),
-                        Gaps.v10,
-                        SizedBox(
-                          height: 150,
-                          child: Column(
-                            children: [
-                              lectureContainer(
-                                page: pronucationAssessment,
-                                thumbnailPath:
-                                    '${Cloudfrontpath.Domain}/pronunciation_assessment/thumbnail/pa.png',
-                              ),
-                              Gaps.h5,
-                              Text('Pronunciation Assessment in Korean'),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Gaps.v20,
+                    // const Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     Text(
+                    //       'Pronunciation Assessment',
+                    //       style: Fonts.titleLMedium,
+                    //     ),
+                    //     Gaps.v10,
+                    //     SizedBox(
+                    //       height: 150,
+                    //       child: Column(
+                    //         children: [
+                    //           lectureContainer(
+                    //             page: pronucationAssessment,
+                    //             thumbnailPath:
+                    //                 '${Cloudfrontpath.Domain}/pronunciation_assessment/thumbnail/pa.png',
+                    //           ),
+                    //           Gaps.h5,
+                    //           Text('Pronunciation Assessment in Korean'),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
