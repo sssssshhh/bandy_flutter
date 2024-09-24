@@ -116,35 +116,41 @@ class _LectureState extends State<Lecture> {
                 color: Colors.white,
                 child: Column(
                   children: List.generate(
-                    10,
+                    10, // TODO: magic number
                     (index) => GestureDetector(
                       onTap: () => _loadVideoAtIndex(index),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 130,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: Border.all(color: Colors.grey),
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                  '${Cloudfrontpath.Domain}/${widget.category}/${widget.level}/thumbnail/lv1_${index + 1}.png',
+                      child: Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 130,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                border: Border.all(color: Colors.grey),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    '${Cloudfrontpath.Domain}/${widget.category}/${widget.level}/thumbnail/lv1_${index + 1}.png',
+                                  ),
+                                  fit: BoxFit.cover,
                                 ),
-                                fit: BoxFit.cover,
                               ),
                             ),
-                          ),
-                          Gaps.h12,
-                          Expanded(
-                            child: Text(
-                              'Lecture ${index + 1}',
-                              style: const TextStyle(
-                                  fontSize: 16, color: Colors.deepOrange),
+                            Gaps.h12,
+                            Expanded(
+                              child: Text(
+                                'Lecture ${index + 1}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.orange,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

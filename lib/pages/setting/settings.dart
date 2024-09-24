@@ -19,7 +19,7 @@ class Settings extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => const SignUpOrSignIn(),
           ),
-        ); // 탈퇴 후 이전 화면으로 돌아감
+        );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

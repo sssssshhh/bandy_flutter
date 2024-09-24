@@ -68,8 +68,8 @@ class _LecturesState extends State<Lectures> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: Sizes.size28,
-                  vertical: Sizes.size5,
+                  horizontal: Sizes.size40,
+                  vertical: Sizes.size40,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +79,7 @@ class _LecturesState extends State<Lectures> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Lets Start',
+                          "Let's Start",
                           style: Fonts.titleLarge,
                         ),
                       ],
@@ -109,6 +109,7 @@ class _LecturesState extends State<Lectures> {
                     //     ),
                     //   ],
                     // ),
+                    Gaps.v10,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
