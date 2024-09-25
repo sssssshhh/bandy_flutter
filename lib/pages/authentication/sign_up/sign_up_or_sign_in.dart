@@ -45,6 +45,7 @@ class _SignUpOrSignInState extends State<SignUpOrSignIn> {
               ),
               const Text(
                 'Lighting Up Your Korean Learning Journey',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: Sizes.size24,
                 ),

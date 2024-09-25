@@ -1,9 +1,13 @@
+import 'package:bandy_flutter/constants/cloudFrontPath.dart';
+import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.dart';
 import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class Onboarding extends StatefulWidget {
+  static String routeName = "onBoarding";
+  static String routeURL = "/onBoarding";
   const Onboarding({super.key});
 
   @override
@@ -12,12 +16,8 @@ class Onboarding extends StatefulWidget {
 
 class _OnboardingState extends State<Onboarding> {
   void _onSignInSignUpTap(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const SignUpOrSignIn(),
-      ),
-      (route) => false,
-    );
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const SignUpOrSignIn()));
   }
 
   @override
@@ -25,15 +25,41 @@ class _OnboardingState extends State<Onboarding> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(20.0),
+            child: TabPageSelector(
+              color: Colors.white,
+              selectedColor: Colors.amber,
+            ),
+          ),
+        ),
         body: SafeArea(
           child: TabBarView(
             children: [
-              const Padding(
-                padding: EdgeInsets.all(Sizes.size40),
+              Padding(
+                padding: const EdgeInsets.all(Sizes.size40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
+                    Container(
+                      width: 260,
+                      height: 390,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        image: const DecorationImage(
+                          image: NetworkImage(
+                            '${Cloudfrontpath.Domain}/onboarding/1.png',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Gaps.v64,
+                    const Text(
                       'Develop your reading skills',
                       style: TextStyle(
                         color: Colors.black,
@@ -41,23 +67,39 @@ class _OnboardingState extends State<Onboarding> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(
-                      'Korean stories narrated by an actor',
+                    Gaps.v28,
+                    const Text(
+                      'Korean stories narrated by anactor',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w100,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(Sizes.size40),
+              Padding(
+                padding: const EdgeInsets.all(Sizes.size40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
+                    Container(
+                      width: 260,
+                      height: 390,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        image: const DecorationImage(
+                          image: NetworkImage(
+                            '${Cloudfrontpath.Domain}/onboarding/2.png',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Gaps.v64,
+                    const Text(
                       'Improve your pronunciation',
                       style: TextStyle(
                         color: Colors.black,
@@ -65,51 +107,57 @@ class _OnboardingState extends State<Onboarding> {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(
-                      'Practice your pronunciation with AI: listen & repeat',
+                    Gaps.v28,
+                    const Text(
+                      'AI Korean pronunciation practice: listen & repeat',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w100,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  Sizes.size20, // Left
-                  Sizes.size40, // Top,
-                  Sizes.size20, // Right
-                  0, // Bottom
-                ),
+                padding: const EdgeInsets.all(Sizes.size40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Have fun learning with experts',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                            ),
+                    Container(
+                      width: 260,
+                      height: 390,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        image: const DecorationImage(
+                          image: NetworkImage(
+                            '${Cloudfrontpath.Domain}/onboarding/3.png',
                           ),
-                          Text(
-                            'Listen to lectures and complete quizzes',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w100,
-                            ),
-                          ),
-                        ],
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
+                    Gaps.v64,
+                    const Text(
+                      'Have fun learning with experts',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Gaps.v28,
+                    const Text(
+                      'Lecture clips and quizzes',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    Gaps.v40,
                     GestureDetector(
                       onTap: () => _onSignInSignUpTap(context),
                       child: const Button(
@@ -120,17 +168,6 @@ class _OnboardingState extends State<Onboarding> {
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: const BottomAppBar(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TabPageSelector(
-                color: Colors.white,
-                selectedColor: Colors.amberAccent,
               ),
             ],
           ),

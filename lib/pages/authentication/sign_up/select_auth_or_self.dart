@@ -36,11 +36,12 @@ class SelectSignUp extends StatelessWidget {
                       'Sign Up',
                       style: Fonts.titleLarge,
                     ),
+                    Gaps.v20,
                     const Text(
                       'Lighting Up Your Korean Learning Journey',
                       style: Fonts.titleSmall,
                     ),
-                    Gaps.v8,
+                    Gaps.v16,
                     // const AuthButton(
                     //   text: 'Continue with Apple',
                     //   icon: FaIcon(FontAwesomeIcons.apple),
@@ -63,7 +64,7 @@ class SelectSignUp extends StatelessWidget {
                         icon: FaIcon(FontAwesomeIcons.user),
                       ),
                     ),
-                    Gaps.v8,
+                    Gaps.v20,
                     const Column(
                       children: [
                         Text(
