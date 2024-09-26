@@ -18,7 +18,7 @@ class Recommendation extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          height: 1000,
+          height: 500,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -27,13 +27,13 @@ class Recommendation extends StatelessWidget {
                 Color(0xFFFFFACD),
                 Colors.white,
               ],
-              stops: [0.3, 0.3], // 30% 지점에서 색상 변경
+              stops: [0.6, 0.3], // 30% 지점에서 색상 변경
             ),
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: 30,
+            horizontal: 20,
             vertical: 70,
           ),
           child: Column(
@@ -88,8 +88,8 @@ class Recommendation extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
                       border: Border.all(
-                        color: Colors.black12,
-                        width: 3,
+                        color: Colors.white,
+                        width: 4,
                       ),
                     ),
                     child: Stack(
@@ -106,18 +106,15 @@ class Recommendation extends StatelessWidget {
                         ),
                         Positioned(
                           left: 10, // 이미지 왼쪽에서 10px 위치
-                          bottom: 10, // 이미지 아래에서 10px 위치
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5), // 반투명 배경
-                              shape: BoxShape.circle,
-                            ),
+                          bottom: 5, // 이미지 아래에서 10px 위치
+                          child: SizedBox(
+                            width: 70,
+                            height: 70,
                             child: IconButton(
                               icon: const Icon(
                                 Icons.play_arrow,
-                                color: Colors.white,
+                                color: Colors.black,
+                                size: 50,
                               ),
                               onPressed: () {
                                 Navigator.push(

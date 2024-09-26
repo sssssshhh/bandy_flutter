@@ -118,53 +118,6 @@ class _LecturesState extends State<Lectures> {
                           style: Fonts.titleLMedium,
                         ),
                         Gaps.v10,
-                        SizedBox(
-                          height: 150,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: const [
-                              Column(
-                                children: [
-                                  lectureContainer(
-                                    page: confusedKorean,
-                                    level: level_1,
-                                    thumbnailPath:
-                                        '${Cloudfrontpath.Domain}/confused_korean/level_1/thumbnail/lv1_1.png',
-                                  ),
-                                  Gaps.h5,
-                                  Text('Level $level_1'),
-                                ],
-                              ),
-                              Gaps.h10,
-                              Column(
-                                children: [
-                                  lectureContainer(
-                                    page: confusedKorean,
-                                    level: level_2,
-                                    thumbnailPath:
-                                        '${Cloudfrontpath.Domain}/confused_korean/level_2/thumbnail/lv2_1.png',
-                                  ),
-                                  Gaps.h5,
-                                  Text('Level $level_2'),
-                                ],
-                              ),
-                              Gaps.h5,
-                              Gaps.h10,
-                              Column(
-                                children: [
-                                  lectureContainer(
-                                    page: confusedKorean,
-                                    level: level_3,
-                                    thumbnailPath:
-                                        '${Cloudfrontpath.Domain}/confused_korean/level_3/thumbnail/lv3_1.png',
-                                  ),
-                                  Gaps.h5,
-                                  Text('Level $level_3'),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
                         const Text(
                           'PodCast',
                           style: Fonts.titleLMedium,
