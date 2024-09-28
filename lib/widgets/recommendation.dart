@@ -41,13 +41,9 @@ class Recommendation extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: 50,
                     height: 50,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
                     child: ClipOval(
                       child: Image.asset(
                         'assets/images/lecture/bandy_lecture.png',
@@ -121,7 +117,7 @@ class Recommendation extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => const Lecture(
-                                          category: 'confused_korean',
+                                          category: Bandy.confusedKorean,
                                           level: 'level_1')),
                                 );
                               },

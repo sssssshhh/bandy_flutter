@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:bandy_flutter/constants/bandy.dart';
-import 'package:bandy_flutter/constants/cloudFrontPath.dart';
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/widgets/recommendation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/services.dart';
 
 class Lectures extends StatefulWidget {
   const Lectures({super.key});
@@ -16,83 +16,106 @@ class Lectures extends StatefulWidget {
 }
 
 class _LecturesState extends State<Lectures> {
-  Future<List<dynamic>>? podcasts;
-  Future<List<dynamic>>? confusedKoreans;
-  Future<List<dynamic>>? bitesizeStories;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  List<Map<String, dynamic>> podcasts = [];
+  List<Map<String, dynamic>> confusedKoreans = [];
+  List<Map<String, dynamic>> bitesizeStories = [];
+  bool isLoading = true;
+
+  Future<void> setBitesizeStory() async {
+    final dbs = await _db
+        .collection('lectures')
+        .doc(Bandy.bitesizeStory)
+        .collection('level1')
+        .get();
+
+    setState(() {
+      bitesizeStories = dbs.docs.map((doc) => doc.data()).toList();
+    });
+  }
+
+  Future<void> setPodcast() async {
+    final dbs = await _db
+        .collection('lectures')
+        .doc(Bandy.podcast)
+        .collection('level1')
+        .get();
+
+    setState(() {
+      podcasts = dbs.docs.map((doc) => doc.data()).toList();
+    });
+  }
+
+  Future<void> setConfusedKorean() async {
+    final dbs = await _db
+        .collection('lectures')
+        .doc(Bandy.confusedKorean)
+        .collection('level1')
+        .get();
+
+    setState(() {
+      confusedKoreans = dbs.docs.map((doc) => doc.data()).toList();
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    podcasts = loadLectures(Bandy.podcast);
-    confusedKoreans = loadLectures(Bandy.confusedKorean);
-    bitesizeStories = loadLectures(Bandy.bitesizeStory);
+    loadAllLectures();
   }
 
-  Future<List<dynamic>> loadLectures(String category) async {
-    final String response =
-        await rootBundle.loadString('assets/text/data.json');
-    final data = await json.decode(response);
-    return data[category] ?? [];
+  Future<void> loadAllLectures() async {
+    // 명시적으로 Future<void>의 리스트로 선언
+    await Future.wait<void>([
+      setPodcast(),
+      setConfusedKorean(),
+      setBitesizeStory(),
+    ]);
+
+    setState(() {
+      isLoading = false; // 데이터 로드가 완료되면 로딩 상태를 false로 설정
+    });
   }
+
+  // Future<List<dynamic>> loadLectures(String category) async {
+  //   final String response =
+  //       await rootBundle.loadString('assets/text/data.json');
+  //   final data = await json.decode(response);
+  //   return data[category] ?? [];
+  // }
+
+  // Future<String?> getUserInfo() async {
+  //   final User? user = _auth.currentUser;
+
+  //   if (user != null) {
+  //     print(user.email);
+  //     return user.email;
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<dynamic>>(
-        future: podcasts,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No lectures found.'));
-          }
-          final List<dynamic> podcastList = snapshot.data!;
-
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Recommendation(),
-                clips(podcastList, 'podcast'),
-                FutureBuilder<List<dynamic>>(
-                  future: confusedKoreans,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(
-                          child: Text('No Confused Korean lectures found.'));
-                    }
-                    return clips(snapshot.data!, 'confused_korean');
-                  },
-                ),
-                FutureBuilder<List<dynamic>>(
-                  future: bitesizeStories,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(
-                          child: Text('No Bitesize Stories found.'));
-                    }
-                    return clips(snapshot.data!, 'bitesize_story');
-                  },
-                ),
-              ],
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Recommendation(),
+                    clips(podcasts, Bandy.podcast),
+                    clips(confusedKoreans, Bandy.confusedKorean),
+                    clips(bitesizeStories, Bandy.bitesizeStory),
+                  ]),
             ),
-          );
-        },
-      ),
     );
   }
 
-  Padding clips(List<dynamic> lectureList, String category) {
+  Padding clips(List<Map<String, dynamic>> lectureList, String category) {
     IconData icon;
     String title;
 
@@ -110,7 +133,7 @@ class _LecturesState extends State<Lectures> {
         title = 'Bitesize Story';
         break;
       default:
-        icon = Icons.error; // Default icon in case of an unknown category
+        icon = Icons.error;
         title = 'Unknown Category';
         break;
     }
@@ -119,6 +142,7 @@ class _LecturesState extends State<Lectures> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
       child: Column(
         children: [
+          // 타이틀 영역
           Row(
             children: [
               IconButton(
@@ -155,6 +179,8 @@ class _LecturesState extends State<Lectures> {
                           ),
                         ),
                         Gaps.v10,
+
+                        // 텍스트 섹션
                         Text(
                           lecture['title'] ?? "No title",
                           style: const TextStyle(
@@ -183,7 +209,6 @@ class _LecturesState extends State<Lectures> {
   }
 }
 
-// Example LectureDetailPage widget
 class LectureDetailPage extends StatelessWidget {
   final dynamic lecture;
 

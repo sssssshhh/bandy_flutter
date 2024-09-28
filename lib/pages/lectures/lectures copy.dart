@@ -4,6 +4,7 @@ import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/lectures/pronucation_assessment.dart';
 import 'package:bandy_flutter/widgets/lectureContainer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Lectures extends StatefulWidget {
@@ -14,8 +15,6 @@ class Lectures extends StatefulWidget {
 }
 
 class _LecturesState extends State<Lectures> {
-  // final FirebaseFirestore _db = FirebaseFirestore.instance;
-
   // Future<Map<String, dynamic>?> findDB() async {
   //   final doc = await _db
   //       .collection('lectures')
@@ -25,6 +24,24 @@ class _LecturesState extends State<Lectures> {
   //       .get();
   //   print(doc.data());
   //   return doc.data();
+  // }
+
+  // Future<List<dynamic>> loadLectures(String category) async {
+  //   final String response =
+  //       await rootBundle.loadString('assets/text/data.json');
+  //   final data = await json.decode(response);
+  //   return data[category] ?? [];
+  // }
+
+  // Future<String?> getUserInfo() async {
+  //   final User? user = _auth.currentUser;
+
+  //   if (user != null) {
+  //     print(user.email);
+  //     return user.email;
+  //   } else {
+  //     return null;
+  //   }
   // }
 
   @override
