@@ -23,6 +23,8 @@ class _LecturesState extends State<Lectures> {
   List<Map<String, dynamic>> confusedKoreans = [];
   List<Map<String, dynamic>> bitesizeStories = [];
   bool isLoading = true;
+  String nickname = '';
+  String level = '';
 
   Future<void> setBitesizeStory() async {
     final dbs = await _db
@@ -78,14 +80,24 @@ class _LecturesState extends State<Lectures> {
     });
   }
 
-  void test() {
-    _db.collection("cities").doc("LA").set({"test": "1", "iddd": "22"}).onError(
-        (e, _) => print("Error writing document: $e"));
+  Future<void> setUserInfo() async {
+    String? email;
+    if (_auth.currentUser?.email != null) {
+      email = _auth.currentUser!.email;
+    }
+
+    final dbs = await _db.collection('users').doc(email).get();
+
+    print(dbs.data()?['nickname']);
+
+    setState(() {
+      nickname = dbs.data()?['nickname'];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    test();
+    setUserInfo();
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -93,7 +105,7 @@ class _LecturesState extends State<Lectures> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Recommendation(),
+                    Recommendation(nickname: nickname),
                     clips(podcasts, Bandy.podcast),
                     clips(confusedKoreans, Bandy.confusedKorean),
                     clips(bitesizeStories, Bandy.bitesizeStory),

@@ -5,11 +5,19 @@ import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class Recommendation extends StatelessWidget {
+class Recommendation extends StatefulWidget {
+  final String nickname;
+
   const Recommendation({
     super.key,
+    required this.nickname,
   });
 
+  @override
+  State<Recommendation> createState() => _RecommendationState();
+}
+
+class _RecommendationState extends State<Recommendation> {
   @override
   Widget build(BuildContext context) {
     const double recommendationWidth = 300;
@@ -52,9 +60,9 @@ class Recommendation extends StatelessWidget {
                     ),
                   ),
                   Gaps.h10,
-                  const Text(
-                    "Let's Start",
-                    style: TextStyle(
+                  Text(
+                    'Hello ${widget.nickname}',
+                    style: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
