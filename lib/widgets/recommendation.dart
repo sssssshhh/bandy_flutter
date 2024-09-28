@@ -1,5 +1,4 @@
 import 'package:bandy_flutter/constants/bandy.dart';
-import 'package:bandy_flutter/constants/cloudFrontPath.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,10 +6,12 @@ import 'package:flutter/material.dart';
 
 class Recommendation extends StatefulWidget {
   final String nickname;
+  final Map<String, dynamic> lecture;
 
   const Recommendation({
     super.key,
     required this.nickname,
+    required this.lecture,
   });
 
   @override
@@ -101,8 +102,7 @@ class _RecommendationState extends State<Recommendation> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child: CachedNetworkImage(
-                            imageUrl:
-                                '${Cloudfrontpath.Domain}/${Bandy.confusedKorean}/level_1/thumbnail/lv1_1.png',
+                            imageUrl: widget.lecture['thumbnailPath'],
                             fit: BoxFit.cover,
                             width: recommendationWidth,
                             height: recommendationHeight,
@@ -124,9 +124,12 @@ class _RecommendationState extends State<Recommendation> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Lecture(
-                                          category: Bandy.confusedKorean,
-                                          level: 'level_1')),
+                                    builder: (context) => Lecture(
+                                        category: Bandy.confusedKorean,
+                                        level: 'level_1',
+                                        lecture: widget.lecture,
+                                        lessonNo: 1),
+                                  ),
                                 );
                               },
                             ),
@@ -139,20 +142,19 @@ class _RecommendationState extends State<Recommendation> {
                     width: recommendationWidth,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(3.0),
-                      child: const Padding(
-                        padding: EdgeInsets.all(10.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
                         child: Column(
                           children: [
-                            // Confused lev1-1
                             Text(
-                              "단모음 ㅓ, ㅕ의 발음 (ㅗ, ㅛ 단어 비교) ",
-                              style: TextStyle(
+                              widget.lecture['title'],
+                              style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.start,
                             ),
-                            Text(
+                            const Text(
                               "In Korea, there are several folk remedies, These can be used to treat some ...",
                               style: TextStyle(
                                 fontSize: 12,

@@ -6,12 +6,15 @@ import 'package:video_player/video_player.dart';
 class Lecture extends StatefulWidget {
   final String category;
   final String level;
+  final int lessonNo;
+  final Map<String, dynamic> lecture;
 
-  const Lecture({
-    super.key,
-    required this.category,
-    required this.level,
-  });
+  const Lecture(
+      {super.key,
+      required this.category,
+      required this.level,
+      required this.lecture,
+      required this.lessonNo});
 
   @override
   State<Lecture> createState() => _LectureState();
@@ -21,7 +24,6 @@ class _LectureState extends State<Lecture> {
   late VideoPlayerController _videoPlayerController;
   bool _isPaused = true;
   bool _isInitialized = false;
-  int _currentLectureIndex = 1;
 
   @override
   void initState() {
@@ -31,7 +33,7 @@ class _LectureState extends State<Lecture> {
 
   void _initializeVideoPlayer() {
     _videoPlayerController = VideoPlayerController.network(
-      '${Cloudfrontpath.Domain}/${widget.category}/${widget.level}/master/LV1_$_currentLectureIndex.mp4',
+      widget.lecture['masterVideoPath'],
     )..initialize().then((_) {
         setState(() {
           _isInitialized = true;
@@ -45,7 +47,6 @@ class _LectureState extends State<Lecture> {
   void _loadVideoAtIndex(int index) {
     setState(() {
       _isInitialized = false;
-      _currentLectureIndex = index + 1;
     });
 
     _videoPlayerController.dispose(); // Dispose of the previous controller
@@ -81,8 +82,8 @@ class _LectureState extends State<Lecture> {
       ),
       body: Column(
         children: [
-          Expanded(
-            flex: 1,
+          SizedBox(
+            height: 250,
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -106,6 +107,43 @@ class _LectureState extends State<Lecture> {
                       )
                     : const SizedBox.shrink(),
               ],
+            ),
+          ),
+          Gaps.v10,
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 4, horizontal: 10), // 타원형 크기 조정
+                    decoration: BoxDecoration(
+                      color: Colors.amber[100],
+                      borderRadius: BorderRadius.circular(5), // 타원형을 위한 경계 반지름
+                    ),
+                    child: Text(
+                      'lesson ${widget.lessonNo}',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange[500],
+                      ),
+                    ),
+                  ),
+                  Gaps.v10,
+                  Text(
+                    widget.lecture['title'],
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(

@@ -65,6 +65,7 @@ class _LecturesState extends State<Lectures> {
   @override
   void initState() {
     super.initState();
+    setUserInfo();
     loadAllLectures();
   }
 
@@ -87,17 +88,16 @@ class _LecturesState extends State<Lectures> {
     }
 
     final dbs = await _db.collection('users').doc(email).get();
-
-    print(dbs.data()?['nickname']);
-
-    setState(() {
-      nickname = dbs.data()?['nickname'];
-    });
+    if (dbs.exists && dbs.data() != null) {
+      setState(() {
+        nickname = dbs.data()?['nickname'];
+        level = dbs.data()?['level']; // TODO: 무한로딩
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    setUserInfo();
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -105,7 +105,8 @@ class _LecturesState extends State<Lectures> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Recommendation(nickname: nickname),
+                    Recommendation(
+                        nickname: nickname, lecture: confusedKoreans[1]),
                     clips(podcasts, Bandy.podcast),
                     clips(confusedKoreans, Bandy.confusedKorean),
                     clips(bitesizeStories, Bandy.bitesizeStory),
@@ -160,7 +161,7 @@ class _LecturesState extends State<Lectures> {
               scrollDirection: Axis.horizontal,
               itemCount: lectureList.length,
               itemBuilder: (context, index) {
-                final lecture = lectureList[index];
+                final lecture = lectureList[index]; // TODO: index 와 doc명 일치?
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: GestureDetector(
@@ -168,8 +169,12 @@ class _LecturesState extends State<Lectures> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              Lecture(category: category, level: 'level_1'),
+                          builder: (context) => Lecture(
+                            category: category,
+                            level: 'level_1',
+                            lecture: lecture,
+                            lessonNo: index,
+                          ),
                         ),
                       );
                     },
@@ -186,7 +191,7 @@ class _LecturesState extends State<Lectures> {
                         ),
                         Gaps.v10,
                         Text(
-                          lecture['title'] ?? "No title",
+                          lecture['title'] ?? "",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
