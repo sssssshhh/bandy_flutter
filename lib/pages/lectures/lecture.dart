@@ -9,26 +9,29 @@ class Lecture extends StatefulWidget {
   final int lessonNo;
   final Map<String, dynamic> lecture;
 
-  const Lecture(
-      {super.key,
-      required this.category,
-      required this.level,
-      required this.lecture,
-      required this.lessonNo});
+  const Lecture({
+    super.key,
+    required this.category,
+    required this.level,
+    required this.lecture,
+    required this.lessonNo,
+  });
 
   @override
   State<Lecture> createState() => _LectureState();
 }
 
-class _LectureState extends State<Lecture> {
+class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   late VideoPlayerController _videoPlayerController;
   bool _isPaused = true;
   bool _isInitialized = false;
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _initializeVideoPlayer();
+    _tabController = TabController(length: 3, vsync: this); // 3개의 탭 설정
   }
 
   void _initializeVideoPlayer() {
@@ -49,13 +52,14 @@ class _LectureState extends State<Lecture> {
       _isInitialized = false;
     });
 
-    _videoPlayerController.dispose(); // Dispose of the previous controller
-    _initializeVideoPlayer(); // Initialize a new controller with the new index
+    _videoPlayerController.dispose(); // 이전 컨트롤러 해제
+    _initializeVideoPlayer(); // 새 컨트롤러 초기화
   }
 
   @override
   void dispose() {
     _videoPlayerController.dispose();
+    _tabController.dispose(); // TabController 해제
     super.dispose();
   }
 
@@ -76,9 +80,7 @@ class _LectureState extends State<Lecture> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          widget.category,
-        ),
+        title: Text(widget.category),
       ),
       body: Column(
         children: [
@@ -118,11 +120,11 @@ class _LectureState extends State<Lecture> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 4, horizontal: 10), // 타원형 크기 조정
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                     decoration: BoxDecoration(
                       color: Colors.amber[100],
-                      borderRadius: BorderRadius.circular(5), // 타원형을 위한 경계 반지름
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       'lesson ${widget.lessonNo}',
@@ -146,54 +148,64 @@ class _LectureState extends State<Lecture> {
               ),
             ),
           ),
+          const Divider(),
+          TabBar(
+            controller: _tabController,
+            indicatorColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            labelColor: Colors.black,
+            indicatorWeight: 1.0,
+            tabs: const [
+              Tab(text: 'Contents'),
+              Tab(text: 'Courses'),
+              Tab(text: 'Progress'),
+            ],
+          ),
           Expanded(
-            flex: 1,
-            child: SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.all(16.0),
-                color: Colors.white,
-                child: Column(
-                  children: List.generate(
-                    10, // TODO: magic number
-                    (index) => GestureDetector(
-                      onTap: () => _loadVideoAtIndex(index),
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 130,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                                border: Border.all(color: Colors.grey),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    '${Cloudfrontpath.Domain}/${widget.category}/${widget.level}/thumbnail/lv1_${index + 1}.png',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(34.0),
+                    child: Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Notes',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              'KOR',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[600],
                               ),
                             ),
-                            Gaps.h12,
-                            Expanded(
-                              child: Text(
-                                'Lecture ${index + 1}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.orange,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ),
+                      Gaps.v10,
+                      Text(widget.lecture['korExplanation'])
+                    ]),
                   ),
                 ),
-              ),
+                const Center(child: Text('Content for Tab 2')),
+                const Center(child: Text('Content for Tab 3')),
+              ],
             ),
           ),
         ],
