@@ -79,8 +79,14 @@ class _LecturesState extends State<Lectures> {
     });
   }
 
+  void test() {
+    _db.collection("cities").doc("LA").set({"test": "1", "iddd": "22"}).onError(
+        (e, _) => print("Error writing document: $e"));
+  }
+
   @override
   Widget build(BuildContext context) {
+    test();
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -132,7 +138,7 @@ class _LecturesState extends State<Lectures> {
               ),
               Text(
                 title,
-                style: Fonts.titleLMedium,
+                style: Fonts.titleMedium,
               ),
             ],
           ),

@@ -6,7 +6,7 @@ class Fonts {
     fontSize: 32,
     fontWeight: FontWeight.bold,
   );
-  static const titleLMedium = TextStyle(
+  static const titleMedium = TextStyle(
     color: Colors.black,
     fontSize: 20,
     fontWeight: FontWeight.bold,

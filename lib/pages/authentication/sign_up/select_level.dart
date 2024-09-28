@@ -18,6 +18,7 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
 
   @override
   Widget build(BuildContext context) {
+    print(ref.read(signUpForm.notifier).state);
     return Scaffold(
         appBar: AppBar(
           title: const Text(

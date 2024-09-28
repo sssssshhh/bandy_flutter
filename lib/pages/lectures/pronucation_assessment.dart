@@ -105,7 +105,7 @@ class _PronunciationAssessmentState extends State<PronunciationAssessment> {
   //           children: [
   //             const Text(
   //               '나는 오늘 학교에 감',
-  //               style: Fonts.titleLMedium,
+  //               style: Fonts.titleMedium,
   //             ),
   //             if (recordingPath != null)
   //               GestureDetector(

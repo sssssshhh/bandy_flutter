@@ -107,7 +107,7 @@ class _LecturesState extends State<Lectures> {
                     //   children: [
                     //     Text(
                     //       'Pronunciation Assessment',
-                    //       style: Fonts.titleLMedium,
+                    //       style: Fonts.titleMedium,
                     //     ),
                     //     Gaps.v10,
                     //     SizedBox(
@@ -132,12 +132,12 @@ class _LecturesState extends State<Lectures> {
                       children: [
                         const Text(
                           'Confused Korean',
-                          style: Fonts.titleLMedium,
+                          style: Fonts.titleMedium,
                         ),
                         Gaps.v10,
                         const Text(
                           'PodCast',
-                          style: Fonts.titleLMedium,
+                          style: Fonts.titleMedium,
                         ),
                         Gaps.v10,
                         SizedBox(
@@ -188,7 +188,7 @@ class _LecturesState extends State<Lectures> {
                         ),
                         const Text(
                           'Bitesize Story',
-                          style: Fonts.titleLMedium,
+                          style: Fonts.titleMedium,
                         ),
                         Gaps.v10,
                         SizedBox(

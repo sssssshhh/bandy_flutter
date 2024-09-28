@@ -1,3 +1,4 @@
+import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/select_level.dart';
@@ -18,14 +19,14 @@ class CreateNickname extends ConsumerStatefulWidget {
 class _CreateNicknameState extends ConsumerState<CreateNickname> {
   final TextEditingController _nicknameController = TextEditingController();
 
-  //  String _nickname = "";
+  String _nickname = "";
 
   @override
   void initState() {
     super.initState();
     _nicknameController.addListener(() {
       setState(() {
-        //_nickname = _nicknameController.text;
+        _nickname = _nicknameController.text;
       });
     });
   }
@@ -36,7 +37,19 @@ class _CreateNicknameState extends ConsumerState<CreateNickname> {
     super.dispose();
   }
 
+  String? _isNicknameValid() {
+    // TODO: nickname 중복체크
+    if (_nickname.isEmpty) return null;
+    return null;
+  }
+
   void _onNextTap() {
+    if (_nickname.isEmpty || _isNicknameValid() != null) return;
+    final state = ref.read(signUpForm.notifier).state;
+    ref.read(signUpForm.notifier).state = {
+      ...state,
+      "nickname": _nickname,
+    };
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -48,7 +61,6 @@ class _CreateNicknameState extends ConsumerState<CreateNickname> {
 
   @override
   Widget build(BuildContext context) {
-    print(ref.read(signUpForm.notifier).state);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -64,25 +76,30 @@ class _CreateNicknameState extends ConsumerState<CreateNickname> {
           children: [
             Gaps.v40,
             const Text(
-              "Create Your nickname",
-              style: TextStyle(
-                fontSize: Sizes.size24,
-                fontWeight: FontWeight.w700,
-              ),
+              'Enter your nickname',
+              style: Fonts.titleLarge,
+            ),
+            const Text(
+              'Please enter the nickname you will use in the community.',
+              style: Fonts.titleSmall,
             ),
             Gaps.v16,
             TextField(
-              enabled: false,
               controller: _nicknameController,
+              keyboardType: TextInputType.emailAddress,
+              onEditingComplete: _onNextTap,
+              autocorrect: false,
               decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
+                hintText: 'Enter your nickname',
+                errorText: _isNicknameValid(),
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: Colors.grey.shade400,
+                    color: Colors.grey,
                   ),
                 ),
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                    color: Colors.grey.shade400,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -93,7 +110,7 @@ class _CreateNicknameState extends ConsumerState<CreateNickname> {
               onTap: _onNextTap,
               child: FormButton(
                 text: 'Continue',
-                disabled: ref.watch(signUpProvider).isLoading,
+                disabled: _nickname.isEmpty || _isNicknameValid() != null,
               ),
             ),
           ],

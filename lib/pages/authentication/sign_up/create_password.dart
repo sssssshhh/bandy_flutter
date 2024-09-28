@@ -41,7 +41,6 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
   }
 
   bool _isPasswordValid() {
-    // TODO: confirm password
     return _password.isNotEmpty && _password.length > 8;
   }
 
@@ -49,13 +48,12 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
     FocusScope.of(context).unfocus();
   }
 
-  void _onSubmit() {
+  void _onNextTap() {
     if (!_isPasswordValid()) return;
     final state = ref.read(signUpForm.notifier).state;
     ref.read(signUpForm.notifier).state = {
       ...state,
       "password": _password,
-      "nicname": "test"
     };
 
     // ref.read(signUpProvider.notifier).signUp(context);
@@ -87,9 +85,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size36,
-          ),
+          padding: const EdgeInsets.all(Sizes.size40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -100,7 +96,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
               Gaps.v8,
               TextField(
                 controller: _passwordController,
-                onEditingComplete: _onSubmit,
+                onEditingComplete: _onNextTap,
                 obscureText: _obscureText,
                 autocorrect: false,
                 decoration: InputDecoration(
@@ -165,7 +161,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
               ),
               Gaps.v28,
               GestureDetector(
-                onTap: _onSubmit,
+                onTap: _onNextTap,
                 child: FormButton(
                   text: 'Continue',
                   disabled: !_isPasswordValid(),
