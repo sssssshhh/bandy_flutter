@@ -1,7 +1,9 @@
 import 'package:bandy_flutter/constants/cloudFrontPath.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Lecture extends StatefulWidget {
   final String category;
@@ -22,16 +24,33 @@ class Lecture extends StatefulWidget {
 }
 
 class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+
   late VideoPlayerController _videoPlayerController;
+  late TabController _tabController;
   bool _isPaused = true;
   bool _isInitialized = false;
-  late TabController _tabController;
+
+  List<Map<String, dynamic>> lectureList = [];
+
+  Future<void> setLectures() async {
+    final dbs = await _db
+        .collection('lectures')
+        .doc(widget.category)
+        .collection(widget.level)
+        .get();
+
+    setState(() {
+      lectureList = dbs.docs.map((doc) => doc.data()).toList();
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     _initializeVideoPlayer();
-    _tabController = TabController(length: 3, vsync: this); // 3개의 탭 설정
+    setLectures();
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   void _initializeVideoPlayer() {
@@ -52,14 +71,14 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
       _isInitialized = false;
     });
 
-    _videoPlayerController.dispose(); // 이전 컨트롤러 해제
-    _initializeVideoPlayer(); // 새 컨트롤러 초기화
+    _videoPlayerController.dispose();
+    _initializeVideoPlayer();
   }
 
   @override
   void dispose() {
     _videoPlayerController.dispose();
-    _tabController.dispose(); // TabController 해제
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -166,49 +185,110 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
               controller: _tabController,
               children: [
                 Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(34.0),
-                    child: Column(children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Notes',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              'KOR',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[600],
+                  child: contents(widget: widget),
+                ),
+                Center(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      color: Colors.white,
+                      child: ListView.builder(
+                        itemCount: lectureList.length,
+                        itemBuilder: (context, index) {
+                          final lecture = lectureList[index];
+
+                          return GestureDetector(
+                            onTap: () => _loadVideoAtIndex(index),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child: CachedNetworkImage(
+                                      imageUrl: lecture['thumbnailPath'],
+                                      fit: BoxFit.fill,
+                                      width: 100,
+                                      height: 100,
+                                    ),
+                                  ),
+                                  Gaps.h12,
+                                  Expanded(
+                                    child: Text(
+                                      'Lecture ${index + 1}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
-                      Gaps.v10,
-                      Text(widget.lecture['korExplanation'])
-                    ]),
+                    ),
                   ),
                 ),
-                const Center(child: Text('Content for Tab 2')),
                 const Center(child: Text('Content for Tab 3')),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class contents extends StatelessWidget {
+  const contents({
+    super.key,
+    required this.widget,
+  });
+
+  final Lecture widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(34.0),
+        child: Column(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Notes',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Text(
+                  'KOR',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Gaps.v10,
+          Text(widget.lecture['korExplanation']),
+        ]),
       ),
     );
   }
