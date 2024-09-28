@@ -56,7 +56,6 @@ class _CreateNicknameState extends ConsumerState<CreateNickname> {
         builder: (context) => const SelectLevel(),
       ),
     );
-    //ref.read(signUpProvider.notifier).signUp(context);
   }
 
   @override
