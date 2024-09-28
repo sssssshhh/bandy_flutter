@@ -4,12 +4,14 @@ import 'package:bandy_flutter/pages/authentication/repos/authentication_repo.dar
 import 'package:bandy_flutter/pages/authentication/sign_up/create_nickname.dart';
 import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
 import 'package:bandy_flutter/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class SignUpViewModel extends AsyncNotifier<void> {
   late final AuthenticationRepository _authRepo;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   @override
   FutureOr<void> build() {
@@ -28,6 +30,16 @@ class SignUpViewModel extends AsyncNotifier<void> {
     if (state.hasError) {
       showFirebaseErrorSnack(context, state.error);
     } else {
+      _db
+          .collection("users")
+          .doc(
+            form["email"],
+          )
+          .set({
+        "level": form["level"],
+        "nickname": form["nickname"],
+        "status": 0,
+      }).onError((e, _) => print("Error writing document: $e"));
       context.go(CreateNickname.routeURL);
     }
   }

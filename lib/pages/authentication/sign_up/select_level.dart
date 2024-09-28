@@ -18,6 +18,11 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
   String _selectedLevel = "";
 
   void _onNextTap() {
+    final state = ref.read(signUpForm.notifier).state;
+    ref.read(signUpForm.notifier).state = {
+      ...state,
+      "level": _selectedLevel,
+    };
     ref.read(signUpProvider.notifier).signUp(context);
   }
 
@@ -145,7 +150,6 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
 
   @override
   Widget build(BuildContext context) {
-    print(ref.read(signUpForm.notifier).state);
     return Scaffold(
         appBar: AppBar(
           title: const Text(

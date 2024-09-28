@@ -67,7 +67,6 @@ class _LecturesState extends State<Lectures> {
   }
 
   Future<void> loadAllLectures() async {
-    // 명시적으로 Future<void>의 리스트로 선언
     await Future.wait<void>([
       setPodcast(),
       setConfusedKorean(),
