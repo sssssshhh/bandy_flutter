@@ -1,11 +1,14 @@
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
+import 'package:bandy_flutter/pages/authentication/sign_up/select_level.dart';
 import 'package:bandy_flutter/pages/authentication/view_model/signup_view_model.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreateNickname extends ConsumerStatefulWidget {
+  static String routeName = "createNickname";
+  static String routeURL = "/createNickname";
   const CreateNickname({super.key});
 
   @override
@@ -34,11 +37,18 @@ class _CreateNicknameState extends ConsumerState<CreateNickname> {
   }
 
   void _onNextTap() {
-    ref.read(signUpProvider.notifier).signUp(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SelectLevel(),
+      ),
+    );
+    //ref.read(signUpProvider.notifier).signUp(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(ref.read(signUpForm.notifier).state);
     return Scaffold(
       appBar: AppBar(
         title: const Text(

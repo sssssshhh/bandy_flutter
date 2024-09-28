@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'package:bandy_flutter/constants/bandy.dart';
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
+import 'package:bandy_flutter/pages/lectures/lecture.dart';
 import 'package:bandy_flutter/widgets/recommendation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -79,24 +79,6 @@ class _LecturesState extends State<Lectures> {
     });
   }
 
-  // Future<List<dynamic>> loadLectures(String category) async {
-  //   final String response =
-  //       await rootBundle.loadString('assets/text/data.json');
-  //   final data = await json.decode(response);
-  //   return data[category] ?? [];
-  // }
-
-  // Future<String?> getUserInfo() async {
-  //   final User? user = _auth.currentUser;
-
-  //   if (user != null) {
-  //     print(user.email);
-  //     return user.email;
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,12 +124,11 @@ class _LecturesState extends State<Lectures> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
       child: Column(
         children: [
-          // 타이틀 영역
           Row(
             children: [
               IconButton(
                 icon: Icon(icon, color: Colors.black),
-                onPressed: () {},
+                onPressed: () {}, // Not use
               ),
               Text(
                 title,
@@ -166,7 +147,15 @@ class _LecturesState extends State<Lectures> {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: GestureDetector(
-                    onTap: () => gotoLecture(context, lecture),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Lecture(category: category, level: 'level_1'),
+                        ),
+                      );
+                    },
                     child: Column(
                       children: [
                         ClipRRect(
@@ -179,8 +168,6 @@ class _LecturesState extends State<Lectures> {
                           ),
                         ),
                         Gaps.v10,
-
-                        // 텍스트 섹션
                         Text(
                           lecture['title'] ?? "No title",
                           style: const TextStyle(
@@ -195,33 +182,6 @@ class _LecturesState extends State<Lectures> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  void gotoLecture(BuildContext context, dynamic lecture) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LectureDetailPage(lecture: lecture),
-      ),
-    );
-  }
-}
-
-class LectureDetailPage extends StatelessWidget {
-  final dynamic lecture;
-
-  const LectureDetailPage({super.key, required this.lecture});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(lecture['title'] ?? "Lecture Detail"),
-      ),
-      body: Center(
-        child: Text("Details for: ${lecture['title']}"),
       ),
     );
   }

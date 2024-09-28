@@ -26,7 +26,6 @@ class AuthenticationRepository {
   }
 }
 
-// For expose
 final authRepo = Provider((ref) => AuthenticationRepository());
 
 final authState = StreamProvider((ref) {
