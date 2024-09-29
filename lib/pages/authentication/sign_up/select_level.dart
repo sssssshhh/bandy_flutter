@@ -151,39 +151,39 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            "Sign up",
-          ),
+      appBar: AppBar(
+        title: const Text(
+          "Sign up",
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size36,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.size36,
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Gaps.v40,
+          const Text(
+            "What’s your level?",
+            style: Fonts.titleLarge,
           ),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Gaps.v40,
-            const Text(
-              "What’s your level?",
-              style: Fonts.titleLarge,
+          const Text(
+            'Select your level.',
+            style: Fonts.titleSmall,
+          ),
+          Gaps.v20,
+          _levelOption(Bandy.level1),
+          _levelOption(Bandy.level2),
+          _levelOption(Bandy.level3),
+          Gaps.v16,
+          GestureDetector(
+            onTap: _onNextTap,
+            child: FormButton(
+              text: 'Continue',
+              disabled: _selectedLevel.isEmpty,
             ),
-            const Text(
-              'Select your level.',
-              style: Fonts.titleSmall,
-            ),
-            Gaps.v20,
-            _levelOption(Bandy.level1),
-            _levelOption(Bandy.level2),
-            _levelOption(Bandy.level3),
-            Gaps.v16,
-            GestureDetector(
-              onTap: _onNextTap,
-              child: FormButton(
-                text: 'Continue',
-                disabled: _selectedLevel.isEmpty,
-              ),
-            ),
-          ]),
-        ));
+          ),
+        ]),
+      ),
+    );
   }
 }

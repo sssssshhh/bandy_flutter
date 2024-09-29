@@ -1,5 +1,6 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
+import 'package:bandy_flutter/pages/lectures/puzzle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -277,13 +278,15 @@ class Progress extends StatelessWidget {
 
   const Progress({
     super.key,
-    required this.progressStatus, // 문자열을 매개변수로 전달
+    required this.progressStatus,
   });
 
   @override
   Widget build(BuildContext context) {
     double progressValue = double.parse(progressStatus) / 100;
 
+    var speakWithAI = 'Speak with AI';
+    var sentenceTest = 'Sentence Test';
     return Padding(
       padding: const EdgeInsets.all(34.0),
       child: Column(
@@ -298,7 +301,6 @@ class Progress extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          // TODO: 원 표시 실패?
           Stack(
             alignment: Alignment.centerLeft,
             children: [
@@ -339,8 +341,70 @@ class Progress extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           const Text('Details'),
-          const Row(
-            children: [],
+          Gaps.v10,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              details(moveto: speakWithAI),
+              details(moveto: sentenceTest),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class details extends StatelessWidget {
+  final String moveto;
+
+  const details({
+    super.key,
+    required this.moveto,
+  });
+
+  void _onNextTap(BuildContext context, String destination) {
+    if (destination == 'Speak with AI') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Puzzle(), // TODO: prouni..
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Puzzle(),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      width: 160,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(moveto, style: const TextStyle(fontSize: 12)),
+          Gaps.v40,
+          ElevatedButton(
+            onPressed: () {
+              _onNextTap(context, moveto);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orange,
+              foregroundColor: Colors.white,
+              fixedSize: const Size(90, 20),
+            ),
+            child: const Text('start'),
           ),
         ],
       ),
@@ -349,12 +413,12 @@ class Progress extends StatelessWidget {
 }
 
 class contents extends StatelessWidget {
+  final Lecture widget;
+
   const contents({
     super.key,
     required this.widget,
   });
-
-  final Lecture widget;
 
   @override
   Widget build(BuildContext context) {
