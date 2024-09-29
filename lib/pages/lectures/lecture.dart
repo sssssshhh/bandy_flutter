@@ -1,5 +1,7 @@
+import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -24,12 +26,14 @@ class Lecture extends StatefulWidget {
 
 class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   late VideoPlayerController _videoPlayerController;
   late TabController _tabController;
   bool _isPaused = true;
   bool _isInitialized = false;
   bool _isLoading = true;
+  String _progessStatus = "0";
 
   List<Map<String, dynamic>> lectureList = [];
 
@@ -44,6 +48,20 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
       lectureList = dbs.docs.map((doc) => doc.data()).toList();
       print('Lecture List: $lectureList');
     });
+  }
+
+  Future<void> setUserInfo() async {
+    String? email;
+    if (_auth.currentUser?.email != null) {
+      email = _auth.currentUser!.email;
+    }
+
+    final dbs = await _db.collection('users').doc(email).get();
+    if (dbs.exists && dbs.data() != null) {
+      setState(() {
+        _progessStatus = dbs.data()?['status']; // TODO: status to progress
+      });
+    }
   }
 
   Future<void> loadAllLectures() async {
@@ -63,6 +81,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
 
     _tabController = TabController(length: 3, vsync: this);
     loadAllLectures();
+    setUserInfo();
   }
 
   void _initializeVideoPlayer() {
@@ -243,12 +262,88 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                           },
                         ),
                       ),
-                      const Center(child: Text('Content for Tab 3')),
+                      Progress(progressStatus: _progessStatus), // TODO: progess
                     ],
                   ),
                 ),
               ],
             ),
+    );
+  }
+}
+
+class Progress extends StatelessWidget {
+  final String progressStatus; // 문자열로 전달된다고 가정
+
+  const Progress({
+    super.key,
+    required this.progressStatus, // 문자열을 매개변수로 전달
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double progressValue = double.parse(progressStatus) / 100;
+
+    return Padding(
+      padding: const EdgeInsets.all(34.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'My Progress: $progressStatus',
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 10),
+          // TODO: 원 표시 실패?
+          Stack(
+            alignment: Alignment.centerLeft,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(25.0),
+                child: Container(
+                  height: 10.0,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300], // 배경색
+                  ),
+                ),
+              ),
+              FractionallySizedBox(
+                widthFactor: progressValue,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.yellow, Colors.orange], // 그라데이션 색상
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left:
+                    progressValue * (MediaQuery.of(context).size.width - 34.0),
+                top: -5,
+                child: Container(
+                  width: 20,
+                  height: 20,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.orange,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          const Text('Details'),
+          const Row(
+            children: [],
+          ),
+        ],
+      ),
     );
   }
 }
