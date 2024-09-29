@@ -1,6 +1,6 @@
-import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
-import 'package:bandy_flutter/pages/lectures/puzzle.dart';
+import 'package:bandy_flutter/pages/lectures/content.dart';
+import 'package:bandy_flutter/pages/lectures/progress.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +47,6 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
 
     setState(() {
       lectureList = dbs.docs.map((doc) => doc.data()).toList();
-      print('Lecture List: $lectureList');
     });
   }
 
@@ -222,7 +221,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                     controller: _tabController,
                     children: [
                       Center(
-                        child: contents(widget: widget),
+                        child: Contents(widget: widget),
                       ),
                       Center(
                         child: ListView.builder(
@@ -274,229 +273,6 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                 ),
               ],
             ),
-    );
-  }
-}
-
-class Progress extends StatefulWidget {
-  final String progressStatus;
-  final String category;
-  final String level;
-  final int lessonNo;
-
-  const Progress({
-    super.key,
-    required this.progressStatus,
-    required this.category,
-    required this.level,
-    required this.lessonNo,
-  });
-
-  @override
-  State<Progress> createState() => _ProgressState();
-}
-
-class _ProgressState extends State<Progress> {
-  @override
-  Widget build(BuildContext context) {
-    double progressValue = double.parse(widget.progressStatus) / 100;
-
-    var speakWithAI = 'Speak with AI';
-    var sentenceTest = 'Sentence Test';
-    return Padding(
-      padding: const EdgeInsets.all(34.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'My Progress: ${widget.progressStatus}',
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(25.0),
-                child: Container(
-                  height: 10.0,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300], // 배경색
-                  ),
-                ),
-              ),
-              FractionallySizedBox(
-                widthFactor: progressValue,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.yellow, Colors.orange], // 그라데이션 색상
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                left:
-                    progressValue * (MediaQuery.of(context).size.width - 34.0),
-                top: -5,
-                child: Container(
-                  width: 20,
-                  height: 20,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.orange,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          const Text('Details'),
-          Gaps.v10,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              details(
-                  moveto: speakWithAI,
-                  category: widget.category,
-                  level: widget.level,
-                  lessonNo: widget.lessonNo),
-              details(
-                  moveto: sentenceTest,
-                  category: widget.category,
-                  level: widget.level,
-                  lessonNo: widget.lessonNo),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class details extends StatelessWidget {
-  final String moveto;
-  final String category;
-  final String level;
-  final int lessonNo;
-
-  const details({
-    super.key,
-    required this.moveto,
-    required this.category,
-    required this.level,
-    required this.lessonNo,
-  });
-
-  void _onNextTap(BuildContext context, String destination) {
-    if (destination == 'Speak with AI') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Puzzle(
-            category: category,
-            level: level,
-            lessonNo: lessonNo,
-          ), // TODO: prouni..
-        ),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Puzzle(
-            category: category,
-            level: level,
-            lessonNo: lessonNo,
-          ),
-        ),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      width: 160,
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(moveto, style: const TextStyle(fontSize: 12)),
-          Gaps.v40,
-          ElevatedButton(
-            onPressed: () {
-              _onNextTap(context, moveto);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              foregroundColor: Colors.white,
-              fixedSize: const Size(90, 20),
-            ),
-            child: const Text('start'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class contents extends StatelessWidget {
-  final Lecture widget;
-
-  const contents({
-    super.key,
-    required this.widget,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(34.0),
-        child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Notes',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Text(
-                  'KOR',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Gaps.v10,
-          Text(widget.lecture['korExplanation']),
-        ]),
-      ),
     );
   }
 }

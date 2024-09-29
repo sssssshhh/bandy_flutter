@@ -1,6 +1,7 @@
-import 'package:bandy_flutter/constants/bandy.dart';
+import 'dart:math';
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
+import 'package:bandy_flutter/constants/hangul.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,15 +9,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Puzzle extends StatefulWidget {
-  final String category;
-  final String level;
-  final int lessonNo;
+  final List<Map<String, dynamic>> expressionList;
 
   const Puzzle({
     super.key,
-    required this.category,
-    required this.level,
-    required this.lessonNo,
+    required this.expressionList,
   });
 
   @override
@@ -28,13 +25,18 @@ class _PuzzleState extends State<Puzzle> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final List<int> _selectedIndices = [];
   final List<String> _selectedCharacters = [];
-  final answer = '가나다라';
   bool isChecked = false;
-  bool _isCorrectAnswer = false;
+  final bool _isCorrectAnswer = false;
 
-  List<Map<String, dynamic>> expressionList = [];
-  int? _startIndex; // 시작 인덱스 저장
-  int? _endIndex; // 끝 인덱스 저장
+  String answer = '';
+  int? _startIndex;
+  int? _endIndex;
+
+  final Random _random = Random();
+  final List<String> characters = [];
+  String maskedKorAnswer = '';
+
+  int circleCount = 16;
 
   @override
   void initState() {
@@ -43,24 +45,50 @@ class _PuzzleState extends State<Puzzle> {
   }
 
   Future<void> getExpressionInfo() async {
-    final QuerySnapshot<Map<String, dynamic>> dbs = await _db
-        .collection('lectures')
-        .doc(widget.category)
-        .collection(widget.level)
-        .doc("1") // TODO: widget.lessonNo.toString()
-        .collection('expression')
-        .get();
-
     setState(() {
-      expressionList = dbs.docs.map((doc) => doc.data()).toList();
+      String korAnswer = widget.expressionList[0]['korAnswer'] ?? '';
+      int firstBlank = widget.expressionList[0]['firstBlank'] ?? 0;
+      int lastBlank = widget.expressionList[0]['lastBlank'] ?? 0;
+
+      maskedKorAnswer = korAnswer.replaceRange(
+        firstBlank,
+        lastBlank + 1,
+        '?' * (lastBlank - firstBlank + 1),
+      );
+      if (widget.expressionList.isEmpty) {
+        answer = '';
+      } else {
+        answer = widget.expressionList[0]['answer'] ?? '';
+      }
+
+      const characterOptions = Hangul.Hanguls;
+
+      characters.clear();
+
+      if (answer.isNotEmpty) {
+        characters.addAll(answer.split(''));
+      }
+
+      int remainingCount = circleCount - characters.length;
+
+      if (remainingCount > 0) {
+        characters.addAll(
+          List.generate(
+            remainingCount,
+            (index) =>
+                characterOptions[_random.nextInt(characterOptions.length)],
+          ),
+        );
+      }
     });
-    print(expressionList);
   }
+
+  void generateRandomHangul() {}
 
   bool checkAnswer() {
     String selectedCharacters = _selectedCharacters.join();
-    _isCorrectAnswer = answer == selectedCharacters;
-    return _isCorrectAnswer;
+    // 이 부분은 나중에 추가하실 수 있습니다.
+    return false;
   }
 
   void _handleButtonPress() {
@@ -80,15 +108,9 @@ class _PuzzleState extends State<Puzzle> {
     });
   }
 
-  String maskKorAnswer(String korAnswer, int firstBlank, int lastBlank) {
-    String prefix = korAnswer.substring(0, firstBlank);
-    String suffix = korAnswer.substring(lastBlank + 1);
-    String masked = '$prefix${'?' * (lastBlank - firstBlank + 1)}$suffix';
-    return masked;
-  }
-
   @override
   Widget build(BuildContext context) {
+    print(widget.expressionList);
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -132,9 +154,9 @@ class _PuzzleState extends State<Puzzle> {
                       ),
                       children: [
                         TextSpan(
-                          text: expressionList.isNotEmpty
-                              ? expressionList[0]['korAnswer']
-                                  .substring(0, expressionList[0]['firstBlank'])
+                          text: widget.expressionList.isNotEmpty
+                              ? widget.expressionList[0]['korAnswer'].substring(
+                                  0, widget.expressionList[0]['firstBlank'])
                               : '',
                         ),
                         WidgetSpan(
@@ -143,10 +165,11 @@ class _PuzzleState extends State<Puzzle> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Text(
-                              expressionList.isNotEmpty
+                              widget.expressionList.isNotEmpty
                                   ? '?' *
-                                      (expressionList[0]['lastBlank'] -
-                                          expressionList[0]['firstBlank'] +
+                                      (widget.expressionList[0]['lastBlank'] -
+                                          widget.expressionList[0]
+                                              ['firstBlank'] +
                                           1)
                                   : '',
                               style: const TextStyle(
@@ -158,17 +181,17 @@ class _PuzzleState extends State<Puzzle> {
                           ),
                         ),
                         TextSpan(
-                          text: expressionList.isNotEmpty
-                              ? expressionList[0]['korAnswer']
-                                  .substring(expressionList[0]['lastBlank'] + 1)
+                          text: widget.expressionList.isNotEmpty
+                              ? widget.expressionList[0]['korAnswer'].substring(
+                                  widget.expressionList[0]['lastBlank'] + 1)
                               : '',
                         ),
                       ],
                     ),
                   ),
                   Text(
-                    expressionList.isNotEmpty
-                        ? expressionList[0]['engAnswer']
+                    widget.expressionList.isNotEmpty
+                        ? widget.expressionList[0]['engAnswer']
                         : '',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
@@ -181,7 +204,7 @@ class _PuzzleState extends State<Puzzle> {
             ),
             Gaps.v20,
             SizedBox(
-              height: 400, // 고정 높이 설정
+              height: 400,
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
@@ -189,27 +212,8 @@ class _PuzzleState extends State<Puzzle> {
                   mainAxisSpacing: 5.0,
                   childAspectRatio: 1.2,
                 ),
-                itemCount: 16,
+                itemCount: circleCount,
                 itemBuilder: (context, index) {
-                  final characters = [
-                    '가',
-                    '나',
-                    '다',
-                    '라',
-                    '마',
-                    '사',
-                    '아',
-                    '자',
-                    '차',
-                    '카',
-                    '타',
-                    '파',
-                    '하',
-                    '라',
-                    '마',
-                    '바',
-                  ];
-
                   return GestureDetector(
                     onTap: () {
                       setState(() {
@@ -300,7 +304,6 @@ class _PuzzleState extends State<Puzzle> {
                 },
               ),
             ),
-            Gaps.v20,
             GestureDetector(
               onTap: _handleButtonPress,
               child: FormButton(
