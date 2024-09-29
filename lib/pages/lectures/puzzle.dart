@@ -1,22 +1,67 @@
+import 'package:bandy_flutter/constants/bandy.dart';
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Puzzle extends StatefulWidget {
-  const Puzzle({super.key});
+  final String category;
+  final String level;
+  final int lessonNo;
+
+  const Puzzle({
+    super.key,
+    required this.category,
+    required this.level,
+    required this.lessonNo,
+  });
 
   @override
   State<Puzzle> createState() => _PuzzleState();
 }
 
 class _PuzzleState extends State<Puzzle> {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final List<int> _selectedIndices = [];
   final List<String> _selectedCharacters = [];
   final answer = '가나다라';
   bool isChecked = false;
   bool _isCorrectAnswer = false;
+
+  List<Map<String, dynamic>> expressionList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getExpressionInfo();
+  }
+
+  Future<void> getExpressionInfo() async {
+    final QuerySnapshot<Map<String, dynamic>> dbs = await _db
+        .collection('lectures')
+        .doc(widget.category)
+        .collection(widget.level)
+        .doc("1") // TODO: widget.lessonNo.toString()
+        .collection('expression')
+        .get();
+    print("puzzle");
+    print(dbs.docs[0].data());
+
+    final dbss = await _db
+        .collection('lectures')
+        .doc(Bandy.bitesizeStory)
+        .collection('level1')
+        .get();
+    // print(dbss.docs[0].data());
+
+    List<Map<String, dynamic>> expressionList =
+        dbs.docs.map((doc) => doc.data()).toList();
+  }
 
   bool checkAnswer() {
     String selectedCharacters = _selectedCharacters.join();
@@ -41,6 +86,9 @@ class _PuzzleState extends State<Puzzle> {
 
   @override
   Widget build(BuildContext context) {
+    // print(widget.category);
+    // print(widget.level);
+    // print(widget.lessonNo);
     return Scaffold(
       appBar: AppBar(),
       body: Padding(

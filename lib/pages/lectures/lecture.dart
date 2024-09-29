@@ -263,7 +263,12 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                           },
                         ),
                       ),
-                      Progress(progressStatus: _progessStatus), // TODO: progess
+                      Progress(
+                        progressStatus: _progessStatus,
+                        category: widget.category,
+                        level: widget.level,
+                        lessonNo: widget.lessonNo,
+                      ), // TODO: progess
                     ],
                   ),
                 ),
@@ -273,17 +278,28 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   }
 }
 
-class Progress extends StatelessWidget {
-  final String progressStatus; // 문자열로 전달된다고 가정
+class Progress extends StatefulWidget {
+  final String progressStatus;
+  final String category;
+  final String level;
+  final int lessonNo;
 
   const Progress({
     super.key,
     required this.progressStatus,
+    required this.category,
+    required this.level,
+    required this.lessonNo,
   });
 
   @override
+  State<Progress> createState() => _ProgressState();
+}
+
+class _ProgressState extends State<Progress> {
+  @override
   Widget build(BuildContext context) {
-    double progressValue = double.parse(progressStatus) / 100;
+    double progressValue = double.parse(widget.progressStatus) / 100;
 
     var speakWithAI = 'Speak with AI';
     var sentenceTest = 'Sentence Test';
@@ -293,7 +309,7 @@ class Progress extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'My Progress: $progressStatus',
+            'My Progress: ${widget.progressStatus}',
             style: const TextStyle(
               color: Colors.black,
               fontSize: 17,
@@ -345,8 +361,16 @@ class Progress extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              details(moveto: speakWithAI),
-              details(moveto: sentenceTest),
+              details(
+                  moveto: speakWithAI,
+                  category: widget.category,
+                  level: widget.level,
+                  lessonNo: widget.lessonNo),
+              details(
+                  moveto: sentenceTest,
+                  category: widget.category,
+                  level: widget.level,
+                  lessonNo: widget.lessonNo),
             ],
           ),
         ],
@@ -357,10 +381,16 @@ class Progress extends StatelessWidget {
 
 class details extends StatelessWidget {
   final String moveto;
+  final String category;
+  final String level;
+  final int lessonNo;
 
   const details({
     super.key,
     required this.moveto,
+    required this.category,
+    required this.level,
+    required this.lessonNo,
   });
 
   void _onNextTap(BuildContext context, String destination) {
@@ -368,14 +398,22 @@ class details extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const Puzzle(), // TODO: prouni..
+          builder: (context) => Puzzle(
+            category: category,
+            level: level,
+            lessonNo: lessonNo,
+          ), // TODO: prouni..
         ),
       );
     } else {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const Puzzle(),
+          builder: (context) => Puzzle(
+            category: category,
+            level: level,
+            lessonNo: lessonNo,
+          ),
         ),
       );
     }
