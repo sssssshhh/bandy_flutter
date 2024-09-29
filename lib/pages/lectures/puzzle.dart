@@ -6,7 +6,6 @@ import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Puzzle extends StatefulWidget {
   final String category;
@@ -34,6 +33,8 @@ class _PuzzleState extends State<Puzzle> {
   bool _isCorrectAnswer = false;
 
   List<Map<String, dynamic>> expressionList = [];
+  int? _startIndex; // 시작 인덱스 저장
+  int? _endIndex; // 끝 인덱스 저장
 
   @override
   void initState() {
@@ -49,18 +50,11 @@ class _PuzzleState extends State<Puzzle> {
         .doc("1") // TODO: widget.lessonNo.toString()
         .collection('expression')
         .get();
-    print("puzzle");
-    print(dbs.docs[0].data());
 
-    final dbss = await _db
-        .collection('lectures')
-        .doc(Bandy.bitesizeStory)
-        .collection('level1')
-        .get();
-    // print(dbss.docs[0].data());
-
-    List<Map<String, dynamic>> expressionList =
-        dbs.docs.map((doc) => doc.data()).toList();
+    setState(() {
+      expressionList = dbs.docs.map((doc) => doc.data()).toList();
+    });
+    print(expressionList);
   }
 
   bool checkAnswer() {
@@ -75,6 +69,8 @@ class _PuzzleState extends State<Puzzle> {
         // Reset the state if the answer was checked
         _selectedIndices.clear();
         _selectedCharacters.clear();
+        _startIndex = null; // 시작 인덱스 초기화
+        _endIndex = null; // 끝 인덱스 초기화
         isChecked = false;
       } else {
         // Check the answer and update the state
@@ -84,18 +80,21 @@ class _PuzzleState extends State<Puzzle> {
     });
   }
 
+  String maskKorAnswer(String korAnswer, int firstBlank, int lastBlank) {
+    String prefix = korAnswer.substring(0, firstBlank);
+    String suffix = korAnswer.substring(lastBlank + 1);
+    String masked = '$prefix${'?' * (lastBlank - firstBlank + 1)}$suffix';
+    return masked;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // print(widget.category);
-    // print(widget.level);
-    // print(widget.lessonNo);
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: Sizes.size24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Gaps.v40,
             const Column(
@@ -112,24 +111,77 @@ class _PuzzleState extends State<Puzzle> {
               ],
             ),
             Gaps.v20,
-
-            // Display selected characters above the grid
-            SizedBox(
-              height: 50,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _selectedCharacters.length,
-                itemBuilder: (context, index) {
-                  return Text(
-                    _selectedCharacters[index],
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  );
-                },
+            Container(
+              width: double.infinity,
+              height: 100,
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: expressionList.isNotEmpty
+                              ? expressionList[0]['korAnswer']
+                                  .substring(0, expressionList[0]['firstBlank'])
+                              : '',
+                        ),
+                        WidgetSpan(
+                          child: Container(
+                            color: Colors.grey[300],
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            child: Text(
+                              expressionList.isNotEmpty
+                                  ? '?' *
+                                      (expressionList[0]['lastBlank'] -
+                                          expressionList[0]['firstBlank'] +
+                                          1)
+                                  : '',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                        TextSpan(
+                          text: expressionList.isNotEmpty
+                              ? expressionList[0]['korAnswer']
+                                  .substring(expressionList[0]['lastBlank'] + 1)
+                              : '',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    expressionList.isNotEmpty
+                        ? expressionList[0]['engAnswer']
+                        : '',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
             ),
-
-            // GridView
-            Expanded(
+            Gaps.v20,
+            SizedBox(
+              height: 400, // 고정 높이 설정
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
@@ -164,57 +216,95 @@ class _PuzzleState extends State<Puzzle> {
                         if (_selectedIndices.contains(index)) {
                           _selectedIndices.remove(index);
                           _selectedCharacters.remove(characters[index]);
+                          if (_startIndex == index) {
+                            _startIndex = null;
+                          }
+                          if (_endIndex == index) {
+                            _endIndex = null;
+                          }
                         } else {
                           _selectedIndices.add(index);
                           _selectedCharacters.add(characters[index]);
+                          if (_startIndex == null) {
+                            _startIndex = index; // 첫 번째 클릭
+                          } else {
+                            _endIndex = index; // 두 번째 클릭
+                          }
                         }
                       });
                     },
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: _selectedIndices.contains(index)
-                            ? Colors.grey
-                            : Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.grey, width: 1.0),
-                      ),
-                      child: Text(
-                        characters[index],
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                    child: Stack(
+                      alignment: Alignment.topLeft,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: _selectedIndices.contains(index)
+                                  ? Colors.orange
+                                  : Colors.grey,
+                              width:
+                                  _selectedIndices.contains(index) ? 2.0 : 1.0,
+                            ),
+                          ),
+                          child: Text(
+                            characters[index],
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
+                        if (_startIndex == index)
+                          Positioned(
+                            left: 20,
+                            top: 0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 4, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Text(
+                                'start',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
+                            ),
+                          ),
+                        if (_endIndex == index)
+                          Positioned(
+                            left: 20,
+                            top: 0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 4, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Text(
+                                'end',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   );
                 },
               ),
             ),
-            Gaps.v16,
-
-            // Display additional messages based on isChecked and _isCorrectAnswer
-            if (isChecked) ...[
-              // Display message based on the result of checkAnswer
-              Text(
-                _isCorrectAnswer ? 'You did a great job!' : 'Answer is $answer',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              Gaps.v16,
-            ],
-
-            // Check 버튼
+            Gaps.v20,
             GestureDetector(
               onTap: _handleButtonPress,
               child: FormButton(
-                text: isChecked
-                    ? (_isCorrectAnswer ? 'Continue' : 'I got it')
-                    : 'Check',
+                text: 'Check',
                 disabled: _selectedCharacters.isEmpty,
               ),
             ),
