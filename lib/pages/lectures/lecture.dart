@@ -1,4 +1,3 @@
-import 'package:bandy_flutter/constants/cloudFrontPath.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +29,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool _isPaused = true;
   bool _isInitialized = false;
+  bool _isLoading = true;
 
   List<Map<String, dynamic>> lectureList = [];
 
@@ -42,6 +42,17 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
 
     setState(() {
       lectureList = dbs.docs.map((doc) => doc.data()).toList();
+      print('Lecture List: $lectureList');
+    });
+  }
+
+  Future<void> loadAllLectures() async {
+    await Future.wait<void>([
+      setLectures(),
+    ]);
+
+    setState(() {
+      _isLoading = false;
     });
   }
 
@@ -49,8 +60,9 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _initializeVideoPlayer();
-    setLectures();
+
     _tabController = TabController(length: 3, vsync: this);
+    loadAllLectures();
   }
 
   void _initializeVideoPlayer() {
@@ -101,144 +113,142 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         title: Text(widget.category),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 250,
-            child: Stack(
-              alignment: Alignment.center,
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
               children: [
-                _isInitialized
-                    ? GestureDetector(
-                        onTap: _onTogglePause,
-                        child: VideoPlayer(_videoPlayerController),
-                      )
-                    : Container(
-                        color: Colors.grey,
-                        child: const Center(child: CircularProgressIndicator()),
-                      ),
-                _isInitialized
-                    ? IconButton(
-                        iconSize: 64.0,
-                        icon: Icon(
-                          _isPaused ? Icons.play_arrow : Icons.pause,
-                          color: Colors.grey,
-                        ),
-                        onPressed: _onTogglePause,
-                      )
-                    : const SizedBox.shrink(),
-              ],
-            ),
-          ),
-          Gaps.v10,
-          SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.amber[100],
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      'lesson ${widget.lessonNo}',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange[500],
-                      ),
-                    ),
+                SizedBox(
+                  height: 250,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      _isInitialized
+                          ? GestureDetector(
+                              onTap: _onTogglePause,
+                              child: VideoPlayer(_videoPlayerController),
+                            )
+                          : Container(
+                              color: Colors.grey,
+                              child: const Center(
+                                  child: CircularProgressIndicator()),
+                            ),
+                      _isInitialized
+                          ? IconButton(
+                              iconSize: 64.0,
+                              icon: Icon(
+                                _isPaused ? Icons.play_arrow : Icons.pause,
+                                color: Colors.grey,
+                              ),
+                              onPressed: _onTogglePause,
+                            )
+                          : const SizedBox.shrink(),
+                    ],
                   ),
-                  Gaps.v10,
-                  Text(
-                    widget.lecture['title'],
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const Divider(),
-          TabBar(
-            controller: _tabController,
-            indicatorColor: Colors.black,
-            unselectedLabelColor: Colors.grey,
-            labelColor: Colors.black,
-            indicatorWeight: 1.0,
-            tabs: const [
-              Tab(text: 'Contents'),
-              Tab(text: 'Courses'),
-              Tab(text: 'Progress'),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                Center(
-                  child: contents(widget: widget),
                 ),
-                Center(
-                  child: SingleChildScrollView(
-                    child: Container(
-                      padding: const EdgeInsets.all(16.0),
-                      color: Colors.white,
-                      child: ListView.builder(
-                        itemCount: lectureList.length,
-                        itemBuilder: (context, index) {
-                          final lecture = lectureList[index];
+                Gaps.v10,
+                SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.amber[100],
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(
+                            'lesson ${widget.lessonNo}',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange[500],
+                            ),
+                          ),
+                        ),
+                        Gaps.v10,
+                        Text(
+                          widget.lecture['title'],
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const Divider(),
+                TabBar(
+                  controller: _tabController,
+                  indicatorColor: Colors.black,
+                  unselectedLabelColor: Colors.grey,
+                  labelColor: Colors.black,
+                  indicatorWeight: 1.0,
+                  tabs: const [
+                    Tab(text: 'Contents'),
+                    Tab(text: 'Courses'),
+                    Tab(text: 'Progress'),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      Center(
+                        child: contents(widget: widget),
+                      ),
+                      Center(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(16.0),
+                          itemCount: lectureList.length,
+                          itemBuilder: (context, index) {
+                            final lecture = lectureList[index];
 
-                          return GestureDetector(
-                            onTap: () => _loadVideoAtIndex(index),
-                            child: Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: lecture['thumbnailPath'],
-                                      fit: BoxFit.fill,
-                                      width: 100,
-                                      height: 100,
-                                    ),
-                                  ),
-                                  Gaps.h12,
-                                  Expanded(
-                                    child: Text(
-                                      'Lecture ${index + 1}',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Colors.orange,
+                            return GestureDetector(
+                              onTap: () => _loadVideoAtIndex(index),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      child: CachedNetworkImage(
+                                        imageUrl: lecture['thumbnailPath'],
+                                        fit: BoxFit.contain,
+                                        width: 90,
+                                        height: 100,
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Gaps.h10,
+                                    Expanded(
+                                      child: Text(
+                                        lecture['title'],
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
-                    ),
+                      const Center(child: Text('Content for Tab 3')),
+                    ],
                   ),
                 ),
-                const Center(child: Text('Content for Tab 3')),
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

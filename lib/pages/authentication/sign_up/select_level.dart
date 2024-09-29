@@ -56,7 +56,7 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
       default: // 'level1'
         icon = Icons.cruelty_free;
         topText = '1';
-        middleText = "High Pre-intermediate (A3)";
+        middleText = "High Pre-intermediate (A2)";
         bottomText = "I can understand words and very simple sentences.";
 
         break;

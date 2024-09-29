@@ -77,7 +77,7 @@ class _LecturesState extends State<Lectures> {
     ]);
 
     setState(() {
-      isLoading = false; // 데이터 로드가 완료되면 로딩 상태를 false로 설정
+      isLoading = false;
     });
   }
 
@@ -171,7 +171,7 @@ class _LecturesState extends State<Lectures> {
                         MaterialPageRoute(
                           builder: (context) => Lecture(
                             category: category,
-                            level: 'level_1',
+                            level: 'level1',
                             lecture: lecture,
                             lessonNo: index,
                           ),
