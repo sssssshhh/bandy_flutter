@@ -4,6 +4,7 @@ import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/hangul.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
+import 'package:bandy_flutter/pages/lectures/completed.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,6 @@ class Puzzle extends StatefulWidget {
 }
 
 class _PuzzleState extends State<Puzzle> {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final List<int> _selectedIndices = [];
   final List<String> _selectedCharacters = [];
@@ -94,6 +94,8 @@ class _PuzzleState extends State<Puzzle> {
         _selectedCharacters.join() +
         korAnswer.substring(lastBlank + 1);
 
+    print(filledAnswer == korAnswer);
+
     setState(() {
       _isCorrectAnswer = filledAnswer == korAnswer;
     });
@@ -114,7 +116,17 @@ class _PuzzleState extends State<Puzzle> {
         _showAnswerOverlay = true;
         isChecked = true;
       }
+      checkAnswer();
     });
+  }
+
+  void _onNextTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const Completed(),
+      ),
+    );
   }
 
   @override
@@ -440,7 +452,7 @@ class _PuzzleState extends State<Puzzle> {
                               ),
                               const SizedBox(height: 20), // 버튼을 위한 공간 추가
                               GestureDetector(
-                                onTap: () {},
+                                onTap: _onNextTap,
                                 child: FormButton(
                                   text:
                                       _isCorrectAnswer ? 'Continue' : 'Got it',
