@@ -1,4 +1,5 @@
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
+import 'package:bandy_flutter/pages/lectures/Pronunciation_assessment_results.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -63,6 +64,15 @@ class _ListenSpeakState extends State<ListenSpeak> {
       // 2초 후 녹음 완료 상태로 변경 (예시, 실제 녹음 로직에 따라 변경 가능)
       await Future.delayed(const Duration(seconds: 2));
     }
+  }
+
+  void _onNextTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PronunciationAssessmentResults(),
+      ),
+    );
   }
 
   @override
@@ -225,7 +235,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
                       ),
                       const SizedBox(height: 20),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: _onNextTap,
                         child: const FormButton(
                           text: 'Check',
                           disabled: false,
