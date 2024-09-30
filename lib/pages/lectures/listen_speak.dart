@@ -1,10 +1,10 @@
-import 'package:bandy_flutter/constants/gaps.dart';
-import 'package:bandy_flutter/constants/sizes.dart';
+import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class ListenSpeak extends StatefulWidget {
   final List<Map<String, dynamic>> expressionList;
+
   const ListenSpeak({
     super.key,
     required this.expressionList,
@@ -17,6 +17,8 @@ class ListenSpeak extends StatefulWidget {
 class _ListenSpeakState extends State<ListenSpeak> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;
+  bool _isListening = false; // 마이크 리스닝 상태
+  bool _isRecordingComplete = false; // 녹음 완료 상태
 
   Future<void> _playAudio() async {
     await _audioPlayer
@@ -41,14 +43,36 @@ class _ListenSpeakState extends State<ListenSpeak> {
     }
   }
 
+  Future<void> _toggleListening() async {
+    if (_isListening) {
+      // 마이크 클릭 시 녹음 완료 상태로 변경
+      setState(() {
+        _isListening = false;
+        _isRecordingComplete = true;
+      });
+    } else {
+      // 오디오 중지
+      await _stopAudio();
+      // 상태 변경
+      setState(() {
+        _isListening = true;
+        _isPlaying = false; // 오디오 재생 중지
+        _isRecordingComplete = false; // 초기화
+      });
+
+      // 2초 후 녹음 완료 상태로 변경 (예시, 실제 녹음 로직에 따라 변경 가능)
+      await Future.delayed(const Duration(seconds: 2));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(), // TODO: go to lecture
       body: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: Sizes.size20,
-          horizontal: Sizes.size40,
+          vertical: 20.0,
+          horizontal: 40.0,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,6 +105,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
+                        // 오디오가 재생 중일 때 타원형 표시
                         if (_isPlaying)
                           Positioned(
                             child: Container(
@@ -103,15 +128,19 @@ class _ListenSpeakState extends State<ListenSpeak> {
                               ),
                             ),
                           ),
-                        const Icon(
+                        // 헤드폰 아이콘
+                        Icon(
                           Icons.headphones,
-                          color: Colors.orange,
+                          color: _isPlaying
+                              ? Colors.orange
+                              : Colors.grey, // 재생 중일 때 오렌지색
                           size: 48,
                         ),
                       ],
                     ),
                   ),
-                  Gaps.v16,
+                  const SizedBox(height: 16),
+                  // 녹음 완료 후 A, B 텍스트 표시
                   Text(
                     widget.expressionList[0]['korAnswer'],
                     style: const TextStyle(
@@ -120,7 +149,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Gaps.v8,
+                  const SizedBox(height: 8),
                   Text(
                     widget.expressionList[0]['engAnswer'],
                     style: const TextStyle(
@@ -134,37 +163,76 @@ class _ListenSpeakState extends State<ListenSpeak> {
             ),
             Column(
               children: [
+                // 흰 컨테이너 밖의 타원형
                 Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                   decoration: BoxDecoration(
-                    color: Colors.black87,
+                    color: Colors.black,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Text(
-                    'Press and speak',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+                  child: _isListening ||
+                          _isRecordingComplete // Listening 또는 녹음 완료 상태일 때 텍스트 변경
+                      ? const Text(
+                          'Listening...',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          'Press and speak',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                ),
+                const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: _toggleListening, // 마이크 버튼 클릭 시 리스닝 토글
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: _isListening
+                          ? Colors.orange
+                          : Colors.grey[400], // 리스닝 중일 때 오렌지색
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.keyboard_voice_rounded,
                       color: Colors.white,
+                      size: 40,
                     ),
                   ),
                 ),
-                Gaps.v28,
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[400],
-                    shape: BoxShape.circle,
+                const SizedBox(height: 20),
+                // 녹음 완료 후 Check result 버튼 표시
+                if (_isRecordingComplete)
+                  Column(
+                    children: [
+                      // 녹음 완료 텍스트
+                      const Text(
+                        'Recording complete',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () {},
+                        child: const FormButton(
+                          text: 'Check',
+                          disabled: false,
+                        ),
+                      ),
+                    ],
                   ),
-                  child: const Icon(
-                    Icons.keyboard_voice_rounded,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-                Gaps.v20,
               ],
             ),
           ],

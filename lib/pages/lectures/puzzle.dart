@@ -338,7 +338,7 @@ class _PuzzleState extends State<Puzzle> {
                 GestureDetector(
                   onTap: _handleButtonPress,
                   child: FormButton(
-                    text: 'Check',
+                    text: 'Check result',
                     disabled: _selectedCharacters.isEmpty,
                   ),
                 ),
