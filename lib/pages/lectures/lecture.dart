@@ -35,6 +35,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   bool _isInitialized = false;
   bool _isLoading = true;
   String _progessStatus = "0";
+  bool _isIconVisible = false;
 
   List<Map<String, dynamic>> lectureList = [];
 
@@ -59,7 +60,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
     final dbs = await _db.collection('users').doc(email).get();
     if (dbs.exists && dbs.data() != null) {
       setState(() {
-        _progessStatus = dbs.data()?['status']; // TODO: status to progress
+        _progessStatus = dbs.data()?['status'];
       });
     }
   }
@@ -126,6 +127,18 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
     });
   }
 
+  void _onVideoTap() {
+    setState(() {
+      _isIconVisible = true;
+    });
+
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        _isIconVisible = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,31 +152,35 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
           : Column(
               children: [
                 SizedBox(
-                  height: 250,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      _isInitialized
-                          ? GestureDetector(
-                              onTap: _onTogglePause,
-                              child: VideoPlayer(_videoPlayerController),
-                            )
-                          : Container(
-                              color: Colors.grey,
-                              child: const Center(
-                                  child: CircularProgressIndicator()),
-                            ),
-                      _isInitialized
-                          ? IconButton(
-                              iconSize: 64.0,
-                              icon: Icon(
-                                _isPaused ? Icons.play_arrow : Icons.pause,
+                  height: 200,
+                  width: 300,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        _isInitialized
+                            ? GestureDetector(
+                                onTap: _onVideoTap,
+                                child: VideoPlayer(_videoPlayerController),
+                              )
+                            : Container(
                                 color: Colors.grey,
+                                child: const Center(
+                                    child: CircularProgressIndicator()),
                               ),
-                              onPressed: _onTogglePause,
-                            )
-                          : const SizedBox.shrink(),
-                    ],
+                        _isInitialized && _isIconVisible
+                            ? IconButton(
+                                iconSize: 64.0,
+                                icon: Icon(
+                                  _isPaused ? Icons.play_arrow : Icons.pause,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: _onTogglePause,
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
                   ),
                 ),
                 Gaps.v10,
@@ -267,7 +284,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                         category: widget.category,
                         level: widget.level,
                         lessonNo: widget.lessonNo,
-                      ), // TODO: progess
+                      ),
                     ],
                   ),
                 ),
