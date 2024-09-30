@@ -1,15 +1,46 @@
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class ListenSpeak extends StatefulWidget {
-  const ListenSpeak({super.key});
+  final List<Map<String, dynamic>> expressionList;
+  const ListenSpeak({
+    super.key,
+    required this.expressionList,
+  });
 
   @override
   State<ListenSpeak> createState() => _ListenSpeakState();
 }
 
 class _ListenSpeakState extends State<ListenSpeak> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  bool _isPlaying = false;
+
+  Future<void> _playAudio() async {
+    await _audioPlayer
+        .play(UrlSource(widget.expressionList[0]['expressionAudioPath']));
+    setState(() {
+      _isPlaying = true;
+    });
+  }
+
+  Future<void> _stopAudio() async {
+    await _audioPlayer.stop();
+    setState(() {
+      _isPlaying = false;
+    });
+  }
+
+  Future<void> _toggleAudio() async {
+    if (_isPlaying) {
+      await _stopAudio();
+    } else {
+      await _playAudio();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,29 +73,59 @@ class _ListenSpeakState extends State<ListenSpeak> {
                 borderRadius: BorderRadius.circular(20.0),
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center, // 세로 중앙 정렬
-                crossAxisAlignment: CrossAxisAlignment.center, // 가로 중앙 정렬
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.headphones,
-                    color: Colors.grey[400],
-                    size: 48,
+                  GestureDetector(
+                    onTap: _toggleAudio,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        if (_isPlaying)
+                          Positioned(
+                            child: Container(
+                              width: 70,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: Colors.yellow.withOpacity(0.6), // 레몬색
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          ),
+                        if (_isPlaying)
+                          Positioned(
+                            child: Container(
+                              width: 120,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                color: Colors.yellow.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(35),
+                              ),
+                            ),
+                          ),
+                        const Icon(
+                          Icons.headphones,
+                          color: Colors.orange,
+                          size: 48,
+                        ),
+                      ],
+                    ),
                   ),
                   Gaps.v16,
                   Text(
-                    "Listen and repeat",
-                    style: TextStyle(
-                      color: Colors.grey[400],
+                    widget.expressionList[0]['korAnswer'],
+                    style: const TextStyle(
+                      color: Colors.black,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Gaps.v8,
                   Text(
-                    "Listen and repeat",
-                    style: TextStyle(
+                    widget.expressionList[0]['engAnswer'],
+                    style: const TextStyle(
                       fontSize: 20,
-                      color: Colors.grey[400],
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -93,8 +154,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
                 Container(
                   width: 60,
                   height: 60,
-                  decoration: const BoxDecoration(
-                    color: Colors.orange,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(

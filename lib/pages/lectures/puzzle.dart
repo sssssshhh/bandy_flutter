@@ -5,7 +5,6 @@ import 'package:bandy_flutter/constants/hangul.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/completed.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -121,10 +120,11 @@ class _PuzzleState extends State<Puzzle> {
   }
 
   void _onNextTap() {
+    print(widget.expressionList);
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const Completed(),
+        builder: (context) => Completed(expressionList: widget.expressionList),
       ),
     );
   }

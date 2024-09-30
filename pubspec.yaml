@@ -51,6 +51,7 @@ dependencies:
   flutter_native_splash: ^2.4.1
   flutter_launcher_icons: ^0.13.1
   cached_network_image: ^3.4.0
+  audioplayers: ^6.1.0
 
 flutter_launcher_icons:
   image_path: assets/images/launcher/bandy_launcher.png

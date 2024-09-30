@@ -3,7 +3,9 @@ import 'package:bandy_flutter/pages/lectures/listen_speak.dart';
 import 'package:flutter/material.dart';
 
 class Completed extends StatefulWidget {
-  const Completed({super.key});
+  final List<Map<String, dynamic>> expressionList;
+
+  const Completed({super.key, required this.expressionList});
 
   @override
   State<Completed> createState() => _CompletedState();
@@ -16,7 +18,9 @@ class _CompletedState extends State<Completed> {
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const ListenSpeak()),
+        MaterialPageRoute(
+            builder: (context) =>
+                ListenSpeak(expressionList: widget.expressionList)),
       );
     });
   }
