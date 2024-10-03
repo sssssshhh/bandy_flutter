@@ -34,7 +34,14 @@ class _LecturesState extends State<Lectures> {
         .get();
 
     setState(() {
-      bitesizeStories = dbs.docs.map((doc) => doc.data()).toList();
+      bitesizeStories = dbs.docs
+          .map((doc) => {
+                'id': int.parse(doc.id),
+                ...doc.data(),
+              })
+          .toList();
+
+      bitesizeStories.sort((a, b) => a['id'].compareTo(b['id']));
     });
   }
 
@@ -45,9 +52,14 @@ class _LecturesState extends State<Lectures> {
         .collection('level1')
         .get();
 
-    setState(() {
-      podcasts = dbs.docs.map((doc) => doc.data()).toList();
-    });
+    podcasts = dbs.docs
+        .map((doc) => {
+              'id': int.parse(doc.id),
+              ...doc.data(),
+            })
+        .toList();
+
+    podcasts.sort((a, b) => a['id'].compareTo(b['id']));
   }
 
   Future<void> setConfusedKorean() async {
@@ -58,7 +70,14 @@ class _LecturesState extends State<Lectures> {
         .get();
 
     setState(() {
-      confusedKoreans = dbs.docs.map((doc) => doc.data()).toList();
+      confusedKoreans = dbs.docs
+          .map((doc) => {
+                'id': int.parse(doc.id),
+                ...doc.data(),
+              })
+          .toList();
+
+      confusedKoreans.sort((a, b) => a['id'].compareTo(b['id']));
     });
   }
 

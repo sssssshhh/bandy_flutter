@@ -47,7 +47,14 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
         .get();
 
     setState(() {
-      lectureList = dbs.docs.map((doc) => doc.data()).toList();
+      lectureList = dbs.docs
+          .map((doc) => {
+                'id': int.parse(doc.id),
+                ...doc.data(),
+              })
+          .toList();
+
+      lectureList.sort((a, b) => a['id'].compareTo(b['id']));
     });
   }
 
