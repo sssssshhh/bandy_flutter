@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  audio_session:
+    dependency: transitive
+    description:
+      name: audio_session
+      sha256: "343e83bc7809fbda2591a49e525d6b63213ade10c76f15813be9aed6657b3261"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.21"
   audioplayers:
     dependency: "direct main"
     description:
@@ -97,6 +105,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
+  azure_speech_assessment:
+    dependency: "direct main"
+    description:
+      name: azure_speech_assessment
+      sha256: "9cecf132fe3fecefd353f3e35c09c714a3ca9c2b219aff72fc26bb40fc59c11d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.7"
   boolean_selector:
     dependency: transitive
     description:
@@ -241,6 +257,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
+  ffmpeg_kit_flutter:
+    dependency: "direct main"
+    description:
+      name: ffmpeg_kit_flutter
+      sha256: "843aae41823ca94a0988d975b4b6cdc6948744b9b7e2707d81a3a9cd237b0100"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.3"
+  ffmpeg_kit_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: ffmpeg_kit_flutter_platform_interface
+      sha256: addf046ae44e190ad0101b2fde2ad909a3cd08a2a109f6106d2f7048b7abedee
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   file:
     dependency: transitive
     description:
@@ -374,6 +406,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.5.1"
+  flutter_sound_record:
+    dependency: "direct main"
+    description:
+      name: flutter_sound_record
+      sha256: "21bd020a528f1de5b23b3f1fb48ef9dae3b880eccc5aa969ed190262aac026bf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.2"
+  flutter_sound_record_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_sound_record_platform_interface
+      sha256: c1efe56e241a16db5a5adb7effce3100ca1ea97e45e8b045cea2fcd603a12892
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.1"
+  flutter_sound_record_web:
+    dependency: transitive
+    description:
+      name: flutter_sound_record_web
+      sha256: "7b85aab6774765b2cf7558b1a364711ba135142c0ee5f1695b25e9ff8066f298"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -448,6 +504,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
+  just_audio:
+    dependency: "direct main"
+    description:
+      name: just_audio
+      sha256: b41646a8241688f1d99c2e69c4da2bb26aa4b3a99795f6ff205c2a165e033fda
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.41"
+  just_audio_platform_interface:
+    dependency: transitive
+    description:
+      name: just_audio_platform_interface
+      sha256: "0243828cce503c8366cc2090cefb2b3c871aa8ed2f520670d76fd47aa1ab2790"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.0"
+  just_audio_web:
+    dependency: transitive
+    description:
+      name: just_audio_web
+      sha256: "9a98035b8b24b40749507687520ec5ab404e291d2b0937823ff45d92cb18d448"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.13"
   leak_tracker:
     dependency: transitive
     description:

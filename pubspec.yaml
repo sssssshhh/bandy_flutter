@@ -52,6 +52,10 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   cached_network_image: ^3.4.0
   audioplayers: ^6.1.0
+  azure_speech_assessment: ^0.0.7
+  flutter_sound_record: ^3.3.2
+  ffmpeg_kit_flutter: ^6.0.3
+  just_audio: ^0.9.41
 
 flutter_launcher_icons:
   image_path: assets/images/launcher/bandy_launcher.png

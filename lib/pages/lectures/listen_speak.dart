@@ -1,5 +1,7 @@
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/Pronunciation_assessment_results.dart';
+import 'package:bandy_flutter/pages/lectures/pronucation_assessment%20copy%202.dart';
+import 'package:bandy_flutter/pages/lectures/pronucation_assessment.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -70,7 +72,10 @@ class _ListenSpeakState extends State<ListenSpeak> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const PronunciationAssessmentResults(),
+        // for Test
+        builder: (context) => const PronunciationAssessment(),
+
+        // builder: (context) => const PronunciationAssessmentResults(),
       ),
     );
   }
