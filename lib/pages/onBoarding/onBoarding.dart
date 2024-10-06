@@ -1,4 +1,3 @@
-import 'package:bandy_flutter/constants/cloudFrontPath.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.dart';
@@ -52,7 +51,7 @@ class _OnboardingState extends State<Onboarding> {
                         borderRadius: BorderRadius.circular(8.0),
                         image: const DecorationImage(
                           image: NetworkImage(
-                            '${Cloudfrontpath.Domain}/onboarding/1.png',
+                            'https://dlcb5kh12wprc.cloudfront.net/onboarding/1.png',
                           ),
                           fit: BoxFit.cover,
                         ),
@@ -92,7 +91,7 @@ class _OnboardingState extends State<Onboarding> {
                         borderRadius: BorderRadius.circular(8.0),
                         image: const DecorationImage(
                           image: NetworkImage(
-                            '${Cloudfrontpath.Domain}/onboarding/2.png',
+                            'https://dlcb5kh12wprc.cloudfront.net/onboarding/2.png',
                           ),
                           fit: BoxFit.cover,
                         ),
@@ -132,7 +131,7 @@ class _OnboardingState extends State<Onboarding> {
                         borderRadius: BorderRadius.circular(8.0),
                         image: const DecorationImage(
                           image: NetworkImage(
-                            '${Cloudfrontpath.Domain}/onboarding/3.png',
+                            'https://dlcb5kh12wprc.cloudfront.net/onboarding/3.png',
                           ),
                           fit: BoxFit.cover,
                         ),

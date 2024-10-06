@@ -254,24 +254,25 @@ class _PronunciationAssessmentState extends State<PronunciationAssessment> {
   }
 
   Future<void> fetchAndSendAudio(String wavPath) async {
-    // file:// 스킴 제거
+    // delete file://
     String filePath = wavPath.replaceFirst('file://', '');
 
     File file = File(filePath);
 
     if (await file.exists()) {
       final url = Uri.parse(
-          'https://qw08qinwif.execute-api.ap-northeast-1.amazonaws.com/default/getPresignedURL'); // API Gateway URL
+          'https://qw08qinwif.execute-api.ap-northeast-1.amazonaws.com/default/getPresignedURL');
 
       try {
         final response = await http.get(url);
 
         if (response.statusCode == 200) {
           final data = json.decode(response.body);
-          final presignedUrl = data['url']; // pre-signed URL 추출
+          // extract pre-signed URL
+          final presignedUrl = data['url'];
           print('Pre-signed URL: $presignedUrl');
 
-          // 파일 업로드
+          // Upload file
           final uploadResponse = await http.put(
             Uri.parse(presignedUrl),
             body: file.readAsBytesSync(),
