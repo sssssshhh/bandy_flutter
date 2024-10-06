@@ -258,7 +258,7 @@ class _PronunciationAssessmentState extends State<PronunciationAssessment> {
     String filePath = wavPath.replaceFirst('file://', '');
 
     File file = File(filePath);
-    print(await file.exists());
+
     if (await file.exists()) {
       final url = Uri.parse(
           'https://qw08qinwif.execute-api.ap-northeast-1.amazonaws.com/default/getPresignedURL'); // API Gateway URL
@@ -309,7 +309,6 @@ class _PronunciationAssessmentState extends State<PronunciationAssessment> {
                     audioSource = ap.AudioSource.uri(Uri.parse(path));
                     String wavPath = await convertM4aToWav(path);
                     stringPath = wavPath;
-                    print(wavPath);
                     fetchAndSendAudio(wavPath);
                     showPlayer = true;
                     setState(() {});

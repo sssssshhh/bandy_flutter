@@ -93,8 +93,6 @@ class _PuzzleState extends State<Puzzle> {
         _selectedCharacters.join() +
         korAnswer.substring(lastBlank + 1);
 
-    print(filledAnswer == korAnswer);
-
     setState(() {
       _isCorrectAnswer = filledAnswer == korAnswer;
     });
@@ -120,7 +118,6 @@ class _PuzzleState extends State<Puzzle> {
   }
 
   void _onNextTap() {
-    print(widget.expressionList);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -131,7 +128,6 @@ class _PuzzleState extends State<Puzzle> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.expressionList);
     return Scaffold(
       appBar: AppBar(),
       body: Stack(
