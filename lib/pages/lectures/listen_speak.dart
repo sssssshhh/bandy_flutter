@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/Pronunciation_assessment_results.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/foundation.dart';
@@ -25,7 +26,6 @@ class ListenSpeak extends StatefulWidget {
 class _ListenSpeakState extends State<ListenSpeak> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isPlaying = false;
-  bool _isListening = false; // 마이크 리스닝 상태
   bool _isRecordingComplete = false; // 녹음 완료 상태
   Timer? _timer;
   Timer? _ampTimer;
@@ -72,34 +72,28 @@ class _ListenSpeakState extends State<ListenSpeak> {
   }
 
   Future<void> _toggleRecording() async {
-    if (_isListening) {
-      print("if");
-
+    if (_isRecording) {
       await _stopAudio();
-      _stop();
-      // 마이크 클릭 시 녹음 완료 상태로 변경
+      _stopRecording();
+
       setState(() {
-        _isListening = false;
+        _isRecording = false;
         _isRecordingComplete = true;
       });
     } else {
-      print("else");
+      _startRecording();
 
-      _start();
-      // 상태 변경
       setState(() {
-        _isListening = true;
-        _isPlaying = false; // 오디오 재생 중지
-        _isRecordingComplete = false; // 초기화
+        _isRecording = true;
+        _isPlaying = false;
+        _isRecordingComplete = false;
       });
 
-      // 2초 후 녹음 완료 상태로 변경 (예시, 실제 녹음 로직에 따라 변경 가능)
       await Future.delayed(const Duration(seconds: 2));
     }
   }
 
   Future<String> convertM4aToWav(String inputPath) async {
-    print("convertM4aToWav");
     String outputPath = inputPath.replaceAll(".m4a", ".wav");
     await FFmpegKit.execute(
             "-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
@@ -168,7 +162,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
     });
   }
 
-  Future<void> _start() async {
+  Future<void> _startRecording() async {
     try {
       if (await _audioRecorder.hasPermission()) {
         await _audioRecorder.start();
@@ -188,7 +182,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
     }
   }
 
-  Future<void> _stop() async {
+  Future<void> _stopRecording() async {
     _timer?.cancel();
     _ampTimer?.cancel();
     final String? path = await _audioRecorder.stop();
@@ -203,7 +197,6 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
   Future<void> _sendRecording(String path) async {
     String wavPath = await convertM4aToWav(path);
-
     fetchAndSendAudio(wavPath);
   }
 
@@ -311,42 +304,40 @@ class _ListenSpeakState extends State<ListenSpeak> {
             ),
             Column(
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(10),
+                if (!_isRecordingComplete)
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: _isRecording
+                        ? const Text(
+                            'Listening...',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            'Press and speak',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
-                  child: _isListening ||
-                          _isRecordingComplete // Listening 또는 녹음 완료 상태일 때 텍스트 변경
-                      ? const Text(
-                          'Listening...',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text(
-                          'Press and speak',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                ),
                 const SizedBox(height: 20),
                 GestureDetector(
-                  onTap: _toggleRecording, // 마이크 버튼 클릭 시 리스닝 토글
+                  onTap: _toggleRecording,
                   child: Container(
                     width: 60,
                     height: 60,
                     decoration: BoxDecoration(
-                      color: _isListening
-                          ? Colors.orange
-                          : Colors.grey[400], // 리스닝 중일 때 오렌지색
+                      color: _isRecording ? Colors.orange : Colors.grey[400],
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -355,32 +346,30 @@ class _ListenSpeakState extends State<ListenSpeak> {
                       size: 40,
                     ),
                   ),
-                )
-
-                // const SizedBox(height: 20),
+                ),
+                const SizedBox(height: 20),
                 // 녹음 완료 후 Check result 버튼 표시
-                // if (_isRecordingComplete)
-                //   const Column(
-                //     children: [
-                //       // 녹음 완료 텍스트
-                //       Text(
-                //         'Recording complete',
-                //         style: TextStyle(
-                //           color: Colors.black,
-                //           fontSize: 18,
-                //           fontWeight: FontWeight.bold,
-                //         ),
-                //       ),
-                // const SizedBox(height: 20),
-                // GestureDetector(
-                //   onTap: _onNextTap,
-                //   child: const FormButton(
-                //     text: 'Check',
-                //     disabled: false,
-                //   ),
-                // ),
-                //   ],
-                // ),
+                if (_isRecordingComplete)
+                  Column(
+                    children: [
+                      const Text(
+                        'Recording complete',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: _onNextTap,
+                        child: const FormButton(
+                          text: 'Check',
+                          disabled: false,
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
           ],
