@@ -124,7 +124,6 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
           final presignedUrl = data['url'];
 
-          // Upload file
           final uploadResponse = await http.put(
             Uri.parse(presignedUrl),
             body: file.readAsBytesSync(),
@@ -208,8 +207,10 @@ class _ListenSpeakState extends State<ListenSpeak> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            PronunciationAssessmentResults(fileName: fileName),
+        builder: (context) => PronunciationAssessmentResults(
+          fileName: fileName,
+          korAnswer: widget.expressionList[0]['korAnswer'],
+        ),
       ),
     );
   }

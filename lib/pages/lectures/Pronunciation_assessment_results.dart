@@ -1,14 +1,19 @@
+import 'dart:convert';
+
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/lectures.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class PronunciationAssessmentResults extends StatefulWidget {
   final String fileName;
+  final String korAnswer;
 
   const PronunciationAssessmentResults({
     super.key,
     required this.fileName,
+    required this.korAnswer,
   });
 
   @override
@@ -18,9 +23,13 @@ class PronunciationAssessmentResults extends StatefulWidget {
 
 class _PronunciationAssessmentResultsState
     extends State<PronunciationAssessmentResults> {
+  String apiUrl = 'https://pronunciation-assessment.vercel.app/api/assessment';
+  String accuracyScore = "0";
+
   @override
   void initState() {
     super.initState();
+    getAssessmentResult();
   }
 
   void _onNextTap() {
@@ -32,9 +41,38 @@ class _PronunciationAssessmentResultsState
     );
   }
 
+  Future<void> getAssessmentResult() async {
+    try {
+      final Map<String, String> requestData = {
+        'fileName': widget.fileName,
+        'referenceText': widget.korAnswer
+      };
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(requestData),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        setState(() {
+          accuracyScore = data['accuracyScore'].toString();
+        });
+      } else {
+        print(
+            'Failed to load pronunciation assessment: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.fileName);
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -73,17 +111,17 @@ class _PronunciationAssessmentResultsState
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.orange, width: 8),
                     ),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "100",
-                          style: TextStyle(
+                          accuracyScore,
+                          style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(
+                        const Text(
                           "Excellent!",
                           style: TextStyle(
                             fontSize: 18,
@@ -95,14 +133,6 @@ class _PronunciationAssessmentResultsState
                 ),
               ),
               Gaps.v80,
-              // Check 버튼 위에 텍스트 추가
-              const Text(
-                "The pronunciation assessment service will be opening soon!",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              Gaps.v16,
               GestureDetector(
                 onTap: _onNextTap,
                 child: const FormButton(
