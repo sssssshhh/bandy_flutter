@@ -25,14 +25,15 @@ class ListenSpeak extends StatefulWidget {
 
 class _ListenSpeakState extends State<ListenSpeak> {
   final AudioPlayer _audioPlayer = AudioPlayer();
+  final FlutterSoundRecord _audioRecorder = FlutterSoundRecord();
   bool _isPlaying = false;
-  bool _isRecordingComplete = false; // 녹음 완료 상태
+  bool _isRecordingComplete = false;
+  bool _isRecording = false;
   Timer? _timer;
   Timer? _ampTimer;
   int _recordDuration = 0;
   Amplitude? _amplitude;
-  final FlutterSoundRecord _audioRecorder = FlutterSoundRecord();
-  bool _isRecording = false;
+  String fileName = "";
 
   @override
   void initState() {
@@ -98,15 +99,15 @@ class _ListenSpeakState extends State<ListenSpeak> {
     await FFmpegKit.execute(
             "-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
         .then((session) async {
-      final duration = await session.getDuration();
-      print("Convert m4a to wav duration: $duration");
+      // final duration = await session.getDuration();
+      // print("Convert m4a to wav duration: $duration");
     });
 
     return outputPath;
   }
 
   Future<void> fetchAndSendAudio(String wavPath) async {
-    // delete file://
+    // delete "file://"
     String filePath = wavPath.replaceFirst('file://', '');
 
     File file = File(filePath);
@@ -120,9 +121,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
         if (response.statusCode == 200) {
           final data = json.decode(response.body);
-          // extract pre-signed URL
+
           final presignedUrl = data['url'];
-          print('Pre-signed URL: $presignedUrl');
 
           // Upload file
           final uploadResponse = await http.put(
@@ -135,6 +135,10 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
           if (uploadResponse.statusCode == 200) {
             print('File uploaded successfully!');
+
+            setState(() {
+              fileName = data['fileName'];
+            });
           } else {
             print('Failed to upload file: ${uploadResponse.statusCode}');
           }
@@ -204,7 +208,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const PronunciationAssessmentResults(),
+        builder: (context) =>
+            PronunciationAssessmentResults(fileName: fileName),
       ),
     );
   }
@@ -348,8 +353,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // 녹음 완료 후 Check result 버튼 표시
-                if (_isRecordingComplete)
+                if (_isRecordingComplete && fileName != "")
                   Column(
                     children: [
                       const Text(

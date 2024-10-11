@@ -2,10 +2,14 @@ import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/lectures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class PronunciationAssessmentResults extends StatefulWidget {
-  const PronunciationAssessmentResults({super.key});
+  final String fileName;
+
+  const PronunciationAssessmentResults({
+    super.key,
+    required this.fileName,
+  });
 
   @override
   State<PronunciationAssessmentResults> createState() =>
@@ -30,6 +34,7 @@ class _PronunciationAssessmentResultsState
 
   @override
   Widget build(BuildContext context) {
+    print(widget.fileName);
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
