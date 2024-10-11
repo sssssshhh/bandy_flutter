@@ -1,7 +1,14 @@
-import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
-import 'package:bandy_flutter/pages/lectures/pronucation_assessment.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:bandy_flutter/pages/lectures/Pronunciation_assessment_results.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_sound_record/flutter_sound_record.dart';
+import 'package:http/http.dart' as http;
 
 class ListenSpeak extends StatefulWidget {
   final List<Map<String, dynamic>> expressionList;
@@ -20,6 +27,26 @@ class _ListenSpeakState extends State<ListenSpeak> {
   bool _isPlaying = false;
   bool _isListening = false; // 마이크 리스닝 상태
   bool _isRecordingComplete = false; // 녹음 완료 상태
+  Timer? _timer;
+  Timer? _ampTimer;
+  int _recordDuration = 0;
+  Amplitude? _amplitude;
+  final FlutterSoundRecord _audioRecorder = FlutterSoundRecord();
+  bool _isRecording = false;
+
+  @override
+  void initState() {
+    _isRecording = false;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _ampTimer?.cancel();
+    _audioRecorder.dispose();
+    super.dispose();
+  }
 
   Future<void> _playAudio() async {
     await _audioPlayer
@@ -44,16 +71,21 @@ class _ListenSpeakState extends State<ListenSpeak> {
     }
   }
 
-  Future<void> _toggleListening() async {
+  Future<void> _toggleRecording() async {
     if (_isListening) {
+      print("if");
+
+      await _stopAudio();
+      _stop();
       // 마이크 클릭 시 녹음 완료 상태로 변경
       setState(() {
         _isListening = false;
         _isRecordingComplete = true;
       });
     } else {
-      // 오디오 중지
-      await _stopAudio();
+      print("else");
+
+      _start();
       // 상태 변경
       setState(() {
         _isListening = true;
@@ -66,14 +98,120 @@ class _ListenSpeakState extends State<ListenSpeak> {
     }
   }
 
+  Future<String> convertM4aToWav(String inputPath) async {
+    print("convertM4aToWav");
+    String outputPath = inputPath.replaceAll(".m4a", ".wav");
+    await FFmpegKit.execute(
+            "-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
+        .then((session) async {
+      final duration = await session.getDuration();
+      print("Convert m4a to wav duration: $duration");
+    });
+
+    return outputPath;
+  }
+
+  Future<void> fetchAndSendAudio(String wavPath) async {
+    // delete file://
+    String filePath = wavPath.replaceFirst('file://', '');
+
+    File file = File(filePath);
+
+    if (await file.exists()) {
+      final url = Uri.parse(
+          'https://qw08qinwif.execute-api.ap-northeast-1.amazonaws.com/default/getPresignedURL');
+
+      try {
+        final response = await http.get(url);
+
+        if (response.statusCode == 200) {
+          final data = json.decode(response.body);
+          // extract pre-signed URL
+          final presignedUrl = data['url'];
+          print('Pre-signed URL: $presignedUrl');
+
+          // Upload file
+          final uploadResponse = await http.put(
+            Uri.parse(presignedUrl),
+            body: file.readAsBytesSync(),
+            headers: {
+              'Content-Type': 'audio/wav',
+            },
+          );
+
+          if (uploadResponse.statusCode == 200) {
+            print('File uploaded successfully!');
+          } else {
+            print('Failed to upload file: ${uploadResponse.statusCode}');
+          }
+        } else {
+          print('Failed to fetch pre-signed URL: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+    _ampTimer?.cancel();
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() => _recordDuration++);
+    });
+
+    _ampTimer =
+        Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
+      _amplitude = await _audioRecorder.getAmplitude();
+      setState(() {});
+    });
+  }
+
+  Future<void> _start() async {
+    try {
+      if (await _audioRecorder.hasPermission()) {
+        await _audioRecorder.start();
+
+        bool isRecording = await _audioRecorder.isRecording();
+        setState(() {
+          _isRecording = isRecording;
+          _recordDuration = 0;
+        });
+
+        _startTimer();
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
+  Future<void> _stop() async {
+    _timer?.cancel();
+    _ampTimer?.cancel();
+    final String? path = await _audioRecorder.stop();
+    if (path != null) {
+      _sendRecording(path);
+    } else {
+      print("Recording path is null.");
+    }
+
+    setState(() => _isRecording = false);
+  }
+
+  Future<void> _sendRecording(String path) async {
+    String wavPath = await convertM4aToWav(path);
+
+    fetchAndSendAudio(wavPath);
+  }
+
   void _onNextTap() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        // for Test
-        builder: (context) => const PronunciationAssessment(),
-
-        // builder: (context) => const PronunciationAssessmentResults(),
+        builder: (context) => const PronunciationAssessmentResults(),
       ),
     );
   }
@@ -84,11 +222,11 @@ class _ListenSpeakState extends State<ListenSpeak> {
       appBar: AppBar(), // TODO: go to lecture
       body: Padding(
         padding: const EdgeInsets.symmetric(
-          vertical: 20.0,
+          vertical: 30.0,
           horizontal: 40.0,
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Align(
               alignment: Alignment.topLeft,
@@ -103,7 +241,6 @@ class _ListenSpeakState extends State<ListenSpeak> {
             Container(
               width: double.infinity,
               height: 400,
-              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: Colors.grey),
@@ -141,7 +278,6 @@ class _ListenSpeakState extends State<ListenSpeak> {
                               ),
                             ),
                           ),
-                        // 헤드폰 아이콘
                         Icon(
                           Icons.headphones,
                           color: _isPlaying
@@ -153,7 +289,6 @@ class _ListenSpeakState extends State<ListenSpeak> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // 녹음 완료 후 A, B 텍스트 표시
                   Text(
                     widget.expressionList[0]['korAnswer'],
                     style: const TextStyle(
@@ -176,7 +311,6 @@ class _ListenSpeakState extends State<ListenSpeak> {
             ),
             Column(
               children: [
-                // 흰 컨테이너 밖의 타원형
                 Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
@@ -205,7 +339,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
                 ),
                 const SizedBox(height: 20),
                 GestureDetector(
-                  onTap: _toggleListening, // 마이크 버튼 클릭 시 리스닝 토글
+                  onTap: _toggleRecording, // 마이크 버튼 클릭 시 리스닝 토글
                   child: Container(
                     width: 60,
                     height: 60,
@@ -221,31 +355,32 @@ class _ListenSpeakState extends State<ListenSpeak> {
                       size: 40,
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
+                )
+
+                // const SizedBox(height: 20),
                 // 녹음 완료 후 Check result 버튼 표시
-                if (_isRecordingComplete)
-                  Column(
-                    children: [
-                      // 녹음 완료 텍스트
-                      const Text(
-                        'Recording complete',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: _onNextTap,
-                        child: const FormButton(
-                          text: 'Check',
-                          disabled: false,
-                        ),
-                      ),
-                    ],
-                  ),
+                // if (_isRecordingComplete)
+                //   const Column(
+                //     children: [
+                //       // 녹음 완료 텍스트
+                //       Text(
+                //         'Recording complete',
+                //         style: TextStyle(
+                //           color: Colors.black,
+                //           fontSize: 18,
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                // const SizedBox(height: 20),
+                // GestureDetector(
+                //   onTap: _onNextTap,
+                //   child: const FormButton(
+                //     text: 'Check',
+                //     disabled: false,
+                //   ),
+                // ),
+                //   ],
+                // ),
               ],
             ),
           ],
