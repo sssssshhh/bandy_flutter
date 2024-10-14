@@ -28,12 +28,12 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'BANDY',
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white, // bgColor for all pages
-        colorScheme: ColorScheme.fromSwatch(
-          backgroundColor: Colors.white,
-        ),
-        splashColor: Colors.transparent,
-      ),
+          colorScheme: ColorScheme.fromSwatch(
+            backgroundColor: Colors.white,
+          ),
+          scaffoldBackgroundColor: Colors.white, // bgColor for all pages
+          splashColor: Colors.transparent,
+          fontFamily: "Pretendard"),
     );
   }
 }
