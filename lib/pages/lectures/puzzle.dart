@@ -104,8 +104,8 @@ class _PuzzleState extends State<Puzzle> {
         // Reset the state if the answer was checked
         _selectedIndices.clear();
         _selectedCharacters.clear();
-        _startIndex = null; // 시작 인덱스 초기화
-        _endIndex = null; // 끝 인덱스 초기화
+        _startIndex = null;
+        _endIndex = null;
         isChecked = false;
         _showAnswerOverlay = false;
       } else {
