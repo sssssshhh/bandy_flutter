@@ -256,9 +256,9 @@ class _PuzzleState extends State<Puzzle> {
                               _selectedIndices.add(index);
                               _selectedCharacters.add(characters[index]);
                               if (_startIndex == null) {
-                                _startIndex = index; // 첫 번째 클릭
+                                _startIndex = index; // first click
                               } else {
-                                _endIndex = index; // 두 번째 클릭
+                                _endIndex = index; // second click
                               }
                             }
                           });
