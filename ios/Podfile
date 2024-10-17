@@ -37,18 +37,41 @@ target 'Runner' do
   pod 'Firebase/Firestore', :modular_headers => true
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-  # target 'RunnerTests' do
-  #   inherit! :search_paths
-  # end
 end
 
+# 안전한 post_install 훅 코드
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
+      # 기본 설정 파일 경로 초기화
+      begin
+        if config.name == 'Release'
+          config.base_configuration_reference = nil
+          config.base_configuration_reference = installer.sandbox.root + 'Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig'
+        elsif config.name == 'Debug'
+          config.base_configuration_reference = nil
+          config.base_configuration_reference = installer.sandbox.root + 'Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig'
+        end
+      rescue => e
+        puts "Error setting base configuration: #{e.message}"
+      end
+
+      # iOS 타겟 버전 및 Swift 최적화 설정
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
       config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-Onone'
     end
+
+    # input/output 파일 목록 비우기
+    target.build_phases.each do |phase|
+      if phase.respond_to?(:input_file_list_paths) && phase.respond_to?(:output_file_list_paths)
+        phase.input_file_list_paths = []
+        phase.output_file_list_paths = []
+      end
+    end
+
     flutter_additional_ios_build_settings(target)
+
+    # BoringSSL-GRPC 타겟의 경고 제거
     if target.name == 'BoringSSL-GRPC'
       create_symlink_phase = target.shell_script_build_phases.find { |x| x.name == 'Create Symlinks to Header Folders' }
       create_symlink_phase.always_out_of_date = "1"
