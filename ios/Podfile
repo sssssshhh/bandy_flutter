@@ -37,6 +37,9 @@ target 'Runner' do
   pod 'Firebase/Firestore', :modular_headers => true
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
 end
 
 # 안전한 post_install 훅 코드
