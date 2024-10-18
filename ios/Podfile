@@ -50,7 +50,7 @@ post_install do |installer|
       begin
         if config.name == 'Release'
           config.base_configuration_reference = nil
-          config.base_configuration_reference = installer.sandbox.root + 'Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig'
+         # config.base_configuration_reference = installer.sandbox.root + 'Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig'
         elsif config.name == 'Debug'
           config.base_configuration_reference = nil
           config.base_configuration_reference = installer.sandbox.root + 'Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig'
