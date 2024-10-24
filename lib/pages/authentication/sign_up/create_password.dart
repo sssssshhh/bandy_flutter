@@ -9,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CreatePassword extends ConsumerStatefulWidget {
+  static const routeURL = "/create-password";
+
   const CreatePassword({super.key});
 
   @override
@@ -53,12 +55,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
     };
 
     // ref.read(signUpProvider.notifier).signUp(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CreateNickname(),
-      ),
-    );
+    Navigator.pushNamed(context, CreateNickname.routeURL);
   }
 
   void _onClearTap() {
@@ -111,9 +108,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                     GestureDetector(
                       onTap: _toggleObscureText,
                       child: FaIcon(
-                        _obscureText
-                            ? FontAwesomeIcons.eye
-                            : FontAwesomeIcons.eyeSlash,
+                        _obscureText ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash,
                         color: Colors.grey.shade500,
                         size: Sizes.size20,
                       ),
@@ -147,8 +142,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                 FaIcon(
                   FontAwesomeIcons.circleCheck,
                   size: Sizes.size20,
-                  color:
-                      _isPasswordValid() ? Colors.green : Colors.grey.shade400,
+                  color: _isPasswordValid() ? Colors.green : Colors.grey.shade400,
                 ),
                 Gaps.h5,
                 const Text("9 to 20 characters")

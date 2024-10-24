@@ -4,15 +4,15 @@ import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_email.dart';
 import 'package:bandy_flutter/pages/authentication/widget/auth_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SelectSignUp extends StatelessWidget {
+  static const routeURL = "/select-sign-up";
+
   const SelectSignUp({super.key});
 
   void _onEmailTap(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const SignUpEmail()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignUpEmail()));
   }
 
   @override

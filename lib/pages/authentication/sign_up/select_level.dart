@@ -4,10 +4,14 @@ import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/view_model/signup_view_model.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
+import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
+import 'package:bandy_flutter/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SelectLevel extends ConsumerStatefulWidget {
+  static const routeURL = "/select-level";
+
   const SelectLevel({super.key});
 
   @override
@@ -17,13 +21,22 @@ class SelectLevel extends ConsumerStatefulWidget {
 class _SelectLevelState extends ConsumerState<SelectLevel> {
   String _selectedLevel = "";
 
-  void _onNextTap() {
+  void _onNextTap() async {
     final state = ref.read(signUpForm.notifier).state;
     ref.read(signUpForm.notifier).state = {
       ...state,
       "level": _selectedLevel,
     };
-    ref.read(signUpProvider.notifier).signUp(context);
+
+    final result = await ref.read(signUpProvider.notifier).signUp();
+
+    if (!mounted) return;
+
+    if (result.hasError) {
+      showFirebaseErrorSnack(context, result.error);
+    } else {
+      Navigator.pushNamed(context, MainNavigation.routeURL);
+    }
   }
 
   void _selectLevel(String level) {
@@ -50,8 +63,7 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
         icon = Icons.account_balance_sharp;
         topText = '3';
         middleText = "High Pre-intermediate (A2)";
-        bottomText =
-            "I can understand moderately sized texts on various aspects of daily life.";
+        bottomText = "I can understand moderately sized texts on various aspects of daily life.";
         break;
       default: // 'level1'
         icon = Icons.cruelty_free;

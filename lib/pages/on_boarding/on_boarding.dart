@@ -5,8 +5,9 @@ import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class Onboarding extends StatefulWidget {
-  static String routeName = "onBoarding";
-  static String routeURL = "/onBoarding";
+  static const String routeName = "onBoarding";
+  static const String routeURL = "/onBoarding";
+
   const Onboarding({super.key});
 
   @override
@@ -15,8 +16,7 @@ class Onboarding extends StatefulWidget {
 
 class _OnboardingState extends State<Onboarding> {
   void _onSignInSignUpTap(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const SignUpOrSignIn()));
+    Navigator.pushNamed(context, SignUpOrSignIn.routeURL);
   }
 
   @override

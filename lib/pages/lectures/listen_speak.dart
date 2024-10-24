@@ -50,8 +50,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
   }
 
   Future<void> _playAudio() async {
-    await _audioPlayer
-        .play(UrlSource(widget.expressionList[0]['expressionAudioPath']));
+    await _audioPlayer.play(UrlSource(widget.expressionList[0]['expressionAudioPath']));
     setState(() {
       _isPlaying = true;
     });
@@ -96,8 +95,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
   Future<String> convertM4aToWav(String inputPath) async {
     String outputPath = inputPath.replaceAll(".m4a", ".wav");
-    await FFmpegKit.execute(
-            "-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
+    await FFmpegKit.execute("-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
         .then((session) async {
       // final duration = await session.getDuration();
       // print("Convert m4a to wav duration: $duration");
@@ -133,19 +131,19 @@ class _ListenSpeakState extends State<ListenSpeak> {
           );
 
           if (uploadResponse.statusCode == 200) {
-            print('File uploaded successfully!');
+            debugPrint('File uploaded successfully!');
 
             setState(() {
               fileName = data['fileName'];
             });
           } else {
-            print('Failed to upload file: ${uploadResponse.statusCode}');
+            debugPrint('Failed to upload file: ${uploadResponse.statusCode}');
           }
         } else {
-          print('Failed to fetch pre-signed URL: ${response.statusCode}');
+          debugPrint('Failed to fetch pre-signed URL: ${response.statusCode}');
         }
       } catch (e) {
-        print('Error: $e');
+        debugPrint('Error: $e');
       }
     }
   }
@@ -158,8 +156,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
       setState(() => _recordDuration++);
     });
 
-    _ampTimer =
-        Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
+    _ampTimer = Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
       _amplitude = await _audioRecorder.getAmplitude();
       setState(() {});
     });
@@ -192,7 +189,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
     if (path != null) {
       _sendRecording(path);
     } else {
-      print("Recording path is null.");
+      debugPrint("Recording path is null.");
     }
 
     setState(() => _isRecording = false);
@@ -279,9 +276,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
                           ),
                         Icon(
                           Icons.headphones,
-                          color: _isPlaying
-                              ? Colors.orange
-                              : Colors.grey, // 재생 중일 때 오렌지색
+                          color: _isPlaying ? Colors.orange : Colors.grey, // 재생 중일 때 오렌지색
                           size: 48,
                         ),
                       ],
@@ -312,8 +307,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
               children: [
                 if (!_isRecordingComplete)
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(10),
