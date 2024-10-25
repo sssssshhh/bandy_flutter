@@ -8,8 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CreateNickname extends ConsumerStatefulWidget {
-  static String routeName = "createNickname";
-  static String routeURL = "/createNickname";
+  static const routeName = "createNickname";
+  static const routeURL = "/createNickname";
+
   const CreateNickname({super.key});
 
   @override
@@ -50,12 +51,8 @@ class _CreateNicknameState extends ConsumerState<CreateNickname> {
       ...state,
       "nickname": _nickname,
     };
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SelectLevel(),
-      ),
-    );
+
+    Navigator.pushNamed(context, SelectLevel.routeURL);
   }
 
   @override

@@ -1,13 +1,13 @@
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/sign_in/sign_in_auth.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up/select_auth_or_self.dart';
+import 'package:bandy_flutter/pages/authentication/sign_in/select_sign_in.dart';
+import 'package:bandy_flutter/pages/authentication/sign_up/select_sign_up.dart';
 import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class SignUpOrSignIn extends StatefulWidget {
-  static String routeName = "signupsignin";
-  static String routeURL = "/signupsignin";
+  static const String routeName = "sign-up-or-sign-in";
+  static const String routeURL = "/sign-up-or-sign-in";
   const SignUpOrSignIn({super.key});
 
   @override
@@ -16,13 +16,11 @@ class SignUpOrSignIn extends StatefulWidget {
 
 class _SignUpOrSignInState extends State<SignUpOrSignIn> {
   void _onSelectSignUpTap(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const SelectSignUp()));
+    Navigator.pushNamed(context, SelectSignUp.routeURL);
   }
 
   void _onSelectSignInTap(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const SelectSignIn()));
+    Navigator.pushNamed(context, SelectSignIn.routeURL);
   }
 
   @override
@@ -39,9 +37,7 @@ class _SignUpOrSignInState extends State<SignUpOrSignIn> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const SizedBox(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: []),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: []),
               ),
               const Text(
                 'Lighting Up Your Korean Learning Journey',

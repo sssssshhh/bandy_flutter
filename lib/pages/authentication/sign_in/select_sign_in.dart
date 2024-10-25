@@ -1,24 +1,28 @@
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_email.dart';
+import 'package:bandy_flutter/pages/authentication/sign_in/sign_in_email.dart';
 import 'package:bandy_flutter/pages/authentication/widget/auth_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SelectSignUp extends StatelessWidget {
-  const SelectSignUp({super.key});
+class SelectSignIn extends StatelessWidget {
+  static const routeURL = "/select-sign-in";
 
-  void _onEmailTap(BuildContext context) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const SignUpEmail()));
+  const SelectSignIn({super.key});
+
+  void _onSingInEmailTap(BuildContext context) {
+    Navigator.pushNamed(context, SignInEmail.routeURL);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text(
+          "Sign In",
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -33,15 +37,10 @@ class SelectSignUp extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Sign Up',
-                      style: Fonts.titleLarge,
-                    ),
-                    Gaps.v20,
-                    const Text(
                       'Lighting Up Your Korean Learning Journey',
                       style: Fonts.titleSmall,
                     ),
-                    Gaps.v16,
+                    Gaps.v8,
                     // const AuthButton(
                     //   text: 'Continue with Apple',
                     //   icon: FaIcon(FontAwesomeIcons.apple),
@@ -58,17 +57,17 @@ class SelectSignUp extends StatelessWidget {
                     // ),
                     // Gaps.v40,
                     GestureDetector(
-                      onTap: () => _onEmailTap(context),
+                      onTap: () => _onSingInEmailTap(context),
                       child: const AuthButton(
-                        text: 'Use your email', // Or use your email
+                        text: 'Use your email',
                         icon: FaIcon(FontAwesomeIcons.user),
                       ),
                     ),
-                    Gaps.v20,
+                    Gaps.v8,
                     const Column(
                       children: [
                         Text(
-                          'By signing up, you accept BANDY',
+                          'By signing up, you accept Bandys',
                           textAlign: TextAlign.center,
                         ),
                         Text('Terms of Service and Privacy Policy')

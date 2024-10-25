@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SignUpEmail extends ConsumerStatefulWidget {
+  static const routeURL = "/sign-up-email";
+
   const SignUpEmail({super.key});
 
   @override
@@ -38,8 +40,7 @@ class _SignUpEmailSignInState extends ConsumerState<SignUpEmail> {
 
   String? _isEmailValid() {
     if (_email.isEmpty) return null;
-    final regExp = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    final regExp = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
     if (!regExp.hasMatch(_email)) {
       return "Email not valid";
     }
@@ -52,13 +53,10 @@ class _SignUpEmailSignInState extends ConsumerState<SignUpEmail> {
 
   void _onNextTap() {
     if (_email.isEmpty || _isEmailValid() != null) return;
+
     ref.read(signUpForm.notifier).state = {"email": _email};
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CreatePassword(),
-      ),
-    );
+
+    Navigator.pushNamed(context, CreatePassword.routeURL);
   }
 
   @override

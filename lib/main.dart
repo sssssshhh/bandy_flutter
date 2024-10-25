@@ -1,5 +1,7 @@
+import 'package:bandy_flutter/bandy_routes.dart';
 import 'package:bandy_flutter/firebase_options.dart';
-import 'package:bandy_flutter/router.dart';
+import 'package:bandy_flutter/pages/on_boarding/on_boarding.dart';
+import 'package:bandy_flutter/route_observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,10 +23,11 @@ void main() async {
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
+  static RouterObserver routerObserver = RouterObserver();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp.router(
-      routerConfig: ref.watch(routerProvider),
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BANDY',
       theme: ThemeData(
@@ -34,6 +37,13 @@ class MyApp extends ConsumerWidget {
           scaffoldBackgroundColor: Colors.white, // bgColor for all pages
           splashColor: Colors.transparent,
           fontFamily: "Pretendard"),
+      initialRoute: Onboarding.routeURL,
+      onGenerateRoute: BandyRoutes.onGenerateRoute,
+      onUnknownRoute: BandyRoutes.onUnknownRoute,
+      navigatorObservers: [
+        routerObserver, // Global
+        BandyRoutes.pageRouteObserver, // Page
+      ],
     );
   }
 }
