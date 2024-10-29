@@ -50,7 +50,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
   }
 
   Future<void> _playAudio() async {
-    await _audioPlayer.play(UrlSource(widget.expressionList[0]['expressionAudioPath']));
+    await _audioPlayer
+        .play(UrlSource(widget.expressionList[0]['expressionAudioPath']));
     setState(() {
       _isPlaying = true;
     });
@@ -95,7 +96,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
   Future<String> convertM4aToWav(String inputPath) async {
     String outputPath = inputPath.replaceAll(".m4a", ".wav");
-    await FFmpegKit.execute("-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
+    await FFmpegKit.execute(
+            "-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
         .then((session) async {
       // final duration = await session.getDuration();
       // print("Convert m4a to wav duration: $duration");
@@ -156,7 +158,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
       setState(() => _recordDuration++);
     });
 
-    _ampTimer = Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
+    _ampTimer =
+        Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
       _amplitude = await _audioRecorder.getAmplitude();
       setState(() {});
     });
@@ -276,7 +279,9 @@ class _ListenSpeakState extends State<ListenSpeak> {
                           ),
                         Icon(
                           Icons.headphones,
-                          color: _isPlaying ? Colors.orange : Colors.grey, // 재생 중일 때 오렌지색
+                          color: _isPlaying
+                              ? Colors.orange
+                              : Colors.grey, // 재생 중일 때 오렌지색
                           size: 48,
                         ),
                       ],
@@ -307,7 +312,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
               children: [
                 if (!_isRecordingComplete)
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                     decoration: BoxDecoration(
                       color: Colors.black,
                       borderRadius: BorderRadius.circular(10),
@@ -331,6 +337,13 @@ class _ListenSpeakState extends State<ListenSpeak> {
                           ),
                   ),
                 const SizedBox(height: 20),
+                const Text(
+                  'Microphone access is required for pronunciation evaluation only',
+                  style: TextStyle(
+                    fontSize: 8,
+                    color: Colors.black,
+                  ),
+                ),
                 GestureDetector(
                   onTap: _toggleRecording,
                   child: Container(
