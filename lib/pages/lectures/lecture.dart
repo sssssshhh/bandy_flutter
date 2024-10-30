@@ -34,17 +34,14 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   bool _isPaused = true;
   bool _isInitialized = false;
   bool _isLoading = true;
-  String _progessStatus = "0";
+  String _progressStatus = "0";
   bool _isIconVisible = false;
 
   List<Map<String, dynamic>> lectureList = [];
 
   Future<void> setLectures() async {
-    final dbs = await _db
-        .collection('lectures')
-        .doc(widget.category)
-        .collection(widget.level)
-        .get();
+    final dbs =
+        await _db.collection('lectures').doc(widget.category).collection(widget.level).get();
 
     setState(() {
       lectureList = dbs.docs
@@ -67,7 +64,12 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
     final dbs = await _db.collection('users').doc(email).get();
     if (dbs.exists && dbs.data() != null) {
       setState(() {
-        _progessStatus = dbs.data()?['status'];
+        final status = dbs.data()?['status'];
+        if (status is int) {
+          _progressStatus = status.toString();
+        } else {
+          _progressStatus = status;
+        }
       });
     }
   }
@@ -173,8 +175,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                               )
                             : Container(
                                 color: Colors.grey,
-                                child: const Center(
-                                    child: CircularProgressIndicator()),
+                                child: const Center(child: CircularProgressIndicator()),
                               ),
                         _isInitialized && _isIconVisible
                             ? IconButton(
@@ -199,8 +200,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                           decoration: BoxDecoration(
                             color: Colors.amber[100],
                             borderRadius: BorderRadius.circular(5),
@@ -287,7 +287,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                         ),
                       ),
                       Progress(
-                        progressStatus: _progessStatus,
+                        progressStatus: _progressStatus,
                         category: widget.category,
                         level: widget.level,
                         lessonNo: widget.lessonNo,
