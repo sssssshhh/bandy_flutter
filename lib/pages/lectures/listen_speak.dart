@@ -338,7 +338,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
                   ),
                 const SizedBox(height: 20),
                 const Text(
-                  'Microphone access is required for pronunciation evaluation only',
+                  'We needs microphone access for your pronunciation evaluation only',
                   style: TextStyle(
                     fontSize: 8,
                     color: Colors.black,
