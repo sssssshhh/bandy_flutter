@@ -194,7 +194,7 @@ class _LecturesState extends State<Lectures> {
                         MaterialPageRoute(
                           builder: (context) => Lecture(
                             category: category,
-                            level: 'level1',
+                            level: level,
                             lecture: lecture,
                             lessonNo: index,
                           ),

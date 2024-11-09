@@ -31,27 +31,34 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
 
   late VideoPlayerController _videoPlayerController;
   late TabController _tabController;
+
   bool _isPaused = true;
   bool _isInitialized = false;
   bool _isLoading = true;
-  String _progressStatus = "0";
   bool _isIconVisible = false;
+  String _progressStatus = "0";
+  int lessonNo = 0;
+  String title = "";
 
-  List<Map<String, dynamic>> lectureList = [];
+  List<Map<String, dynamic>> videoList = [];
 
   Future<void> setLectures() async {
-    final dbs =
-        await _db.collection('lectures').doc(widget.category).collection(widget.level).get();
+    final lectures = await _db
+        .collection('lectures')
+        .doc(widget.category)
+        .collection(widget.level)
+        .get();
 
     setState(() {
-      lectureList = dbs.docs
+      // order lecture list by id
+      videoList = lectures.docs
           .map((doc) => {
                 'id': int.parse(doc.id),
                 ...doc.data(),
               })
           .toList();
 
-      lectureList.sort((a, b) => a['id'].compareTo(b['id']));
+      videoList.sort((a, b) => a['id'].compareTo(b['id']));
     });
   }
 
@@ -61,10 +68,10 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
       email = _auth.currentUser!.email;
     }
 
-    final dbs = await _db.collection('users').doc(email).get();
-    if (dbs.exists && dbs.data() != null) {
+    final user = await _db.collection('users').doc(email).get();
+    if (user.exists && user.data() != null) {
       setState(() {
-        final status = dbs.data()?['status'];
+        final status = user.data()?['status'];
         if (status is int) {
           _progressStatus = status.toString();
         } else {
@@ -87,16 +94,17 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _initializeVideoPlayer();
-
-    _tabController = TabController(length: 3, vsync: this);
+    setLectureDetail(widget.lecture['masterVideoPath'], widget.lecture['title'],
+        widget.lessonNo);
     loadAllLectures();
     setUserInfo();
+    _tabController = TabController(length: 3, vsync: this);
   }
 
-  void _initializeVideoPlayer() {
+  Future<void> setLectureDetail(String masterVideoPath, String titleParameter,
+      int lessonNoParameter) async {
     _videoPlayerController = VideoPlayerController.network(
-      widget.lecture['masterVideoPath'],
+      masterVideoPath,
     )..initialize().then((_) {
         setState(() {
           _isInitialized = true;
@@ -105,15 +113,20 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
       }).catchError((error) {
         print('Error initializing video player: $error');
       });
+
+    setState(() {
+      lessonNo = lessonNoParameter;
+      title = titleParameter;
+    });
   }
 
-  void _loadVideoAtIndex(int index) {
+  void _loadVideoAtIndex(String masterVideoPath, String title, int lessonNo) {
     setState(() {
       _isInitialized = false;
     });
 
     _videoPlayerController.dispose();
-    _initializeVideoPlayer();
+    setLectureDetail(masterVideoPath, title, lessonNo);
   }
 
   @override
@@ -175,7 +188,8 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                               )
                             : Container(
                                 color: Colors.grey,
-                                child: const Center(child: CircularProgressIndicator()),
+                                child: const Center(
+                                    child: CircularProgressIndicator()),
                               ),
                         _isInitialized && _isIconVisible
                             ? IconButton(
@@ -200,13 +214,14 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 10),
                           decoration: BoxDecoration(
                             color: Colors.amber[100],
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Text(
-                            'lesson ${widget.lessonNo}',
+                            'lesson $lessonNo',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -216,7 +231,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                         ),
                         Gaps.v10,
                         Text(
-                          widget.lecture['title'],
+                          title,
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -250,12 +265,15 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                       Center(
                         child: ListView.builder(
                           padding: const EdgeInsets.all(16.0),
-                          itemCount: lectureList.length,
+                          itemCount: videoList.length,
                           itemBuilder: (context, index) {
-                            final lecture = lectureList[index];
+                            final lecture = videoList[index];
 
                             return GestureDetector(
-                              onTap: () => _loadVideoAtIndex(index),
+                              onTap: () => _loadVideoAtIndex(
+                                  lecture['masterVideoPath'],
+                                  lecture['title'],
+                                  index + 1),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
