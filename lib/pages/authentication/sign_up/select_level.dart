@@ -53,22 +53,23 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
     String bottomText;
 
     switch (level) {
-      case 'A2':
+      case 'A2': // 'level2'
         icon = Icons.query_builder_sharp;
         topText = '2';
         middleText = "Low Pre-intermediate (A2)";
         bottomText = "I can understand short texts on everyday topics.";
         break;
-      case 'A3':
+      case 'A3': // 'level3'
         icon = Icons.account_balance_sharp;
         topText = '3';
         middleText = "High Pre-intermediate (A2)";
-        bottomText = "I can understand moderately sized texts on various aspects of daily life.";
+        bottomText =
+            "I can understand moderately sized texts on various aspects of daily life.";
         break;
       default: // 'level1'
         icon = Icons.cruelty_free;
         topText = '1';
-        middleText = "High Pre-intermediate (A2)";
+        middleText = "High Beginner (A1)";
         bottomText = "I can understand words and very simple sentences.";
 
         break;

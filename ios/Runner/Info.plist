@@ -27,7 +27,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Need camera access for uploading photo</string>
+	<string>e would like to access your camera for uploading profil photo</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We would like to access your microphone for pronunciation evaluation</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

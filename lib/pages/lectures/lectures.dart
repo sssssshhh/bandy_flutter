@@ -30,7 +30,7 @@ class _LecturesState extends State<Lectures> {
     final dbs = await _db
         .collection('lectures')
         .doc(Bandy.bitesizeStory)
-        .collection('level1')
+        .collection(level)
         .get();
 
     setState(() {
@@ -49,7 +49,7 @@ class _LecturesState extends State<Lectures> {
     final dbs = await _db
         .collection('lectures')
         .doc(Bandy.podcast)
-        .collection('level1')
+        .collection(level)
         .get();
 
     podcasts = dbs.docs
@@ -66,7 +66,7 @@ class _LecturesState extends State<Lectures> {
     final dbs = await _db
         .collection('lectures')
         .doc(Bandy.confusedKorean)
-        .collection('level1')
+        .collection(level)
         .get();
 
     setState(() {
@@ -84,8 +84,12 @@ class _LecturesState extends State<Lectures> {
   @override
   void initState() {
     super.initState();
-    setUserInfo();
-    loadAllLectures();
+    initLectures();
+  }
+
+  Future<void> initLectures() async {
+    await setUserInfo();
+    await loadAllLectures();
   }
 
   Future<void> loadAllLectures() async {
@@ -110,7 +114,7 @@ class _LecturesState extends State<Lectures> {
     if (dbs.exists && dbs.data() != null) {
       setState(() {
         nickname = dbs.data()?['nickname'];
-        level = dbs.data()?['level']; // TODO: 무한로딩
+        level = dbs.data()?['level'];
       });
     }
   }
