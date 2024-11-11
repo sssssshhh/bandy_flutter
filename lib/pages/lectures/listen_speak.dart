@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
-import 'package:bandy_flutter/pages/lectures/Pronunciation_assessment_results.dart';
+import 'package:bandy_flutter/pages/lectures/pronunciation_assessment_results.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

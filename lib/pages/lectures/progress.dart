@@ -1,4 +1,5 @@
 import 'package:bandy_flutter/constants/gaps.dart';
+import 'package:bandy_flutter/pages/lectures/listen_speak.dart';
 import 'package:bandy_flutter/pages/lectures/puzzle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -65,19 +66,6 @@ class _ProgressState extends State<Progress> {
                   ),
                 ),
               ),
-              // Positioned(
-              //   left:
-              //       progressValue * (MediaQuery.of(context).size.width - 34.0),
-              //   top: -5,
-              //   child: Container(
-              //     width: 20,
-              //     height: 20,
-              //     decoration: const BoxDecoration(
-              //       shape: BoxShape.circle,
-              //       color: Colors.orange,
-              //     ),
-              //   ),
-              // ),
             ],
           ),
           const SizedBox(height: 20),
@@ -132,7 +120,7 @@ class _DetailsState extends State<Details> {
         .collection('lectures')
         .doc(widget.category)
         .collection(widget.level)
-        .doc("1") // TODO: widget.lessonNo.toString()
+        .doc(widget.lessonNo.toString())
         .collection('expression')
         .get();
 
@@ -146,9 +134,9 @@ class _DetailsState extends State<Details> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Puzzle(
+          builder: (context) => ListenSpeak(
             expressionList: expressionList,
-          ), // TODO: prouni..
+          ),
         ),
       );
     } else {

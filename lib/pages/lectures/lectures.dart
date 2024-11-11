@@ -196,7 +196,7 @@ class _LecturesState extends State<Lectures> {
                             category: category,
                             level: level,
                             lecture: lecture,
-                            lessonNo: index,
+                            lessonNo: index + 1,
                           ),
                         ),
                       );
