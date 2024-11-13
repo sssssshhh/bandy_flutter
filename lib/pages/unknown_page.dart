@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class UnknownScreen extends StatelessWidget {
-  const UnknownScreen({super.key});
+class UnknownPage extends StatelessWidget {
+  const UnknownPage({super.key});
 
   @override
   Widget build(BuildContext context) {

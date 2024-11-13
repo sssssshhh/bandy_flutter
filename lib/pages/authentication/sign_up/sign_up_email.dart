@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SignUpEmail extends ConsumerStatefulWidget {
-  static const routeURL = "/sign-up-email";
+  static const routeName = "/sign-up-email";
 
   const SignUpEmail({super.key});
 
@@ -56,7 +56,7 @@ class _SignUpEmailSignInState extends ConsumerState<SignUpEmail> {
 
     ref.read(signUpForm.notifier).state = {"email": _email};
 
-    Navigator.pushNamed(context, CreatePassword.routeURL);
+    Navigator.pushNamed(context, CreatePassword.routeName);
   }
 
   @override

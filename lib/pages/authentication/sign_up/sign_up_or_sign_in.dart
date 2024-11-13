@@ -6,8 +6,8 @@ import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class SignUpOrSignIn extends StatefulWidget {
-  static const String routeName = "sign-up-or-sign-in";
-  static const String routeURL = "/sign-up-or-sign-in";
+  static const routeName = "/sign-up-or-sign-in";
+
   const SignUpOrSignIn({super.key});
 
   @override
@@ -16,11 +16,11 @@ class SignUpOrSignIn extends StatefulWidget {
 
 class _SignUpOrSignInState extends State<SignUpOrSignIn> {
   void _onSelectSignUpTap(BuildContext context) {
-    Navigator.pushNamed(context, SelectSignUp.routeURL);
+    Navigator.pushNamed(context, SelectSignUp.routeName);
   }
 
   void _onSelectSignInTap(BuildContext context) {
-    Navigator.pushNamed(context, SelectSignIn.routeURL);
+    Navigator.pushNamed(context, SelectSignIn.routeName);
   }
 
   @override

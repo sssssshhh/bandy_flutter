@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 class Settings extends StatelessWidget {
   const Settings({super.key});
 
-  static String routeName = "settings";
-  static String routeURL = "/settings";
+  static String routeName = "/settings";
 
   Future<void> _deleteAccount(BuildContext context) async {
     try {

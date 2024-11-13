@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SignInEmail extends ConsumerStatefulWidget {
-  static const routeURL = "/sign-in-email";
+  static const routeName = "/sign-in-email";
 
   const SignInEmail({super.key});
 
@@ -38,7 +38,7 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
         if (result.hasError) {
           showFirebaseErrorSnack(context, result.error);
         } else {
-          Navigator.pushNamedAndRemoveUntil(context, MainNavigation.routeURL, (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, MainNavigation.routeName, (route) => false);
         }
       }
     }

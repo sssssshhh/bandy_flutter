@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SelectSignIn extends StatelessWidget {
-  static const routeURL = "/select-sign-in";
+  static const routeName = "/select-sign-in";
 
   const SelectSignIn({super.key});
 
   void _onSingInEmailTap(BuildContext context) {
-    Navigator.pushNamed(context, SignInEmail.routeURL);
+    Navigator.pushNamed(context, SignInEmail.routeName);
   }
 
   @override

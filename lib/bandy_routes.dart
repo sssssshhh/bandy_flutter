@@ -8,7 +8,8 @@ import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_email.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.dart';
 import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
 import 'package:bandy_flutter/pages/on_boarding/on_boarding.dart';
-import 'package:bandy_flutter/pages/unknown_screen.dart';
+import 'package:bandy_flutter/pages/splash_page.dart';
+import 'package:bandy_flutter/pages/unknown_page.dart';
 import 'package:flutter/material.dart';
 
 class BandyRoutes {
@@ -24,47 +25,54 @@ class BandyRoutes {
       };
 
   static RouteFactory? get onUnknownRoute =>
-      (settings) => MaterialPageRoute(builder: (_) => const UnknownScreen());
+      (settings) => MaterialPageRoute(builder: (_) => const UnknownPage());
 
   static Widget getScreen(String? name, {Object? arguments}) {
-    return _getScreen(name, arguments: arguments) ?? const UnknownScreen();
+    return _getScreen(name, arguments: arguments) ?? const UnknownPage();
   }
 
   static Widget? _getScreen(String? name, {Object? arguments}) {
     switch (name) {
-      case Onboarding.routeURL:
+      case SplashPage.routeName:
+        return _getSplash();
+
+      case Onboarding.routeName:
         return _getOnBoarding();
 
-      case SignUpOrSignIn.routeURL:
+      case SignUpOrSignIn.routeName:
         return _getSignUpOrSignIn();
 
-      case SelectSignUp.routeURL:
+      case SelectSignUp.routeName:
         return _getSelectSignUp();
 
-      case SignUpEmail.routeURL:
+      case SignUpEmail.routeName:
         return _getSignUpEmail();
 
-      case CreatePassword.routeURL:
+      case CreatePassword.routeName:
         return _getCreatePassword();
 
-      case CreateNickname.routeURL:
+      case CreateNickname.routeName:
         return _getCreateNickname();
 
-      case SelectLevel.routeURL:
+      case SelectLevel.routeName:
         return _getSelectLevel();
 
-      case SelectSignIn.routeURL:
+      case SelectSignIn.routeName:
         return _getSelectSignIn();
 
-      case SignInEmail.routeURL:
+      case SignInEmail.routeName:
         return _getSignInEmail();
 
-      case MainNavigation.routeURL:
+      case MainNavigation.routeName:
         return _getMainNavigation();
 
       default:
         return null;
     }
+  }
+
+  static Widget? _getSplash() {
+    return const SplashPage();
   }
 
   static Widget? _getOnBoarding() {

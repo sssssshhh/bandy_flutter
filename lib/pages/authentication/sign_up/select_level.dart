@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SelectLevel extends ConsumerStatefulWidget {
-  static const routeURL = "/select-level";
+  static const routeName = "/select-level";
 
   const SelectLevel({super.key});
 
@@ -35,7 +35,7 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
     if (result.hasError) {
       showFirebaseErrorSnack(context, result.error);
     } else {
-      Navigator.pushNamed(context, MainNavigation.routeURL);
+      Navigator.pushNamed(context, MainNavigation.routeName);
     }
   }
 
@@ -63,8 +63,7 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
         icon = Icons.account_balance_sharp;
         topText = '3';
         middleText = "High Pre-intermediate (A2)";
-        bottomText =
-            "I can understand moderately sized texts on various aspects of daily life.";
+        bottomText = "I can understand moderately sized texts on various aspects of daily life.";
         break;
       default: // 'level1'
         icon = Icons.cruelty_free;

@@ -1,13 +1,16 @@
 import 'package:bandy_flutter/bandy_routes.dart';
 import 'package:bandy_flutter/firebase_options.dart';
-import 'package:bandy_flutter/pages/on_boarding/on_boarding.dart';
+import 'package:bandy_flutter/pages/splash_page.dart';
 import 'package:bandy_flutter/route_observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -37,7 +40,7 @@ class MyApp extends ConsumerWidget {
           scaffoldBackgroundColor: Colors.white, // bgColor for all pages
           splashColor: Colors.transparent,
           fontFamily: "Pretendard"),
-      initialRoute: Onboarding.routeURL,
+      initialRoute: SplashPage.routeName,
       onGenerateRoute: BandyRoutes.onGenerateRoute,
       onUnknownRoute: BandyRoutes.onUnknownRoute,
       navigatorObservers: [

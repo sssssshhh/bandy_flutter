@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SelectSignUp extends StatelessWidget {
-  static const routeURL = "/select-sign-up";
+  static const routeName = "/select-sign-up";
 
   const SelectSignUp({super.key});
 

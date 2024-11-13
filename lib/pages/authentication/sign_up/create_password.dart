@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CreatePassword extends ConsumerStatefulWidget {
-  static const routeURL = "/create-password";
+  static const routeName = "/create-password";
 
   const CreatePassword({super.key});
 
@@ -55,7 +55,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
     };
 
     // ref.read(signUpProvider.notifier).signUp(context);
-    Navigator.pushNamed(context, CreateNickname.routeURL);
+    Navigator.pushNamed(context, CreateNickname.routeName);
   }
 
   void _onClearTap() {
