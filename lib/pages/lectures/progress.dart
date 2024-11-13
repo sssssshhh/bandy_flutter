@@ -115,7 +115,14 @@ class _DetailsState extends State<Details> {
 
   List<Map<String, dynamic>> expressionList = [];
 
-  Future<void> getExpressionInfo() async {
+  @override
+  void initState() {
+    super.initState();
+
+    _getExpressionInfo();
+  }
+
+  Future<void> _getExpressionInfo() async {
     final dbs = await _db
         .collection('lectures')
         .doc(widget.category)
@@ -153,7 +160,6 @@ class _DetailsState extends State<Details> {
 
   @override
   Widget build(BuildContext context) {
-    getExpressionInfo();
     return Container(
       padding: const EdgeInsets.all(16.0),
       width: 160,
