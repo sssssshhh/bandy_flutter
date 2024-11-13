@@ -11,7 +11,7 @@ class Contents extends StatefulWidget {
   });
 
   @override
-  _ContentsState createState() => _ContentsState();
+  State<Contents> createState() => _ContentsState();
 }
 
 class _ContentsState extends State<Contents> {
@@ -44,8 +44,7 @@ class _ContentsState extends State<Contents> {
                     });
                   },
                   child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: BorderRadius.circular(5),
@@ -64,10 +63,8 @@ class _ContentsState extends State<Contents> {
             ),
             Gaps.v10,
             Text(isKorean
-                ? widget.widget.lecture['korExplanation']
-                    .replaceAll(r'\n', '\n')
-                : widget.widget.lecture['engExplanation']
-                    .replaceAll(r'\n', '\n')),
+                ? widget.widget.lecture['korExplanation'].replaceAll(r'\n', '\n')
+                : widget.widget.lecture['engExplanation'].replaceAll(r'\n', '\n')),
           ],
         ),
       ),

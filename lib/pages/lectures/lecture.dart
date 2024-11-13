@@ -1,8 +1,11 @@
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/lectures/content.dart';
 import 'package:bandy_flutter/pages/lectures/progress.dart';
+import 'package:bandy_flutter/widgets/custom_video_player/controls.dart';
+import 'package:bandy_flutter/widgets/custom_video_player/data_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -29,13 +32,12 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  late VideoPlayerController _videoPlayerController;
+  // late VideoPlayerController _videoPlayerController;
+  late FlickManager _flickManager;
+  late DataManager _dataManager;
   late TabController _tabController;
 
-  bool _isPaused = true;
-  bool _isInitialized = false;
   bool _isLoading = true;
-  bool _isIconVisible = false;
   String _progressStatus = "0";
   int lessonNo = 0;
   String title = "";
@@ -43,11 +45,8 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>> videoList = [];
 
   Future<void> setLectures() async {
-    final lectures = await _db
-        .collection('lectures')
-        .doc(widget.category)
-        .collection(widget.level)
-        .get();
+    final lectures =
+        await _db.collection('lectures').doc(widget.category).collection(widget.level).get();
 
     setState(() {
       // order lecture list by id
@@ -94,25 +93,30 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    setLectureDetail(widget.lecture['masterVideoPath'], widget.lecture['title'],
-        widget.lessonNo);
+    setLectureDetail(widget.lecture['masterVideoPath'], widget.lecture['title'], widget.lessonNo);
     loadAllLectures();
     setUserInfo();
     _tabController = TabController(length: 3, vsync: this);
   }
 
-  Future<void> setLectureDetail(String masterVideoPath, String titleParameter,
-      int lessonNoParameter) async {
-    _videoPlayerController = VideoPlayerController.network(
-      masterVideoPath,
-    )..initialize().then((_) {
-        setState(() {
-          _isInitialized = true;
-          _videoPlayerController.pause();
-        });
-      }).catchError((error) {
-        print('Error initializing video player: $error');
-      });
+  Future<void> setLectureDetail(
+      String masterVideoPath, String titleParameter, int lessonNoParameter) async {
+    _flickManager = FlickManager(
+      videoPlayerController: VideoPlayerController.networkUrl(
+        Uri.parse(masterVideoPath),
+      ),
+      autoInitialize: false,
+      autoPlay: false,
+      onVideoEnd: () {
+        _dataManager.skipToNextVideo(const Duration(seconds: 5));
+      },
+    );
+
+    _dataManager = DataManager(flickManager: _flickManager, urls: [masterVideoPath]);
+
+    _flickManager = FlickManager(
+      videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(masterVideoPath)),
+    );
 
     setState(() {
       lessonNo = lessonNoParameter;
@@ -121,44 +125,15 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   }
 
   void _loadVideoAtIndex(String masterVideoPath, String title, int lessonNo) {
-    setState(() {
-      _isInitialized = false;
-    });
-
-    _videoPlayerController.dispose();
+    _flickManager.dispose();
     setLectureDetail(masterVideoPath, title, lessonNo);
   }
 
   @override
   void dispose() {
-    _videoPlayerController.dispose();
+    _flickManager.dispose();
     _tabController.dispose();
     super.dispose();
-  }
-
-  void _onTogglePause() {
-    if (!_isInitialized) return;
-
-    if (_videoPlayerController.value.isPlaying) {
-      _videoPlayerController.pause();
-    } else {
-      _videoPlayerController.play();
-    }
-    setState(() {
-      _isPaused = !_isPaused;
-    });
-  }
-
-  void _onVideoTap() {
-    setState(() {
-      _isIconVisible = true;
-    });
-
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        _isIconVisible = false;
-      });
-    });
   }
 
   @override
@@ -173,36 +148,22 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
             )
           : Column(
               children: [
-                SizedBox(
-                  height: 200,
-                  width: 300,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        _isInitialized
-                            ? GestureDetector(
-                                onTap: _onVideoTap,
-                                child: VideoPlayer(_videoPlayerController),
-                              )
-                            : Container(
-                                color: Colors.grey,
-                                child: const Center(
-                                    child: CircularProgressIndicator()),
-                              ),
-                        _isInitialized && _isIconVisible
-                            ? IconButton(
-                                iconSize: 64.0,
-                                icon: Icon(
-                                  _isPaused ? Icons.play_arrow : Icons.pause,
-                                  color: Colors.grey,
-                                ),
-                                onPressed: _onTogglePause,
-                              )
-                            : const SizedBox.shrink(),
-                      ],
-                    ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      FlickVideoPlayer(
+                        flickManager: _flickManager,
+                        flickVideoWithControls: FlickVideoWithControls(
+                          controls: CustomOrientationControls(dataManager: _dataManager),
+                        ),
+                        flickVideoWithControlsFullscreen: FlickVideoWithControls(
+                          videoFit: BoxFit.fitWidth,
+                          controls: CustomOrientationControls(dataManager: _dataManager),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Gaps.v10,
@@ -214,8 +175,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                           decoration: BoxDecoration(
                             color: Colors.amber[100],
                             borderRadius: BorderRadius.circular(5),
@@ -271,9 +231,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
 
                             return GestureDetector(
                               onTap: () => _loadVideoAtIndex(
-                                  lecture['masterVideoPath'],
-                                  lecture['title'],
-                                  index + 1),
+                                  lecture['masterVideoPath'], lecture['title'], index + 1),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
