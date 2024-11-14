@@ -4,6 +4,7 @@ import 'package:bandy_flutter/pages/authentication/sign_in/select_sign_in.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/select_sign_up.dart';
 import 'package:bandy_flutter/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SignUpOrSignIn extends StatefulWidget {
   static const routeName = "/sign-up-or-sign-in";
@@ -26,50 +27,73 @@ class _SignUpOrSignInState extends State<SignUpOrSignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: Sizes.size40,
-            vertical: Sizes.size40,
+      body: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.size40,
+          vertical: Sizes.size40,
+        ),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0x88F2BC40), Color(0x22FFFB9D), Colors.transparent],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0, 0.25, 1.0],
           ),
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const SizedBox(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: []),
-              ),
-              const Text(
-                'Lighting Up Your Korean Learning Journey',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: Sizes.size24,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            // const SizedBox(
+            //   child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: []),
+            // ),
+            SvgPicture.asset('assets/svg/logo.svg'),
+            Gaps.v28,
+            const Text(
+              'Lighting Up Your Korean Learning Journey',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: Sizes.size16, color: Color(0xFF808080)),
+            ),
+            const SizedBox(height: 150),
+            Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () => _onSelectSignUpTap(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFF2BC40),
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 56),
+                    shadowColor: Colors.transparent,
+                  ),
+                  child: const Text('Sign up for free', style: TextStyle(fontSize: 16)),
                 ),
-              ),
-              Gaps.v2,
-              Column(
-                children: [
-                  GestureDetector(
-                    onTap: () => _onSelectSignUpTap(context),
-                    child: const Button(
-                      text: 'Sign up for free',
-                      bgColor: Colors.orange, // TODO: Colors.orange[200]
-                      textColor: Colors.white,
-                    ),
+                Gaps.v14,
+                ElevatedButton(
+                  onPressed: () => _onSelectSignInTap(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFF0F0F0),
+                    foregroundColor: const Color(0xFF808080),
+                    minimumSize: const Size(double.infinity, 56),
+                    shadowColor: Colors.transparent,
                   ),
-                  Gaps.v4,
-                  GestureDetector(
-                    onTap: () => _onSelectSignInTap(context),
-                    child: const Button(
-                      text: 'Already Sign up? Log in',
-                      bgColor: Colors.orange, // TODO: Colors.orange[200]
-                      textColor: Colors.white,
-                    ),
+                  child: const Text.rich(
+                    TextSpan(children: [
+                      TextSpan(text: 'Already signed up? ', style: TextStyle(fontSize: 16)),
+                      TextSpan(
+                          text: 'Log in',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    ]),
                   ),
-                ],
-              ),
-            ],
-          ),
+
+                  // const Text(
+                  //   'Already signed up? Log in',
+                  //   style: TextStyle(color: Colors.blue),
+                  // ),
+                ),
+              ],
+            ),
+            Gaps.v28,
+          ],
         ),
       ),
     );
