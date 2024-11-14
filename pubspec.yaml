@@ -54,6 +54,8 @@ dependencies:
   flutter_sound_record: ^3.3.2
   ffmpeg_kit_flutter: ^6.0.3
   just_audio: ^0.9.41
+  flutter_svg: ^2.0.14
+  gradient_borders: ^1.0.1
 
 flutter_launcher_icons:
   image_path: assets/images/launcher/bandy_launcher.png
@@ -88,6 +90,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/svg/
     - assets/images/lecture/
   #   - images/a_dot_ham.jpeg
 

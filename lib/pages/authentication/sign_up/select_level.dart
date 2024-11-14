@@ -8,6 +8,8 @@ import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
 import 'package:bandy_flutter/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 
 class SelectLevel extends ConsumerStatefulWidget {
   static const routeName = "/select-level";
@@ -47,115 +49,137 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
 
   Widget _levelOption(String level) {
     final bool isSelected = _selectedLevel == level;
-    IconData icon;
+    String iconAssetName;
     String topText;
     String middleText;
     String bottomText;
 
     switch (level) {
-      case 'A2': // 'level2'
-        icon = Icons.query_builder_sharp;
+      case 'level1': // 'level1'
+        iconAssetName = 'level_1';
+        topText = '1';
+        middleText = "High Beginner (A1)";
+        bottomText = "I can understand words and very simple sentences.";
+        break;
+      case 'level2': // 'level2'
+        iconAssetName = 'level_2';
         topText = '2';
         middleText = "Low Pre-intermediate (A2)";
         bottomText = "I can understand short texts on everyday topics.";
         break;
-      case 'A3': // 'level3'
-        icon = Icons.account_balance_sharp;
+      default: // 'level3'
+        iconAssetName = 'level_3';
         topText = '3';
         middleText = "High Pre-intermediate (A2)";
         bottomText = "I can understand moderately sized texts on various aspects of daily life.";
-        break;
-      default: // 'level1'
-        icon = Icons.cruelty_free;
-        topText = '1';
-        middleText = "High Beginner (A1)";
-        bottomText = "I can understand words and very simple sentences.";
-
         break;
     }
 
     return GestureDetector(
       onTap: () => _selectLevel(level),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        height: 150,
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.grey[200],
-          border: Border.all(
-            color: isSelected ? Colors.yellow : Colors.transparent,
-            width: 2,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 190,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+      child: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            height: 150,
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.white : Colors.grey[200],
+              border: isSelected
+                  ? const GradientBoxBorder(
+                      gradient: LinearGradient(
+                        colors: [Color(0xFFFFE55B), Color(0xFFF2BC40), Color(0xFFFFA63F)],
+                      ),
+                      width: 2,
+                    )
+                  : null,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: 190,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Level ",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected ? Colors.black : Colors.grey[800],
+                            ),
+                          ),
+                          Text(
+                            topText,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange,
+                            ),
+                          ),
+                        ],
+                      ),
                       Text(
-                        "Level ",
+                        middleText,
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                           color: isSelected ? Colors.black : Colors.grey[800],
                         ),
                       ),
+                      Gaps.v14,
                       Text(
-                        topText,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.orange,
+                        bottomText,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: isSelected ? Colors.black : Colors.grey[800],
                         ),
                       ),
                     ],
                   ),
-                  Text(
-                    middleText,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: isSelected ? Colors.black : Colors.grey[800],
-                    ),
-                  ),
-                  Gaps.v14,
-                  Text(
-                    bottomText,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: isSelected ? Colors.black : Colors.grey[800],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Icon(
-                  icon,
-                  size: 40,
-                  color: Colors.lime,
                 ),
-                if (isSelected)
-                  const Positioned(
-                    right: -5,
-                    top: -5,
-                    child: Icon(
-                      Icons.check,
-                      color: Colors.orange,
-                      size: 34,
+                Stack(
+                  clipBehavior: Clip.none,
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isSelected ? const Color(0xFFF7F7F7) : Colors.white,
+                      ),
                     ),
-                  ),
+                    SvgPicture.asset('assets/svg/$iconAssetName.svg'),
+                    if (isSelected)
+                      Positioned(
+                        right: -5,
+                        top: -5,
+                        child: SvgPicture.asset('assets/svg/level_checkbox.svg'),
+                      ),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+          // Container(
+          //   height: 150,
+          //   decoration: BoxDecoration(
+          //     color: Colors.transparent,
+          //     gradient: isSelected
+          //         ? const LinearGradient(
+          //             colors: [Color(0xFFFFE55B), Color(0xFFF2BC40), Color(0xFFFFA63F)],
+          //             begin: Alignment.topCenter,
+          //             end: Alignment.bottomCenter,
+          //           )
+          //         : null,
+          //     borderRadius: BorderRadius.circular(8),
+          //   ),
+          // ),
+        ],
       ),
     );
   }
