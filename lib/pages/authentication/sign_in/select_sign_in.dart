@@ -64,14 +64,17 @@ class SelectSignIn extends StatelessWidget {
                       ),
                     ),
                     Gaps.v8,
-                    const Column(
-                      children: [
-                        Text(
-                          'By signing up, you accept Bandys',
-                          textAlign: TextAlign.center,
-                        ),
-                        Text('Terms of Service and Privacy Policy')
-                      ],
+                    const SizedBox(
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          Text(
+                            'By signing up, you accept Bandys',
+                            textAlign: TextAlign.center,
+                          ),
+                          Text('Terms of Service and Privacy Policy')
+                        ],
+                      ),
                     ),
                   ],
                 ),
