@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bandy_flutter/constants/bandy.dart';
 import 'package:bandy_flutter/pages/authentication/repos/authentication_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,30 @@ class SignUpViewModel extends AsyncNotifier<void> {
         "nickname": form["nickname"],
         "status": 0,
       }).onError((e, _) => debugPrint("Error writing document: $e"));
+
+      final completedLecturesRef = _db
+          .collection('users')
+          .doc(form["email"])
+          .collection('completedLectures');
+
+      completedLecturesRef.doc(Bandy.level1).set({
+        'status': 0,
+        'biteSizeStory': '',
+        'confusedKorean': '',
+        'podcast': ''
+      });
+      completedLecturesRef.doc(Bandy.level2).set({
+        'status': 0,
+        'biteSizeStory': '',
+        'confusedKorean': '',
+        'podcast': ''
+      });
+      completedLecturesRef.doc(Bandy.level3).set({
+        'status': 0,
+        'biteSizeStory': '',
+        'confusedKorean': '',
+        'podcast': ''
+      });
     }
 
     return state;

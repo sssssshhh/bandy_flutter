@@ -6,7 +6,6 @@ import 'package:bandy_flutter/pages/authentication/view_model/signup_view_model.
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
 import 'package:bandy_flutter/utils.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,46 +23,12 @@ class SelectLevel extends ConsumerStatefulWidget {
 class _SelectLevelState extends ConsumerState<SelectLevel> {
   String _selectedLevel = "";
 
-  Future<void> addCompletedLecturesCollection(String email) async {
-    try {
-      final FirebaseFirestore db = FirebaseFirestore.instance;
-
-      final completedLecturesRef =
-          db.collection('users').doc(email).collection('completedLectures');
-
-      await completedLecturesRef.doc(Bandy.level1).set({
-        'status': 0,
-        'biteSizeStory': '',
-        'confusedKorean': '',
-        'podcast': ''
-      });
-      await completedLecturesRef.doc(Bandy.level2).set({
-        'status': 0,
-        'biteSizeStory': '',
-        'confusedKorean': '',
-        'podcast': ''
-      });
-      await completedLecturesRef.doc(Bandy.level3).set({
-        'status': 0,
-        'biteSizeStory': '',
-        'confusedKorean': '',
-        'podcast': ''
-      });
-
-      print("CompletedLectures added successfully");
-    } catch (e) {
-      print("Error occurred: $e");
-    }
-  }
-
   void _onNextTap() async {
     final state = ref.read(signUpForm.notifier).state;
     ref.read(signUpForm.notifier).state = {
       ...state,
       "level": _selectedLevel,
     };
-
-    addCompletedLecturesCollection(state["email"]);
 
     final result = await ref.read(signUpProvider.notifier).signUp();
 
