@@ -5,9 +5,15 @@ import 'package:flutter/material.dart';
 class Completed extends StatefulWidget {
   final List<Map<String, dynamic>> expressionList;
   final int lessonNo;
+  final String level;
+  final String category;
 
   const Completed(
-      {super.key, required this.expressionList, required this.lessonNo});
+      {super.key,
+      required this.expressionList,
+      required this.lessonNo,
+      required this.level,
+      required this.category});
 
   @override
   State<Completed> createState() => _CompletedState();
@@ -24,6 +30,8 @@ class _CompletedState extends State<Completed> {
             builder: (context) => ListenSpeak(
                   expressionList: widget.expressionList,
                   lessonNo: widget.lessonNo,
+                  level: widget.level,
+                  category: widget.category,
                 )),
       );
     });

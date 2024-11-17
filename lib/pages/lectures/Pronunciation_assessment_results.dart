@@ -1,19 +1,28 @@
 import 'dart:convert';
 
+import 'package:bandy_flutter/constants/bandy.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class PronunciationAssessmentResults extends StatefulWidget {
   final String fileName;
   final String korAnswer;
+  final int lessonNo;
+  final String level;
+  final String category;
 
   const PronunciationAssessmentResults({
     super.key,
     required this.fileName,
     required this.korAnswer,
+    required this.lessonNo,
+    required this.level,
+    required this.category,
   });
 
   @override
@@ -32,9 +41,57 @@ class _PronunciationAssessmentResultsState
     getAssessmentResult();
   }
 
-  void _onNextTap() {
-    Navigator.pushNamedAndRemoveUntil(
-        context, MainNavigation.routeName, (route) => false);
+  Future<void> _onNextTap() async {
+    await setStatus();
+
+    // Navigator.pushNamedAndRemoveUntil(
+    //     context, MainNavigation.routeName, (route) => false);
+  }
+
+  Future<void> setStatus() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
+    if (auth.currentUser?.email != null) {
+      final dbs = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(auth.currentUser!.email)
+          .collection("completedLectures")
+          .doc(widget.level)
+          .get();
+
+      var completedLectures = "";
+
+      switch (widget.category) {
+        case Bandy.confusedKorean:
+          completedLectures = dbs.data()?['confusedKorean'] as String;
+
+        case Bandy.bitesizeStory:
+          completedLectures = dbs.data()?['biteSizeStory'] as String;
+
+        case Bandy.podcast:
+          completedLectures = dbs.data()?['podcast'] as String;
+
+        default:
+          null;
+      }
+
+      final completedLectureList = completedLectures.split(',');
+
+      if (!completedLectureList.contains(widget.lessonNo.toString())) {
+        var currentStatus = dbs.data()?['status'];
+        completedLectureList.add(widget.lessonNo.toString());
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(auth.currentUser!.email)
+            .collection("completedLectures")
+            .doc(widget.level)
+            .update({
+          'status': currentStatus + 10,
+          // 'completedLectures': completedLectureList.join(",")
+        });
+      }
+    }
   }
 
   Future<void> getAssessmentResult() async {

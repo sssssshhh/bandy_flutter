@@ -29,17 +29,26 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
       final FirebaseFirestore db = FirebaseFirestore.instance;
 
       final completedLecturesRef =
-          db.collection('users').doc(email).collection('CompletedLectures');
+          db.collection('users').doc(email).collection('completedLectures');
 
-      await completedLecturesRef
-          .doc(Bandy.level1)
-          .set({'status': 0, 'completedLectures': ''});
-      await completedLecturesRef
-          .doc(Bandy.level2)
-          .set({'status': 0, 'completedLectures': ''});
-      await completedLecturesRef
-          .doc(Bandy.level3)
-          .set({'status': 0, 'completedLectures': ''});
+      await completedLecturesRef.doc(Bandy.level1).set({
+        'status': 0,
+        'biteSizeStory': '',
+        'confusedKorean': '',
+        'podcast': ''
+      });
+      await completedLecturesRef.doc(Bandy.level2).set({
+        'status': 0,
+        'biteSizeStory': '',
+        'confusedKorean': '',
+        'podcast': ''
+      });
+      await completedLecturesRef.doc(Bandy.level3).set({
+        'status': 0,
+        'biteSizeStory': '',
+        'confusedKorean': '',
+        'podcast': ''
+      });
 
       print("CompletedLectures added successfully");
     } catch (e) {

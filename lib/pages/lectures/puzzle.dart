@@ -10,11 +10,15 @@ import 'package:flutter/material.dart';
 class Puzzle extends StatefulWidget {
   final List<Map<String, dynamic>> expressionList;
   final int lessonNo;
+  final String level;
+  final String category;
 
   const Puzzle({
     super.key,
     required this.expressionList,
     required this.lessonNo,
+    required this.level,
+    required this.category,
   });
 
   @override
@@ -124,6 +128,8 @@ class _PuzzleState extends State<Puzzle> {
         builder: (context) => Completed(
           expressionList: widget.expressionList,
           lessonNo: widget.lessonNo,
+          level: widget.level,
+          category: widget.category,
         ),
       ),
     );

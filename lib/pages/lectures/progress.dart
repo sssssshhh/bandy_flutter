@@ -144,6 +144,8 @@ class _DetailsState extends State<Details> {
           builder: (context) => ListenSpeak(
             expressionList: expressionList,
             lessonNo: lessonNo,
+            level: widget.level,
+            category: widget.category,
           ),
         ),
       );
@@ -154,6 +156,8 @@ class _DetailsState extends State<Details> {
           builder: (context) => Puzzle(
             expressionList: expressionList,
             lessonNo: lessonNo,
+            level: widget.level,
+            category: widget.category,
           ),
         ),
       );

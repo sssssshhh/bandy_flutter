@@ -14,11 +14,15 @@ import 'package:http/http.dart' as http;
 class ListenSpeak extends StatefulWidget {
   final List<Map<String, dynamic>> expressionList;
   final int lessonNo;
+  final String level;
+  final String category;
 
   const ListenSpeak({
     super.key,
     required this.expressionList,
     required this.lessonNo,
+    required this.level,
+    required this.category,
   });
 
   @override
@@ -211,6 +215,9 @@ class _ListenSpeakState extends State<ListenSpeak> {
         builder: (context) => PronunciationAssessmentResults(
           fileName: fileName,
           korAnswer: widget.expressionList[0]['korAnswer'],
+          lessonNo: widget.lessonNo,
+          level: widget.level,
+          category: widget.category,
         ),
       ),
     );
