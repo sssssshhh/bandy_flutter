@@ -184,7 +184,7 @@ class _LecturesState extends State<Lectures> {
               scrollDirection: Axis.horizontal,
               itemCount: lectureList.length,
               itemBuilder: (context, index) {
-                final lecture = lectureList[index]; // TODO: index 와 doc명 일치?
+                final lecture = lectureList[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: GestureDetector(
@@ -214,7 +214,9 @@ class _LecturesState extends State<Lectures> {
                         ),
                         Gaps.v10,
                         Text(
-                          lecture['title'] ?? "",
+                          (lecture['title'] ?? "").length > 30
+                              ? '${(lecture['title'] ?? "").substring(0, 15)}...'
+                              : lecture['title'] ?? "",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
