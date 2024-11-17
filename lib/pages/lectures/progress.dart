@@ -136,13 +136,14 @@ class _DetailsState extends State<Details> {
     });
   }
 
-  void _onNextTap(BuildContext context, String destination) {
+  void _onNextTap(BuildContext context, String destination, int lessonNo) {
     if (destination == 'Speak with AI') {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ListenSpeak(
             expressionList: expressionList,
+            lessonNo: lessonNo,
           ),
         ),
       );
@@ -152,6 +153,7 @@ class _DetailsState extends State<Details> {
         MaterialPageRoute(
           builder: (context) => Puzzle(
             expressionList: expressionList,
+            lessonNo: lessonNo,
           ),
         ),
       );
@@ -174,7 +176,7 @@ class _DetailsState extends State<Details> {
           Gaps.v40,
           ElevatedButton(
             onPressed: () {
-              _onNextTap(context, widget.moveto);
+              _onNextTap(context, widget.moveto, widget.lessonNo);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.orange,

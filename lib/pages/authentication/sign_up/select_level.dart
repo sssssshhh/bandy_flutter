@@ -6,6 +6,7 @@ import 'package:bandy_flutter/pages/authentication/view_model/signup_view_model.
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
 import 'package:bandy_flutter/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,12 +24,37 @@ class SelectLevel extends ConsumerStatefulWidget {
 class _SelectLevelState extends ConsumerState<SelectLevel> {
   String _selectedLevel = "";
 
+  Future<void> addCompletedLecturesCollection(String email) async {
+    try {
+      final FirebaseFirestore db = FirebaseFirestore.instance;
+
+      final completedLecturesRef =
+          db.collection('users').doc(email).collection('CompletedLectures');
+
+      await completedLecturesRef
+          .doc(Bandy.level1)
+          .set({'status': 0, 'completedLectures': ''});
+      await completedLecturesRef
+          .doc(Bandy.level2)
+          .set({'status': 0, 'completedLectures': ''});
+      await completedLecturesRef
+          .doc(Bandy.level3)
+          .set({'status': 0, 'completedLectures': ''});
+
+      print("CompletedLectures added successfully");
+    } catch (e) {
+      print("Error occurred: $e");
+    }
+  }
+
   void _onNextTap() async {
     final state = ref.read(signUpForm.notifier).state;
     ref.read(signUpForm.notifier).state = {
       ...state,
       "level": _selectedLevel,
     };
+
+    addCompletedLecturesCollection(state["email"]);
 
     final result = await ref.read(signUpProvider.notifier).signUp();
 
@@ -71,7 +97,8 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
         iconAssetName = 'level_3';
         topText = '3';
         middleText = "High Pre-intermediate (A2)";
-        bottomText = "I can understand moderately sized texts on various aspects of daily life.";
+        bottomText =
+            "I can understand moderately sized texts on various aspects of daily life.";
         break;
     }
 
@@ -88,7 +115,11 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
               border: isSelected
                   ? const GradientBoxBorder(
                       gradient: LinearGradient(
-                        colors: [Color(0xFFFFE55B), Color(0xFFF2BC40), Color(0xFFFFA63F)],
+                        colors: [
+                          Color(0xFFFFE55B),
+                          Color(0xFFF2BC40),
+                          Color(0xFFFFA63F)
+                        ],
                       ),
                       width: 2,
                     )
@@ -110,7 +141,8 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: isSelected ? Colors.black : Colors.grey[800],
+                              color:
+                                  isSelected ? Colors.black : Colors.grey[800],
                             ),
                           ),
                           Text(
@@ -150,7 +182,8 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
                       height: 60,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: isSelected ? const Color(0xFFF7F7F7) : Colors.white,
+                        color:
+                            isSelected ? const Color(0xFFF7F7F7) : Colors.white,
                       ),
                     ),
                     SvgPicture.asset('assets/svg/$iconAssetName.svg'),
@@ -158,27 +191,14 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
                       Positioned(
                         right: -5,
                         top: -5,
-                        child: SvgPicture.asset('assets/svg/level_checkbox.svg'),
+                        child:
+                            SvgPicture.asset('assets/svg/level_checkbox.svg'),
                       ),
                   ],
                 ),
               ],
             ),
           ),
-          // Container(
-          //   height: 150,
-          //   decoration: BoxDecoration(
-          //     color: Colors.transparent,
-          //     gradient: isSelected
-          //         ? const LinearGradient(
-          //             colors: [Color(0xFFFFE55B), Color(0xFFF2BC40), Color(0xFFFFA63F)],
-          //             begin: Alignment.topCenter,
-          //             end: Alignment.bottomCenter,
-          //           )
-          //         : null,
-          //     borderRadius: BorderRadius.circular(8),
-          //   ),
-          // ),
         ],
       ),
     );

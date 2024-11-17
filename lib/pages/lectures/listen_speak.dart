@@ -13,10 +13,12 @@ import 'package:http/http.dart' as http;
 
 class ListenSpeak extends StatefulWidget {
   final List<Map<String, dynamic>> expressionList;
+  final int lessonNo;
 
   const ListenSpeak({
     super.key,
     required this.expressionList,
+    required this.lessonNo,
   });
 
   @override
@@ -33,7 +35,6 @@ class _ListenSpeakState extends State<ListenSpeak> {
   Timer? _timer;
   Timer? _ampTimer;
   int _recordDuration = 0;
-  // Amplitude? _amplitude;
   String fileName = "";
 
   @override
@@ -100,10 +101,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
     String outputPath = inputPath.replaceAll(".m4a", ".wav");
     await FFmpegKit.execute(
             "-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
-        .then((session) async {
-      // final duration = await session.getDuration();
-      // print("Convert m4a to wav duration: $duration");
-    });
+        .then((session) async {});
 
     return outputPath;
   }
@@ -369,12 +367,14 @@ class _ListenSpeakState extends State<ListenSpeak> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    widget.expressionList[0]['engAnswer'],
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      widget.expressionList[0]['engAnswer'],
+                      style: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ],

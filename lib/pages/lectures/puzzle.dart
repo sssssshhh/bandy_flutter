@@ -5,15 +5,16 @@ import 'package:bandy_flutter/constants/hangul.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/completed.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Puzzle extends StatefulWidget {
   final List<Map<String, dynamic>> expressionList;
+  final int lessonNo;
 
   const Puzzle({
     super.key,
     required this.expressionList,
+    required this.lessonNo,
   });
 
   @override
@@ -21,7 +22,6 @@ class Puzzle extends StatefulWidget {
 }
 
 class _PuzzleState extends State<Puzzle> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final List<int> _selectedIndices = [];
   final List<String> _selectedCharacters = [];
   bool isChecked = false;
@@ -121,7 +121,10 @@ class _PuzzleState extends State<Puzzle> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Completed(expressionList: widget.expressionList),
+        builder: (context) => Completed(
+          expressionList: widget.expressionList,
+          lessonNo: widget.lessonNo,
+        ),
       ),
     );
   }

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 class Completed extends StatefulWidget {
   final List<Map<String, dynamic>> expressionList;
+  final int lessonNo;
 
-  const Completed({super.key, required this.expressionList});
+  const Completed(
+      {super.key, required this.expressionList, required this.lessonNo});
 
   @override
   State<Completed> createState() => _CompletedState();
@@ -19,8 +21,10 @@ class _CompletedState extends State<Completed> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ListenSpeak(expressionList: widget.expressionList)),
+            builder: (context) => ListenSpeak(
+                  expressionList: widget.expressionList,
+                  lessonNo: widget.lessonNo,
+                )),
       );
     });
   }
