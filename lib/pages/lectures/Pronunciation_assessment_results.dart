@@ -59,22 +59,7 @@ class _PronunciationAssessmentResultsState
           .doc(widget.level)
           .get();
 
-      var completedLectures = "";
-
-      switch (widget.category) {
-        case Bandy.confusedKorean:
-          completedLectures = dbs.data()?['confusedKorean'] as String;
-
-        case Bandy.bitesizeStory:
-          completedLectures = dbs.data()?['biteSizeStory'] as String;
-
-        case Bandy.podcast:
-          completedLectures = dbs.data()?['podcast'] as String;
-
-        default:
-          null;
-      }
-
+      final completedLectures = dbs.data()?[widget.category] as String;
       final completedLectureList = completedLectures.split(',');
 
       if (!completedLectureList.contains(widget.lessonNo.toString())) {
@@ -87,8 +72,10 @@ class _PronunciationAssessmentResultsState
             .collection("completedLectures")
             .doc(widget.level)
             .update({
-          'status': currentStatus + 10,
-          // 'completedLectures': completedLectureList.join(",")
+          'status': currentStatus + 3,
+          widget.category: completedLectureList.isEmpty
+              ? completedLectureList.join("")
+              : completedLectureList.join(",")
         });
       }
     }

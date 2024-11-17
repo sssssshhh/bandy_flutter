@@ -44,21 +44,21 @@ class SignUpViewModel extends AsyncNotifier<void> {
 
       completedLecturesRef.doc(Bandy.level1).set({
         'status': 0,
-        'biteSizeStory': '',
-        'confusedKorean': '',
-        'podcast': ''
+        Bandy.bitesizeStory: '',
+        Bandy.confusedKorean: '',
+        Bandy.podcast: ''
       });
       completedLecturesRef.doc(Bandy.level2).set({
         'status': 0,
-        'biteSizeStory': '',
-        'confusedKorean': '',
-        'podcast': ''
+        Bandy.bitesizeStory: '',
+        Bandy.confusedKorean: '',
+        Bandy.podcast: ''
       });
       completedLecturesRef.doc(Bandy.level3).set({
         'status': 0,
-        'biteSizeStory': '',
-        'confusedKorean': '',
-        'podcast': ''
+        Bandy.bitesizeStory: '',
+        Bandy.confusedKorean: '',
+        Bandy.podcast: ''
       });
     }
 
