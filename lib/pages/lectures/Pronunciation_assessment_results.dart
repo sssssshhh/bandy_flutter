@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
-import 'package:bandy_flutter/pages/lectures/lectures.dart';
+import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,12 +33,8 @@ class _PronunciationAssessmentResultsState
   }
 
   void _onNextTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const Lectures(),
-      ),
-    );
+    Navigator.pushNamedAndRemoveUntil(
+        context, MainNavigation.routeName, (route) => false);
   }
 
   Future<void> getAssessmentResult() async {

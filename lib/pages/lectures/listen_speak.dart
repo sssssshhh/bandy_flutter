@@ -27,12 +27,13 @@ class _ListenSpeakState extends State<ListenSpeak> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FlutterSoundRecord _audioRecorder = FlutterSoundRecord();
   bool _isPlaying = false;
-  bool _isRecordingComplete = false;
+  bool _showRecording = false;
+  bool _isRecordingCompleted = false;
   bool _isRecording = false;
   Timer? _timer;
   Timer? _ampTimer;
   int _recordDuration = 0;
-  Amplitude? _amplitude;
+  // Amplitude? _amplitude;
   String fileName = "";
 
   @override
@@ -61,6 +62,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
     await _audioPlayer.stop();
     setState(() {
       _isPlaying = false;
+      _showRecording = true;
     });
   }
 
@@ -79,7 +81,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
       setState(() {
         _isRecording = false;
-        _isRecordingComplete = true;
+        _isRecordingCompleted = false;
       });
     } else {
       _startRecording();
@@ -87,7 +89,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
       setState(() {
         _isRecording = true;
         _isPlaying = false;
-        _isRecordingComplete = false;
+        _isRecordingCompleted = false;
       });
 
       await Future.delayed(const Duration(seconds: 2));
@@ -107,7 +109,6 @@ class _ListenSpeakState extends State<ListenSpeak> {
   }
 
   Future<void> fetchAndSendAudio(String wavPath) async {
-    // delete "file://"
     String filePath = wavPath.replaceFirst('file://', '');
 
     File file = File(filePath);
@@ -158,11 +159,11 @@ class _ListenSpeakState extends State<ListenSpeak> {
       setState(() => _recordDuration++);
     });
 
-    _ampTimer =
-        Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
-      _amplitude = await _audioRecorder.getAmplitude();
-      setState(() {});
-    });
+    // _ampTimer =
+    //     Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
+    //   _amplitude = await _audioRecorder.getAmplitude();
+    //   setState(() {});
+    // });
   }
 
   Future<void> _startRecording() async {
@@ -194,8 +195,10 @@ class _ListenSpeakState extends State<ListenSpeak> {
     } else {
       debugPrint("Recording path is null.");
     }
-
-    setState(() => _isRecording = false);
+    setState(() {
+      _isRecording = false;
+      _isRecordingCompleted = true;
+    });
   }
 
   Future<void> _sendRecording(String path) async {
@@ -217,6 +220,74 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
   @override
   Widget build(BuildContext context) {
+    var recordingArea = Column(
+      children: [
+        if (!_isRecordingCompleted)
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: _isRecording
+                ? const Text(
+                    'Listening...',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  )
+                : const Text(
+                    'Press and speak',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+          ),
+        const SizedBox(height: 20),
+        GestureDetector(
+          onTap: _toggleRecording,
+          child: Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: _isRecording ? Colors.orange : Colors.grey[400],
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.keyboard_voice_rounded,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        if (_isRecordingCompleted && fileName != "")
+          Column(
+            children: [
+              const Text(
+                'Recording complete',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: _onNextTap,
+                child: const FormButton(
+                  text: 'Check',
+                  disabled: false,
+                ),
+              ),
+            ],
+          ),
+      ],
+    );
     return Scaffold(
       appBar: AppBar(), // TODO: go to lecture
       body: Padding(
@@ -225,7 +296,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
           horizontal: 40.0,
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Align(
               alignment: Alignment.topLeft,
@@ -237,6 +308,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
                 ),
               ),
             ),
+            const SizedBox(height: 16),
             Container(
               width: double.infinity,
               height: 400,
@@ -308,75 +380,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
                 ],
               ),
             ),
-            Column(
-              children: [
-                if (!_isRecordingComplete)
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: _isRecording
-                        ? const Text(
-                            'Listening...',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Text(
-                            'Press and speak',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                  ),
-                const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: _toggleRecording,
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: _isRecording ? Colors.orange : Colors.grey[400],
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.keyboard_voice_rounded,
-                      color: Colors.white,
-                      size: 40,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                if (_isRecordingComplete && fileName != "")
-                  Column(
-                    children: [
-                      const Text(
-                        'Recording complete',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: _onNextTap,
-                        child: const FormButton(
-                          text: 'Check',
-                          disabled: false,
-                        ),
-                      ),
-                    ],
-                  ),
-              ],
-            ),
+            const SizedBox(height: 16),
+            if (_showRecording) recordingArea,
           ],
         ),
       ),
