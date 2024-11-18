@@ -172,19 +172,19 @@ class _LecturesState extends State<Lectures> {
     List completedLectureList = [];
 
     switch (category) {
-      case 'podcast':
+      case Bandy.podcast:
         icon = Icons.mic;
         title = 'Korean Podcast';
         completedLectureList = completedStatus[Bandy.bitesizeStory].split(',');
 
         break;
-      case 'confused_korean':
+      case Bandy.confusedKorean:
         icon = Icons.search;
         title = 'Confused Korean';
         completedLectureList = completedStatus[Bandy.confusedKorean].split(',');
 
         break;
-      case 'bitesize_story':
+      case Bandy.bitesizeStory:
         icon = Icons.menu_book_sharp;
         title = 'Bitesize Story';
         completedLectureList = completedStatus[Bandy.bitesizeStory].split(',');

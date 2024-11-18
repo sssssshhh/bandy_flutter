@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bandy_flutter/constants/gaps.dart';
+import 'package:bandy_flutter/constants/bandy.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,8 +44,8 @@ class _PronunciationAssessmentResultsState
   Future<void> _onNextTap() async {
     await setStatus();
 
-    // Navigator.pushNamedAndRemoveUntil(
-    //     context, MainNavigation.routeName, (route) => false);
+    Navigator.pushNamedAndRemoveUntil(
+        context, MainNavigation.routeName, (route) => false);
   }
 
   Future<void> setStatus() async {
@@ -62,7 +63,13 @@ class _PronunciationAssessmentResultsState
       final completedLectureList = completedLectures.split(',');
 
       if (!completedLectureList.contains(widget.lessonNo.toString())) {
-        var currentStatus = dbs.data()?['status'];
+        // confused 30 +  bitestory 30 + podcast 30 + 10 = 100
+        var status = dbs.data()?['status'] + 3;
+        if (status == 90) {
+          status = 100;
+          levelup();
+        }
+
         completedLectureList.add(widget.lessonNo.toString());
 
         await FirebaseFirestore.instance
@@ -71,13 +78,32 @@ class _PronunciationAssessmentResultsState
             .collection("completedLectures")
             .doc(widget.level)
             .update({
-          'status': currentStatus + 3,
+          'status': status,
           widget.category: completedLectureList.isEmpty
               ? completedLectureList.join("")
               : completedLectureList.join(",")
         });
       }
     }
+  }
+
+  Future<void> levelup() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
+    var level = "";
+    switch (widget.level) {
+      case Bandy.level1:
+        level = Bandy.level2;
+      case Bandy.level2:
+        level = Bandy.level3;
+      default:
+        level = Bandy.level3;
+    }
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser!.email)
+        .update({'level': level});
   }
 
   Future<void> getAssessmentResult() async {
