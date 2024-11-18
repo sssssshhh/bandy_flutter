@@ -34,7 +34,6 @@ class SignUpViewModel extends AsyncNotifier<void> {
           .set({
         "level": form["level"],
         "nickname": form["nickname"],
-        "status": 0,
       }).onError((e, _) => debugPrint("Error writing document: $e"));
 
       final completedLecturesRef = _db

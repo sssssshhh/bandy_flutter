@@ -72,10 +72,16 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
       email = _auth.currentUser!.email;
     }
 
-    final user = await _db.collection('users').doc(email).get();
-    if (user.exists && user.data() != null) {
+    final dbs = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(email)
+        .collection("completedLectures")
+        .doc(widget.level)
+        .get();
+
+    if (dbs.exists && dbs.data() != null) {
       setState(() {
-        final status = user.data()?['status'];
+        final status = dbs.data()?['status'];
         if (status is int) {
           _progressStatus = status.toString();
         } else {
