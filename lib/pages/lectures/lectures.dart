@@ -2,6 +2,8 @@ import 'package:bandy_flutter/constants/bandy.dart';
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/lectures/lecture.dart';
+import 'package:bandy_flutter/widgets/button.dart';
+import 'package:bandy_flutter/widgets/completed.dart';
 import 'package:bandy_flutter/widgets/recommendation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +24,13 @@ class _LecturesState extends State<Lectures> {
   List<Map<String, dynamic>> podcasts = [];
   List<Map<String, dynamic>> confusedKoreans = [];
   List<Map<String, dynamic>> bitesizeStories = [];
+  Map<String, dynamic> completedStatus = {
+    "status": 0,
+    Bandy.podcast: "",
+    Bandy.confusedKorean: "",
+    Bandy.bitesizeStory: "",
+  };
+
   bool isLoading = true;
   String nickname = '';
   String level = '';
@@ -81,6 +90,21 @@ class _LecturesState extends State<Lectures> {
     });
   }
 
+  Future<void> setCompletedStatus() async {
+    final dbs = await _db
+        .collection('users')
+        .doc(_auth.currentUser!.email)
+        .collection("completedLectures")
+        .doc(level)
+        .get();
+
+    if (dbs.exists && dbs.data() != null) {
+      setState(() {
+        completedStatus = dbs.data()!;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -97,6 +121,7 @@ class _LecturesState extends State<Lectures> {
       setPodcast(),
       setConfusedKorean(),
       setBitesizeStory(),
+      setCompletedStatus(),
     ]);
 
     setState(() {
@@ -141,25 +166,33 @@ class _LecturesState extends State<Lectures> {
   Padding clips(List<Map<String, dynamic>> lectureList, String category) {
     IconData icon;
     String title;
+    List completedLectureList = [];
 
     switch (category) {
       case 'podcast':
         icon = Icons.mic;
         title = 'Korean Podcast';
+        completedLectureList = completedStatus[Bandy.bitesizeStory].split(',');
+
         break;
       case 'confused_korean':
         icon = Icons.search;
         title = 'Confused Korean';
+        completedLectureList = completedStatus[Bandy.confusedKorean].split(',');
+
         break;
       case 'bitesize_story':
         icon = Icons.menu_book_sharp;
         title = 'Bitesize Story';
+        completedLectureList = completedStatus[Bandy.bitesizeStory].split(',');
+
         break;
       default:
         icon = Icons.error;
         title = 'Unknown Category';
         break;
     }
+    print(completedLectureList);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
@@ -185,6 +218,10 @@ class _LecturesState extends State<Lectures> {
               itemCount: lectureList.length,
               itemBuilder: (context, index) {
                 final lecture = lectureList[index];
+                final lessonNo = index + 1;
+                final isCompleted =
+                    completedLectureList.contains(lessonNo.toString());
+
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: GestureDetector(
@@ -196,21 +233,28 @@ class _LecturesState extends State<Lectures> {
                             category: category,
                             level: level,
                             lecture: lecture,
-                            lessonNo: index + 1,
+                            lessonNo: lessonNo,
                           ),
                         ),
                       );
                     },
                     child: Column(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: CachedNetworkImage(
-                            imageUrl: lecture['thumbnailPath'],
-                            fit: BoxFit.fill,
-                            width: 170,
-                            height: 130,
-                          ),
+                        Stack(
+                          children: [
+                            // 썸네일 이미지
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20.0),
+                              child: CachedNetworkImage(
+                                imageUrl: lecture['thumbnailPath'],
+                                fit: BoxFit.fill,
+                                width: 170,
+                                height: 130,
+                              ),
+                            ),
+
+                            if (isCompleted) const CompletedLabel()
+                          ],
                         ),
                         Gaps.v10,
                         Text(

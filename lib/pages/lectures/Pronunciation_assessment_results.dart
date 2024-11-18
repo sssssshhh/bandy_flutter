@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bandy_flutter/constants/bandy.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
