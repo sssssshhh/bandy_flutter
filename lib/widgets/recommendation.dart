@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 class Recommendation extends StatefulWidget {
   final String nickname;
   final Map<String, dynamic> lecture;
+  final List completedLectureList;
 
   const Recommendation({
     super.key,
     required this.nickname,
     required this.lecture,
+    required this.completedLectureList,
   });
 
   @override
@@ -109,8 +111,8 @@ class _RecommendationState extends State<Recommendation> {
                           ),
                         ),
                         Positioned(
-                          left: 10, // 이미지 왼쪽에서 10px 위치
-                          bottom: 5, // 이미지 아래에서 10px 위치
+                          left: 10,
+                          bottom: 5,
                           child: SizedBox(
                             width: 70,
                             height: 70,
@@ -126,9 +128,11 @@ class _RecommendationState extends State<Recommendation> {
                                   MaterialPageRoute(
                                     builder: (context) => Lecture(
                                         category: Bandy.confusedKorean,
-                                        level: 'level_1',
+                                        level: 'level1',
                                         lecture: widget.lecture,
-                                        lessonNo: 1),
+                                        lessonNo: 1,
+                                        completedLectureList:
+                                            widget.completedLectureList),
                                   ),
                                 );
                               },

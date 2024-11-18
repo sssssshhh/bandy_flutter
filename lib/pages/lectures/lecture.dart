@@ -1,6 +1,7 @@
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/lectures/content.dart';
 import 'package:bandy_flutter/pages/lectures/progress.dart';
+import 'package:bandy_flutter/widgets/completed.dart';
 import 'package:bandy_flutter/widgets/custom_video_player/controls.dart';
 import 'package:bandy_flutter/widgets/custom_video_player/data_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +16,7 @@ class Lecture extends StatefulWidget {
   final String level;
   final int lessonNo;
   final Map<String, dynamic> lecture;
+  final List completedLectureList;
 
   const Lecture({
     super.key,
@@ -22,6 +24,7 @@ class Lecture extends StatefulWidget {
     required this.level,
     required this.lecture,
     required this.lessonNo,
+    required this.completedLectureList,
   });
 
   @override
@@ -237,25 +240,31 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                           itemCount: videoList.length,
                           itemBuilder: (context, index) {
                             final lecture = videoList[index];
-
+                            final lessonNo = index + 1;
+                            final isCompleted = widget.completedLectureList
+                                .contains(lessonNo.toString());
                             return GestureDetector(
                               onTap: () => _loadVideoAtIndex(
                                   lecture['masterVideoPath'],
                                   lecture['title'],
-                                  index + 1),
+                                  lessonNo),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      child: CachedNetworkImage(
-                                        imageUrl: lecture['thumbnailPath'],
-                                        fit: BoxFit.contain,
-                                        width: 90,
-                                        height: 100,
+                                    Stack(children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl: lecture['thumbnailPath'],
+                                          fit: BoxFit.contain,
+                                          width: 90,
+                                          height: 100,
+                                        ),
                                       ),
-                                    ),
+                                      if (isCompleted) const CompletedLabel()
+                                    ]),
                                     Gaps.h10,
                                     Expanded(
                                       child: Text(

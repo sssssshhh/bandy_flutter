@@ -2,7 +2,6 @@ import 'package:bandy_flutter/constants/bandy.dart';
 import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/lectures/lecture.dart';
-import 'package:bandy_flutter/widgets/button.dart';
 import 'package:bandy_flutter/widgets/completed.dart';
 import 'package:bandy_flutter/widgets/recommendation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -154,7 +153,11 @@ class _LecturesState extends State<Lectures> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Recommendation(
-                        nickname: nickname, lecture: confusedKoreans[1]),
+                      nickname: nickname,
+                      lecture: confusedKoreans[1],
+                      completedLectureList:
+                          completedStatus[Bandy.bitesizeStory].split(','),
+                    ),
                     clips(podcasts, Bandy.podcast),
                     clips(confusedKoreans, Bandy.confusedKorean),
                     clips(bitesizeStories, Bandy.bitesizeStory),
@@ -192,7 +195,6 @@ class _LecturesState extends State<Lectures> {
         title = 'Unknown Category';
         break;
     }
-    print(completedLectureList);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
@@ -234,6 +236,7 @@ class _LecturesState extends State<Lectures> {
                             level: level,
                             lecture: lecture,
                             lessonNo: lessonNo,
+                            completedLectureList: completedLectureList,
                           ),
                         ),
                       );
@@ -242,7 +245,6 @@ class _LecturesState extends State<Lectures> {
                       children: [
                         Stack(
                           children: [
-                            // 썸네일 이미지
                             ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
                               child: CachedNetworkImage(
@@ -252,7 +254,6 @@ class _LecturesState extends State<Lectures> {
                                 height: 130,
                               ),
                             ),
-
                             if (isCompleted) const CompletedLabel()
                           ],
                         ),
