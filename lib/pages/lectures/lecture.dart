@@ -1,3 +1,4 @@
+import 'package:bandy_flutter/bandy_routes.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/pages/lectures/content.dart';
 import 'package:bandy_flutter/pages/lectures/progress.dart';
@@ -31,7 +32,7 @@ class Lecture extends StatefulWidget {
   State<Lecture> createState() => _LectureState();
 }
 
-class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
+class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin, RouteAware {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -47,11 +48,8 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   List<Map<String, dynamic>> videoList = [];
 
   Future<void> setLectures() async {
-    final lectures = await _db
-        .collection('lectures')
-        .doc(widget.category)
-        .collection(widget.level)
-        .get();
+    final lectures =
+        await _db.collection('lectures').doc(widget.category).collection(widget.level).get();
 
     setState(() {
       // order lecture list by id
@@ -104,33 +102,31 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    setLectureDetail(widget.lecture['masterVideoPath'], widget.lecture['title'],
-        widget.lessonNo);
+
+    final masterVideoPath = widget.lecture['masterVideoPath'];
+
+    _initializeVideo(masterVideoPath);
+
     loadAllLectures();
     setUserInfo();
     _tabController = TabController(length: 3, vsync: this);
   }
 
-  Future<void> setLectureDetail(String masterVideoPath, String titleParameter,
-      int lessonNoParameter) async {
+  void _initializeVideo(String masterVideoPath) {
     _flickManager = FlickManager(
-      videoPlayerController: VideoPlayerController.networkUrl(
-        Uri.parse(masterVideoPath),
-      ),
-      autoInitialize: false,
+      videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(masterVideoPath)),
       autoPlay: false,
       onVideoEnd: () {
         _dataManager.skipToNextVideo(const Duration(seconds: 5));
       },
     );
 
-    _dataManager =
-        DataManager(flickManager: _flickManager, urls: [masterVideoPath]);
+    _dataManager = DataManager(flickManager: _flickManager, urls: [masterVideoPath]);
+  }
 
-    _flickManager = FlickManager(
-      videoPlayerController:
-          VideoPlayerController.networkUrl(Uri.parse(masterVideoPath)),
-    );
+  Future<void> setLectureDetail(
+      String masterVideoPath, String titleParameter, int lessonNoParameter) async {
+    _flickManager.handleChangeVideo(VideoPlayerController.networkUrl(Uri.parse(masterVideoPath)));
 
     setState(() {
       lessonNo = lessonNoParameter;
@@ -139,14 +135,33 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
   }
 
   void _loadVideoAtIndex(String masterVideoPath, String title, int lessonNo) {
-    _flickManager.dispose();
+    // _flickManager.dispose();
     setLectureDetail(masterVideoPath, title, lessonNo);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    BandyRoutes.pageRouteObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void didPopNext() {
+    //
+  }
+
+  @override
+  void didPushNext() {
+    _flickManager.flickControlManager?.pause();
   }
 
   @override
   void dispose() {
     _flickManager.dispose();
     _tabController.dispose();
+    BandyRoutes.pageRouteObserver.unsubscribe(this);
+
     super.dispose();
   }
 
@@ -170,14 +185,11 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                       FlickVideoPlayer(
                         flickManager: _flickManager,
                         flickVideoWithControls: FlickVideoWithControls(
-                          controls: CustomOrientationControls(
-                              dataManager: _dataManager),
+                          controls: CustomOrientationControls(dataManager: _dataManager),
                         ),
-                        flickVideoWithControlsFullscreen:
-                            FlickVideoWithControls(
+                        flickVideoWithControlsFullscreen: FlickVideoWithControls(
                           videoFit: BoxFit.fitWidth,
-                          controls: CustomOrientationControls(
-                              dataManager: _dataManager),
+                          controls: CustomOrientationControls(dataManager: _dataManager),
                         ),
                       ),
                     ],
@@ -192,8 +204,7 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                           decoration: BoxDecoration(
                             color: Colors.amber[100],
                             borderRadius: BorderRadius.circular(5),
@@ -247,21 +258,18 @@ class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin {
                           itemBuilder: (context, index) {
                             final lecture = videoList[index];
                             final lessonNo = index + 1;
-                            final isCompleted = widget.completedLectureList
-                                .contains(lessonNo.toString());
+                            final isCompleted =
+                                widget.completedLectureList.contains(lessonNo.toString());
                             return GestureDetector(
                               onTap: () => _loadVideoAtIndex(
-                                  lecture['masterVideoPath'],
-                                  lecture['title'],
-                                  lessonNo),
+                                  lecture['masterVideoPath'], lecture['title'], lessonNo),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
                                     Stack(children: [
                                       ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        borderRadius: BorderRadius.circular(10.0),
                                         child: CachedNetworkImage(
                                           imageUrl: lecture['thumbnailPath'],
                                           fit: BoxFit.contain,
