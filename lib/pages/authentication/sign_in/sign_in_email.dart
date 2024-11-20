@@ -39,6 +39,8 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
           showFirebaseErrorSnack(context, result.error);
         } else {
           Navigator.pushNamedAndRemoveUntil(context, MainNavigation.routeName, (route) => false);
+
+          // 자동 로그인 설정
         }
       }
     }

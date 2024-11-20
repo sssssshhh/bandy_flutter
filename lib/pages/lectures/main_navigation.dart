@@ -1,3 +1,4 @@
+import 'package:bandy_flutter/pages/authentication/my_page/my_page.dart';
 import 'package:bandy_flutter/pages/lectures/lectures.dart';
 import 'package:bandy_flutter/pages/setting/settings.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class _MainNavigationState extends State<MainNavigation> {
         children: [
           Offstage(
             offstage: _selectedIndex == 0,
-            child: const Settings(),
+            child: const MyPage(),
           ),
           Offstage(
             offstage: _selectedIndex == 1,

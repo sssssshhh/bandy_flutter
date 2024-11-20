@@ -1,6 +1,8 @@
 import 'dart:math';
 
+import 'package:bandy_flutter/pages/lectures/main_navigation.dart';
 import 'package:bandy_flutter/pages/on_boarding/on_boarding.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -37,7 +39,12 @@ class _SplashScreenState extends State<SplashPage> {
       FlutterNativeSplash.remove();
 
       if (!mounted) return;
-      Navigator.pushNamedAndRemoveUntil(context, Onboarding.routeName, (route) => false);
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        Navigator.pushNamedAndRemoveUntil(context, MainNavigation.routeName, (route) => false);
+      } else {
+        Navigator.pushNamedAndRemoveUntil(context, Onboarding.routeName, (route) => false);
+      }
     });
   }
 
