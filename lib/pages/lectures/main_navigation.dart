@@ -1,6 +1,5 @@
 import 'package:bandy_flutter/pages/authentication/my_page/my_page.dart';
 import 'package:bandy_flutter/pages/lectures/lectures.dart';
-import 'package:bandy_flutter/pages/setting/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

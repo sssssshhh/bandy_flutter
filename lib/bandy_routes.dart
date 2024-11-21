@@ -1,3 +1,4 @@
+import 'package:bandy_flutter/pages/authentication/my_page/account_setting_page.dart';
 import 'package:bandy_flutter/pages/authentication/sign_in/select_sign_in.dart';
 import 'package:bandy_flutter/pages/authentication/sign_in/sign_in_email.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/create_nickname.dart';
@@ -55,7 +56,7 @@ class BandyRoutes {
         return _getCreateNickname();
 
       case SelectLevel.routeName:
-        return _getSelectLevel();
+        return _getSelectLevel(arguments);
 
       case SelectSignIn.routeName:
         return _getSelectSignIn();
@@ -65,6 +66,9 @@ class BandyRoutes {
 
       case MainNavigation.routeName:
         return _getMainNavigation();
+
+      case AccountSettingPage.routeName:
+        return _getAccountSettingPage();
 
       default:
         return null;
@@ -99,8 +103,15 @@ class BandyRoutes {
     return const CreateNickname();
   }
 
-  static Widget? _getSelectLevel() {
-    return const SelectLevel();
+  static Widget? _getSelectLevel(Object? arguments) {
+    final mapArguments = arguments as Map<String, dynamic>;
+    final canSelect = mapArguments['canSelect'] as bool;
+    String initialLevel = '';
+    if (mapArguments.containsKey('initialLevel')) {
+      initialLevel = mapArguments['initialLevel'] as String;
+    }
+
+    return SelectLevel(canSelect: canSelect, initialLevel: initialLevel);
   }
 
   static Widget? _getSelectSignIn() {
@@ -113,5 +124,9 @@ class BandyRoutes {
 
   static Widget? _getMainNavigation() {
     return const MainNavigation();
+  }
+
+  static Widget? _getAccountSettingPage() {
+    return const AccountSettingPage();
   }
 }

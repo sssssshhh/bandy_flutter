@@ -35,11 +35,7 @@ class _LecturesState extends State<Lectures> {
   String level = '';
 
   Future<void> setBitesizeStory() async {
-    final dbs = await _db
-        .collection('lectures')
-        .doc(Bandy.bitesizeStory)
-        .collection(level)
-        .get();
+    final dbs = await _db.collection('lectures').doc(Bandy.bitesizeStory).collection(level).get();
 
     setState(() {
       bitesizeStories = dbs.docs
@@ -54,11 +50,7 @@ class _LecturesState extends State<Lectures> {
   }
 
   Future<void> setPodcast() async {
-    final dbs = await _db
-        .collection('lectures')
-        .doc(Bandy.podcast)
-        .collection(level)
-        .get();
+    final dbs = await _db.collection('lectures').doc(Bandy.podcast).collection(level).get();
 
     podcasts = dbs.docs
         .map((doc) => {
@@ -71,11 +63,7 @@ class _LecturesState extends State<Lectures> {
   }
 
   Future<void> setConfusedKorean() async {
-    final dbs = await _db
-        .collection('lectures')
-        .doc(Bandy.confusedKorean)
-        .collection(level)
-        .get();
+    final dbs = await _db.collection('lectures').doc(Bandy.confusedKorean).collection(level).get();
 
     setState(() {
       confusedKoreans = dbs.docs
@@ -149,19 +137,16 @@ class _LecturesState extends State<Lectures> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Recommendation(
-                      nickname: nickname,
-                      lecture: confusedKoreans[1],
-                      completedLectureList:
-                          completedStatus[Bandy.bitesizeStory].split(','),
-                    ),
-                    clips(podcasts, Bandy.podcast),
-                    clips(confusedKoreans, Bandy.confusedKorean),
-                    clips(bitesizeStories, Bandy.bitesizeStory),
-                  ]),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Recommendation(
+                  nickname: nickname,
+                  lecture: confusedKoreans[1],
+                  completedLectureList: completedStatus[Bandy.bitesizeStory].split(','),
+                ),
+                clips(podcasts, Bandy.podcast),
+                clips(confusedKoreans, Bandy.confusedKorean),
+                clips(bitesizeStories, Bandy.bitesizeStory),
+              ]),
             ),
     );
   }
@@ -221,8 +206,7 @@ class _LecturesState extends State<Lectures> {
               itemBuilder: (context, index) {
                 final lecture = lectureList[index];
                 final lessonNo = index + 1;
-                final isCompleted =
-                    completedLectureList.contains(lessonNo.toString());
+                final isCompleted = completedLectureList.contains(lessonNo.toString());
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5.0),

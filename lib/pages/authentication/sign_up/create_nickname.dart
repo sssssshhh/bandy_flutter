@@ -51,7 +51,11 @@ class _CreateNicknameState extends ConsumerState<CreateNickname> {
       "nickname": _nickname,
     };
 
-    Navigator.pushNamed(context, SelectLevel.routeName);
+    Navigator.pushNamed(
+      context,
+      SelectLevel.routeName,
+      arguments: {"canSelect": true},
+    );
   }
 
   @override

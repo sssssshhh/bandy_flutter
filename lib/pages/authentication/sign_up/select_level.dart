@@ -14,14 +14,30 @@ import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 class SelectLevel extends ConsumerStatefulWidget {
   static const routeName = "/select-level";
 
-  const SelectLevel({super.key});
+  final bool canSelect;
+  final String initialLevel;
+
+  const SelectLevel({
+    super.key,
+    required this.canSelect,
+    this.initialLevel = '',
+  });
 
   @override
   ConsumerState<SelectLevel> createState() => _SelectLevelState();
 }
 
 class _SelectLevelState extends ConsumerState<SelectLevel> {
-  String _selectedLevel = "";
+  String _selectedLevel = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.initialLevel.isNotEmpty) {
+      _selectLevel(widget.initialLevel);
+    }
+  }
 
   void _onNextTap() async {
     final state = ref.read(signUpForm.notifier).state;
@@ -71,13 +87,16 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
         iconAssetName = 'level_3';
         topText = '3';
         middleText = "High Pre-intermediate (A2)";
-        bottomText =
-            "I can understand moderately sized texts on various aspects of daily life.";
+        bottomText = "I can understand moderately sized texts on various aspects of daily life.";
         break;
     }
 
     return GestureDetector(
-      onTap: () => _selectLevel(level),
+      onTap: () {
+        if (widget.canSelect) {
+          _selectLevel(level);
+        }
+      },
       child: Stack(
         children: [
           Container(
@@ -89,11 +108,7 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
               border: isSelected
                   ? const GradientBoxBorder(
                       gradient: LinearGradient(
-                        colors: [
-                          Color(0xFFFFE55B),
-                          Color(0xFFF2BC40),
-                          Color(0xFFFFA63F)
-                        ],
+                        colors: [Color(0xFFFFE55B), Color(0xFFF2BC40), Color(0xFFFFA63F)],
                       ),
                       width: 2,
                     )
@@ -115,8 +130,7 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color:
-                                  isSelected ? Colors.black : Colors.grey[800],
+                              color: isSelected ? Colors.black : Colors.grey[800],
                             ),
                           ),
                           Text(
@@ -156,8 +170,7 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
                       height: 60,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color:
-                            isSelected ? const Color(0xFFF7F7F7) : Colors.white,
+                        color: isSelected ? const Color(0xFFF7F7F7) : Colors.white,
                       ),
                     ),
                     SvgPicture.asset('assets/svg/$iconAssetName.svg'),
@@ -165,8 +178,7 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
                       Positioned(
                         right: -5,
                         top: -5,
-                        child:
-                            SvgPicture.asset('assets/svg/level_checkbox.svg'),
+                        child: SvgPicture.asset('assets/svg/level_checkbox.svg'),
                       ),
                   ],
                 ),
@@ -180,24 +192,23 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
 
   @override
   Widget build(BuildContext context) {
+    final title = widget.canSelect ? 'What’s your level?' : 'My level';
+    final subTitle = widget.canSelect ? 'Select your level.' : '';
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Sign up",
-        ),
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: Sizes.size36,
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Gaps.v40,
-          const Text(
-            "What’s your level?",
+          Text(
+            title,
             style: Fonts.titleLarge,
           ),
-          const Text(
-            'Select your level.',
+          Text(
+            subTitle,
             style: Fonts.titleSmall,
           ),
           Gaps.v20,
@@ -205,13 +216,14 @@ class _SelectLevelState extends ConsumerState<SelectLevel> {
           _levelOption(Bandy.level2),
           _levelOption(Bandy.level3),
           Gaps.v16,
-          GestureDetector(
-            onTap: _onNextTap,
-            child: FormButton(
-              text: 'Continue',
-              disabled: _selectedLevel.isEmpty,
+          if (widget.canSelect)
+            GestureDetector(
+              onTap: _onNextTap,
+              child: FormButton(
+                text: 'Continue',
+                disabled: _selectedLevel.isEmpty,
+              ),
             ),
-          ),
         ]),
       ),
     );

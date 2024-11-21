@@ -1,34 +1,65 @@
-import 'package:bandy_flutter/pages/authentication/sign_in/sign_in_email.dart';
+import 'package:bandy_flutter/constants/bandy.dart';
+import 'package:bandy_flutter/pages/authentication/my_page/account_setting_page.dart';
+import 'package:bandy_flutter/pages/authentication/sign_up/select_level.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.dart';
 import 'package:bandy_flutter/widgets/shared_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class MyPage extends StatefulWidget {
-  const MyPage({super.key});
+  static const routeName = "/my-page";
 
-  static String routeName = "/settings";
+  const MyPage({super.key});
 
   @override
   State<MyPage> createState() => _MyPageState();
 }
 
 class _MyPageState extends State<MyPage> {
-  Future<void> _deleteAccount() async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await user.delete();
+  bool isLoading = false;
 
-        if (!mounted) return;
-        Navigator.pushNamedAndRemoveUntil(context, SignUpOrSignIn.routeName, (route) => false);
+  void _pushAccountSettingPage() {
+    Navigator.pushNamed(context, AccountSettingPage.routeName);
+  }
+
+  void _pushMyLevelPage() async {
+    String selectedLevel = Bandy.level1;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user?.email != null) {
+      setState(() {
+        isLoading = true;
+      });
+
+      final dbs = await FirebaseFirestore.instance.collection('users').doc(user?.email).get();
+      if (dbs.exists && dbs.data() != null) {
+        selectedLevel = dbs.data()?['level'];
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting account: $e')),
-      );
+
+      setState(() {
+        isLoading = false;
+      });
     }
+
+    if (!mounted) return;
+    Navigator.pushNamed(
+      context,
+      SelectLevel.routeName,
+      arguments: {
+        'canSelect': false,
+        'initialLevel': selectedLevel,
+      },
+    );
+  }
+
+  void _confirmLogout() {
+    SharedDialog.showAlertDialog(
+      context,
+      'Log out',
+      'Do you really want to log out?',
+      onYes: () => _logout(),
+    );
   }
 
   Future<void> _logout() async {
@@ -47,13 +78,20 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
-  void _confirmLogout() {
-    SharedDialog.showAlertDialog(
-      context,
-      'Log out',
-      'Do you really want to log out?',
-      onYes: () => _logout(),
-    );
+  Future<void> _deleteAccount() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await user.delete();
+
+        if (!mounted) return;
+        Navigator.pushNamedAndRemoveUntil(context, SignUpOrSignIn.routeName, (route) => false);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error deleting account: $e')),
+      );
+    }
   }
 
   @override
@@ -69,29 +107,47 @@ class _MyPageState extends State<MyPage> {
         centerTitle: false,
       ),
       backgroundColor: const Color(0xFFF7F7F7),
-      body: Container(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 30),
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildMenu(index: 0, title: 'Account setting', iconAssetName: "account_setting"),
-            _buildMenu(index: 1, title: 'My Level', iconAssetName: "my_level"),
-            _buildMenu(
-              index: 2,
-              title: 'Log out',
-              iconAssetName: "log_out",
-              onTap: () => _confirmLogout(),
+      body: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 30),
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildMenu(
+                  index: 0,
+                  title: 'Account setting',
+                  iconAssetName: "account_setting",
+                  onTap: () => _pushAccountSettingPage(),
+                ),
+                _buildMenu(
+                  index: 1,
+                  title: 'My Level',
+                  iconAssetName: "my_level",
+                  onTap: () => _pushMyLevelPage(),
+                ),
+                _buildMenu(
+                  index: 2,
+                  title: 'Log out',
+                  iconAssetName: "log_out",
+                  onTap: () => _confirmLogout(),
+                ),
+                _buildMenu(
+                  index: 3,
+                  title: 'Delete Account',
+                  iconAssetName: "delete_account",
+                  onTap: () => _confirmDeleteAccount(),
+                ),
+              ],
             ),
-            _buildMenu(
-              index: 3,
-              title: 'Delete Account',
-              iconAssetName: "delete_account",
-              onTap: () => _confirmDeleteAccount(),
-            ),
-          ],
-        ),
+          ),
+          Visibility(
+            visible: isLoading,
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+        ],
       ),
     );
   }
