@@ -32,14 +32,16 @@ class ListenSpeak extends StatefulWidget {
 class _ListenSpeakState extends State<ListenSpeak> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FlutterSoundRecord _audioRecorder = FlutterSoundRecord();
+
   bool _isPlaying = false;
   bool _showRecording = false;
   bool _isRecordingCompleted = false;
   bool _isRecording = false;
-  Timer? _timer;
-  Timer? _ampTimer;
   int _recordDuration = 0;
   String fileName = "";
+
+  Timer? _timer;
+  Timer? _ampTimer;
 
   @override
   void initState() {
@@ -160,12 +162,6 @@ class _ListenSpeakState extends State<ListenSpeak> {
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       setState(() => _recordDuration++);
     });
-
-    // _ampTimer =
-    //     Timer.periodic(const Duration(milliseconds: 200), (Timer t) async {
-    //   _amplitude = await _audioRecorder.getAmplitude();
-    //   setState(() {});
-    // });
   }
 
   Future<void> _startRecording() async {
@@ -270,27 +266,29 @@ class _ListenSpeakState extends State<ListenSpeak> {
           ),
         ),
         const SizedBox(height: 20),
-        if (_isRecordingCompleted && fileName != "")
-          Column(
-            children: [
-              const Text(
-                'Recording complete',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+        if (_isRecordingCompleted)
+          (fileName == "")
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    const Text(
+                      'Recording complete',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    GestureDetector(
+                      onTap: _onNextTap,
+                      child: const FormButton(
+                        text: 'Check',
+                        disabled: false,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: _onNextTap,
-                child: const FormButton(
-                  text: 'Check',
-                  disabled: false,
-                ),
-              ),
-            ],
-          ),
       ],
     );
     return Scaffold(
@@ -301,7 +299,6 @@ class _ListenSpeakState extends State<ListenSpeak> {
           horizontal: 40.0,
         ),
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Align(
               alignment: Alignment.topLeft,
