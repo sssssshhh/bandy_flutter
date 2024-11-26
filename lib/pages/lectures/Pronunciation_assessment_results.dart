@@ -33,7 +33,8 @@ class PronunciationAssessmentResults extends StatefulWidget {
 class _PronunciationAssessmentResultsState
     extends State<PronunciationAssessmentResults> {
   String apiUrl = 'https://pronunciation-assessment.vercel.app/api/assessment';
-  String accuracyScore = "0";
+  int accuracyScore = 0;
+  String resultMessage = "please wait";
 
   @override
   void initState() {
@@ -125,7 +126,23 @@ class _PronunciationAssessmentResultsState
         final data = json.decode(response.body);
 
         setState(() {
-          accuracyScore = data['accuracyScore'].toString();
+          if (data['accuracyScore'] == null) {
+            accuracyScore = 0;
+          } else {
+            accuracyScore = data['accuracyScore'];
+          }
+
+          if (accuracyScore > 89) {
+            resultMessage = "Excellent!";
+          } else if (accuracyScore > 79) {
+            resultMessage = "Very Good!";
+          } else if (accuracyScore > 69) {
+            resultMessage = "Good Effort!";
+          } else if (accuracyScore > 59) {
+            resultMessage = "Needs Improvement";
+          } else {
+            resultMessage = "Don’t Give Up!";
+          }
         });
       } else {
         print(
@@ -166,12 +183,12 @@ class _PronunciationAssessmentResultsState
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
                 child: Center(
                   child: Container(
-                    width: 150,
-                    height: 150,
+                    width: 200,
+                    height: 200,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.orange, width: 8),
@@ -180,15 +197,15 @@ class _PronunciationAssessmentResultsState
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          accuracyScore,
+                          accuracyScore.toString(),
                           style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const Text(
-                          "Excellent!",
-                          style: TextStyle(
+                        Text(
+                          resultMessage,
+                          style: const TextStyle(
                             fontSize: 18,
                           ),
                         ),
