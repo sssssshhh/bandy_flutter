@@ -83,6 +83,7 @@ class _PuzzleState extends State<Puzzle> {
                 characterOptions[_random.nextInt(characterOptions.length)],
           ),
         );
+        characters.shuffle();
       }
     });
   }
