@@ -20,149 +20,37 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(20.0),
-            child: TabPageSelector(
-              color: Colors.white,
-              selectedColor: Colors.amber,
-            ),
-          ),
-        ),
-        body: SafeArea(
-          child: TabBarView(
+    return Scaffold(
+      body: SafeArea(
+        child: DefaultTabController(
+          length: 3,
+          child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(Sizes.size40),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+              const SizedBox(
+                height: 56,
+                child: TabPageSelector(
+                  color: Colors.white,
+                  selectedColor: Colors.amber,
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
                   children: [
-                    Container(
-                      width: 260,
-                      height: 390,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        image: const DecorationImage(
-                          image: NetworkImage(
-                            'https://dlcb5kh12wprc.cloudfront.net/onboarding/1.png',
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Gaps.v64,
-                    const Text(
+                    _buildTabBarView(
+                      'https://dlcb5kh12wprc.cloudfront.net/onboarding/1.png',
                       'Develop your reading skills',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      'Korean stories narrated by an actor',
                     ),
-                    Gaps.v28,
-                    const Text(
-                      'Korean stories narrated by anactor',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(Sizes.size40),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 260,
-                      height: 390,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        image: const DecorationImage(
-                          image: NetworkImage(
-                            'https://dlcb5kh12wprc.cloudfront.net/onboarding/2.png',
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Gaps.v64,
-                    const Text(
+                    _buildTabBarView(
+                      'https://dlcb5kh12wprc.cloudfront.net/onboarding/2.png',
                       'Improve your pronunciation',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Gaps.v28,
-                    const Text(
                       'AI Korean pronunciation practice: listen & repeat',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300,
-                      ),
                     ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(Sizes.size40),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 260,
-                      height: 390,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        image: const DecorationImage(
-                          image: NetworkImage(
-                            'https://dlcb5kh12wprc.cloudfront.net/onboarding/3.png',
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Gaps.v64,
-                    const Text(
+                    _buildTabBarView(
+                      'https://dlcb5kh12wprc.cloudfront.net/onboarding/3.png',
                       'Have fun learning with experts',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Gaps.v28,
-                    const Text(
-                      'Lecture clips and quizzes',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                    Gaps.v40,
-                    GestureDetector(
-                      onTap: () => _onSignInSignUpTap(context),
-                      child: const Button(
-                        text: 'Get Started',
-                        bgColor: Colors.orange, // TODO: Colors.orange[200]
-                        textColor: Colors.white,
-                      ),
+                      'Lecture clips and puzzles',
+                      isNextButton: true,
                     ),
                   ],
                 ),
@@ -171,6 +59,74 @@ class _OnboardingState extends State<Onboarding> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTabBarView(
+    String imageUrl,
+    String title,
+    String subTitle, {
+    bool isNextButton = false,
+  }) {
+    return LayoutBuilder(builder: (BuildContext context, BoxConstraints viewportConstraints) {
+      return Padding(
+        padding: const EdgeInsets.all(Sizes.size20),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: viewportConstraints.minHeight * 0.6,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                      image: NetworkImage(imageUrl),
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                ),
+                Gaps.v64,
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: const Color(0xFF1A1A1A),
+                    fontSize: viewportConstraints.minHeight / 45,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Gaps.v10,
+                Text(
+                  subTitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: const Color(0xFF808080),
+                    fontSize: viewportConstraints.minHeight / 60,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ],
+            ),
+            if (isNextButton) _buildNextButton()
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _buildNextButton() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        GestureDetector(
+          onTap: () => _onSignInSignUpTap(context),
+          child: const Button(
+            text: 'Get Started',
+            bgColor: Color(0xFFF2BC40),
+            textColor: Colors.white,
+          ),
+        ),
+      ],
     );
   }
 }
