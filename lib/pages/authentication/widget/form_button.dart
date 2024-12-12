@@ -20,9 +20,8 @@ class FormButton extends StatelessWidget {
           vertical: Sizes.size16,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: disabled ? Colors.grey.shade300 : Colors.orange,
-        ),
+            borderRadius: BorderRadius.circular(50),
+            color: disabled ? Colors.grey.shade300 : const Color(0xFFF2BC40)),
         duration: const Duration(milliseconds: 500),
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 500),

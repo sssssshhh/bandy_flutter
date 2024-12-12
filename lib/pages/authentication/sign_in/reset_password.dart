@@ -81,7 +81,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   onTap: _onResetPasswordTap,
                   child: const Button(
                     text: 'Send password reset Email',
-                    bgColor: Colors.orange,
+                    bgColor: Color(0xFFF2BC40),
                     textColor: Colors.white,
                   ),
                 ),

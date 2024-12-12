@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:bandy_flutter/constants/fonts.dart';
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/hangul.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
@@ -79,8 +78,7 @@ class _PuzzleState extends State<Puzzle> {
         characters.addAll(
           List.generate(
             remainingCount,
-            (index) =>
-                characterOptions[_random.nextInt(characterOptions.length)],
+            (index) => characterOptions[_random.nextInt(characterOptions.length)],
           ),
         );
         characters.shuffle();
@@ -142,215 +140,58 @@ class _PuzzleState extends State<Puzzle> {
       appBar: AppBar(),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: Sizes.size24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Gaps.v40,
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Complete the puzzles',
-                      style: Fonts.titleLarge,
-                    ),
-                    Text(
-                      'Connect the words to make a sentence then tap to check the answer.',
-                      style: Fonts.titleSmall,
-                    ),
-                  ],
-                ),
-                Gaps.v20,
-                Container(
-                  width: double.infinity,
-                  height: 100,
-                  padding: const EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          LayoutBuilder(builder: (BuildContext context, BoxConstraints viewportConstraints) {
+            final double maxWidth = viewportConstraints.maxWidth;
+            final double titleFontSize = min(maxWidth * 0.065, 40);
+            final double subTitleFontSize = min(maxWidth * 0.038, 18);
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Sizes.size24, vertical: 30),
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Complete the puzzles',
+                            style: TextStyle(
+                                fontSize: titleFontSize,
+                                color: const Color(0xFF1A1A1A),
+                                fontWeight: FontWeight.bold),
                           ),
-                          children: [
-                            TextSpan(
-                              text: widget.expressionList.isNotEmpty
-                                  ? widget.expressionList[0]['korAnswer']
-                                      .substring(
-                                          0,
-                                          widget.expressionList[0]
-                                              ['firstBlank'])
-                                  : '',
-                            ),
-                            WidgetSpan(
-                              child: Container(
-                                color: Colors.grey[300],
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4.0),
-                                child: Text(
-                                  widget.expressionList.isNotEmpty
-                                      ? '?' *
-                                          (widget.expressionList[0]
-                                                  ['lastBlank'] -
-                                              widget.expressionList[0]
-                                                  ['firstBlank'] +
-                                              1)
-                                      : '',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            TextSpan(
-                              text: widget.expressionList.isNotEmpty
-                                  ? widget.expressionList[0]['korAnswer']
-                                      .substring(widget.expressionList[0]
-                                              ['lastBlank'] +
-                                          1)
-                                  : '',
-                            ),
-                          ],
-                        ),
+                          Gaps.v10,
+                          Text(
+                            'Connect the words to make a sentence then tap to check the answer.',
+                            style: TextStyle(
+                                fontSize: subTitleFontSize, color: const Color(0xFF808080)),
+                          ),
+                        ],
                       ),
-                      Text(
-                        widget.expressionList.isNotEmpty
-                            ? widget.expressionList[0]['engAnswer']
-                            : '',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
+                      Gaps.v20,
+                      _buildQuestion(maxWidth: maxWidth),
+                      Gaps.v32,
+                      _buildPuzzleBoard(maxWidth: maxWidth),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: _handleButtonPress,
+                        child: FormButton(
+                          text: 'Check',
+                          disabled: _selectedCharacters.isEmpty,
                         ),
                       ),
                     ],
                   ),
-                ),
-                Gaps.v20,
-                SizedBox(
-                  height: 400,
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 5.0,
-                      mainAxisSpacing: 5.0,
-                      childAspectRatio: 1.2,
-                    ),
-                    itemCount: circleCount,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (_selectedIndices.contains(index)) {
-                              _selectedIndices.remove(index);
-                              _selectedCharacters.remove(characters[index]);
-                              if (_startIndex == index) {
-                                _startIndex = null;
-                              }
-                              if (_endIndex == index) {
-                                _endIndex = null;
-                              }
-                            } else {
-                              _selectedIndices.add(index);
-                              _selectedCharacters.add(characters[index]);
-                              if (_startIndex == null) {
-                                _startIndex = index; // first click
-                              } else {
-                                _endIndex = index; // second click
-                              }
-                            }
-                          });
-                        },
-                        child: Stack(
-                          alignment: Alignment.topLeft,
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: _selectedIndices.contains(index)
-                                      ? Colors.orange
-                                      : Colors.grey,
-                                  width: _selectedIndices.contains(index)
-                                      ? 2.0
-                                      : 1.0,
-                                ),
-                              ),
-                              child: Text(
-                                characters[index],
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            if (_startIndex == index)
-                              Positioned(
-                                left: 20,
-                                top: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Text(
-                                    'start',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                            if (_endIndex == index)
-                              Positioned(
-                                left: 20,
-                                top: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Text(
-                                    'end',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 12),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                GestureDetector(
-                  onTap: _handleButtonPress,
-                  child: FormButton(
-                    text: 'Check result',
-                    disabled: _selectedCharacters.isEmpty,
-                  ),
-                ),
-              ],
-            ),
-          ),
+                ],
+              ),
+            );
+          }),
           if (_showAnswerOverlay)
             Stack(
               children: [
@@ -404,31 +245,24 @@ class _PuzzleState extends State<Puzzle> {
                           width: double.infinity,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start, // 왼쪽 정렬
+                            crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
                             children: [
                               Container(
                                 padding: const EdgeInsets.all(5.0),
                                 decoration: BoxDecoration(
-                                  color: _isCorrectAnswer
-                                      ? Colors.blue
-                                      : Colors.red,
+                                  color: _isCorrectAnswer ? Colors.blue : Colors.red,
                                   borderRadius: BorderRadius.circular(20.0),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Icon(
-                                      _isCorrectAnswer
-                                          ? Icons.check
-                                          : Icons.close,
+                                      _isCorrectAnswer ? Icons.check : Icons.close,
                                       color: Colors.white,
                                     ),
                                     const SizedBox(width: 8.0),
                                     Text(
-                                      _isCorrectAnswer
-                                          ? 'Correct'
-                                          : 'Incorrect',
+                                      _isCorrectAnswer ? 'Correct' : 'Incorrect',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
@@ -460,8 +294,7 @@ class _PuzzleState extends State<Puzzle> {
                               GestureDetector(
                                 onTap: _onNextTap,
                                 child: FormButton(
-                                  text:
-                                      _isCorrectAnswer ? 'Continue' : 'Got it',
+                                  text: _isCorrectAnswer ? 'Continue' : 'Got it',
                                   disabled: false,
                                 ),
                               ),
@@ -475,6 +308,183 @@ class _PuzzleState extends State<Puzzle> {
               ],
             )
         ],
+      ),
+    );
+  }
+
+  Widget _buildQuestion({required double maxWidth}) {
+    final double questionKorFontSize = min(maxWidth * 0.075, 50);
+    final double questionEngFontSize = min(maxWidth * 0.038, 25);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          RichText(
+            text: TextSpan(
+              style: TextStyle(
+                  fontSize: questionKorFontSize,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF1A1A1A)),
+              children: [
+                TextSpan(
+                  text: widget.expressionList.isNotEmpty
+                      ? widget.expressionList[0]['korAnswer']
+                          .substring(0, widget.expressionList[0]['firstBlank'])
+                      : '',
+                ),
+                WidgetSpan(
+                  child: Container(
+                    color: const Color(0xFFF0F0F0),
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Text(
+                      widget.expressionList.isNotEmpty
+                          ? '?' *
+                              (widget.expressionList[0]['lastBlank'] -
+                                  widget.expressionList[0]['firstBlank'] +
+                                  1)
+                          : '',
+                      style: TextStyle(
+                        fontSize: questionKorFontSize,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFFBEBEBE),
+                      ),
+                    ),
+                  ),
+                ),
+                TextSpan(
+                  text: widget.expressionList.isNotEmpty
+                      ? widget.expressionList[0]['korAnswer']
+                          .substring(widget.expressionList[0]['lastBlank'] + 1)
+                      : '',
+                  style: TextStyle(
+                    fontSize: questionKorFontSize,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF1A1A1A),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text(
+            widget.expressionList.isNotEmpty ? widget.expressionList[0]['engAnswer'] : '',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: questionEngFontSize, color: const Color(0xFF808080)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPuzzleBoard({required double maxWidth}) {
+    final double width = maxWidth * 0.75;
+    final double puzzleFontSize = maxWidth * 0.055;
+
+    return Center(
+      child: SizedBox(
+        width: width,
+        child: GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 25,
+            childAspectRatio: 1.2,
+          ),
+          itemCount: circleCount,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  if (_selectedIndices.contains(index)) {
+                    _selectedIndices.remove(index);
+                    _selectedCharacters.remove(characters[index]);
+                    if (_startIndex == index) {
+                      _startIndex = null;
+                    }
+                    if (_endIndex == index) {
+                      _endIndex = null;
+                    }
+                  } else {
+                    _selectedIndices.add(index);
+                    _selectedCharacters.add(characters[index]);
+                    if (_startIndex == null) {
+                      _startIndex = index; // first click
+                    } else {
+                      _endIndex = index; // second click
+                    }
+                  }
+                });
+              },
+              child: Stack(
+                alignment: Alignment.topLeft,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: _selectedIndices.contains(index)
+                            ? const Color(0xFFF2BC40)
+                            : const Color(0xFFEAEAEA),
+                        width: _selectedIndices.contains(index) ? 2.0 : 1.0,
+                      ),
+                    ),
+                    child: Text(
+                      characters[index],
+                      style: TextStyle(
+                        color: const Color(0xFF444444),
+                        fontSize: puzzleFontSize,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  if (_startIndex == index)
+                    Positioned(
+                      left: 20,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Text(
+                          'start',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ),
+                    ),
+                  if (_endIndex == index)
+                    Positioned(
+                      left: 20,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Text(
+                          'end',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
