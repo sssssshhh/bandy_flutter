@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -32,8 +33,7 @@ class Lecture extends StatefulWidget {
   State<Lecture> createState() => _LectureState();
 }
 
-class _LectureState extends State<Lecture>
-    with SingleTickerProviderStateMixin, RouteAware {
+class _LectureState extends State<Lecture> with SingleTickerProviderStateMixin, RouteAware {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -49,11 +49,8 @@ class _LectureState extends State<Lecture>
   List<Map<String, dynamic>> videoList = [];
 
   Future<void> setLectures() async {
-    final lectures = await _db
-        .collection('lectures')
-        .doc(widget.category)
-        .collection(widget.level)
-        .get();
+    final lectures =
+        await _db.collection('lectures').doc(widget.category).collection(widget.level).get();
 
     setState(() {
       // order lecture list by id
@@ -120,22 +117,19 @@ class _LectureState extends State<Lecture>
 
   void _initializeVideo(String masterVideoPath) {
     _flickManager = FlickManager(
-      videoPlayerController:
-          VideoPlayerController.networkUrl(Uri.parse(masterVideoPath)),
+      videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(masterVideoPath)),
       autoPlay: false,
       onVideoEnd: () {
         _dataManager.skipToNextVideo(const Duration(seconds: 5));
       },
     );
 
-    _dataManager =
-        DataManager(flickManager: _flickManager, urls: [masterVideoPath]);
+    _dataManager = DataManager(flickManager: _flickManager, urls: [masterVideoPath]);
   }
 
-  Future<void> setLectureDetail(String masterVideoPath, String titleParameter,
-      int lessonNoParameter) async {
-    _flickManager.handleChangeVideo(
-        VideoPlayerController.networkUrl(Uri.parse(masterVideoPath)));
+  Future<void> setLectureDetail(
+      String masterVideoPath, String titleParameter, int lessonNoParameter) async {
+    _flickManager.handleChangeVideo(VideoPlayerController.networkUrl(Uri.parse(masterVideoPath)));
 
     setState(() {
       lessonNo = lessonNoParameter;
@@ -194,14 +188,11 @@ class _LectureState extends State<Lecture>
                       FlickVideoPlayer(
                         flickManager: _flickManager,
                         flickVideoWithControls: FlickVideoWithControls(
-                          controls: CustomOrientationControls(
-                              dataManager: _dataManager),
+                          controls: CustomOrientationControls(dataManager: _dataManager),
                         ),
-                        flickVideoWithControlsFullscreen:
-                            FlickVideoWithControls(
+                        flickVideoWithControlsFullscreen: FlickVideoWithControls(
                           videoFit: BoxFit.fitWidth,
-                          controls: CustomOrientationControls(
-                              dataManager: _dataManager),
+                          controls: CustomOrientationControls(dataManager: _dataManager),
                         ),
                       ),
                     ],
@@ -216,8 +207,7 @@ class _LectureState extends State<Lecture>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                           decoration: BoxDecoration(
                             color: Colors.amber[100],
                             borderRadius: BorderRadius.circular(5),
@@ -271,21 +261,18 @@ class _LectureState extends State<Lecture>
                           itemBuilder: (context, index) {
                             final lecture = videoList[index];
                             final lessonNo = index + 1;
-                            final isCompleted = widget.completedLectureList
-                                .contains(lessonNo.toString());
+                            final isCompleted =
+                                widget.completedLectureList.contains(lessonNo.toString());
                             return GestureDetector(
                               onTap: () => _loadVideoAtIndex(
-                                  lecture['masterVideoPath'],
-                                  lecture['title'],
-                                  lessonNo),
+                                  lecture['masterVideoPath'], lecture['title'], lessonNo),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: [
                                     Stack(children: [
                                       ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                        borderRadius: BorderRadius.circular(10.0),
                                         child: CachedNetworkImage(
                                           imageUrl: lecture['thumbnailPath'],
                                           fit: BoxFit.contain,

@@ -1,7 +1,7 @@
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/sign_up_or_sign_in.dart';
-import 'package:bandy_flutter/widgets/button.dart';
+import 'package:bandy_flutter/widgets/action_button.dart';
 import 'package:flutter/material.dart';
 
 class Onboarding extends StatefulWidget {
@@ -69,6 +69,10 @@ class _OnboardingState extends State<Onboarding> {
     bool isNextButton = false,
   }) {
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints viewportConstraints) {
+      final imageHeight = viewportConstraints.maxHeight * 0.6;
+      final titleFontSize = viewportConstraints.maxHeight * 0.022;
+      final subTitleFontSize = viewportConstraints.maxHeight * 0.016;
+
       return Padding(
         padding: const EdgeInsets.all(Sizes.size20),
         child: Stack(
@@ -77,7 +81,7 @@ class _OnboardingState extends State<Onboarding> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  height: viewportConstraints.minHeight * 0.6,
+                  height: imageHeight,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                     image: DecorationImage(
@@ -91,7 +95,7 @@ class _OnboardingState extends State<Onboarding> {
                   title,
                   style: TextStyle(
                     color: const Color(0xFF1A1A1A),
-                    fontSize: viewportConstraints.minHeight / 45,
+                    fontSize: titleFontSize,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -101,7 +105,7 @@ class _OnboardingState extends State<Onboarding> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: const Color(0xFF808080),
-                    fontSize: viewportConstraints.minHeight / 60,
+                    fontSize: subTitleFontSize,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
@@ -115,18 +119,9 @@ class _OnboardingState extends State<Onboarding> {
   }
 
   Widget _buildNextButton() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        GestureDetector(
-          onTap: () => _onSignInSignUpTap(context),
-          child: const Button(
-            text: 'Get Started',
-            bgColor: Color(0xFFF2BC40),
-            textColor: Colors.white,
-          ),
-        ),
-      ],
+    return ActionButton(
+      text: 'Get started',
+      onPressed: () => _onSignInSignUpTap(context),
     );
   }
 }

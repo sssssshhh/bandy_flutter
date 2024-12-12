@@ -1,6 +1,6 @@
 import 'package:bandy_flutter/constants/gaps.dart';
 import 'package:bandy_flutter/constants/sizes.dart';
-import 'package:bandy_flutter/pages/authentication/sign_in/select_sign_in.dart';
+import 'package:bandy_flutter/pages/authentication/sign_in/sign_in_email.dart';
 import 'package:bandy_flutter/pages/authentication/sign_up/select_sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,7 +20,7 @@ class _SignUpOrSignInState extends State<SignUpOrSignIn> {
   }
 
   void _onSelectSignInTap(BuildContext context) {
-    Navigator.pushNamed(context, SelectSignIn.routeName);
+    Navigator.pushNamed(context, SignInEmail.routeName);
   }
 
   @override
@@ -51,8 +51,7 @@ class _SignUpOrSignInState extends State<SignUpOrSignIn> {
             const Text(
               'Lighting Up Your Korean Learning Journey',
               textAlign: TextAlign.center,
-              style:
-                  TextStyle(fontSize: Sizes.size16, color: Color(0xFF808080)),
+              style: TextStyle(fontSize: Sizes.size16, color: Color(0xFF808080)),
             ),
             const SizedBox(height: 150),
             Column(
@@ -65,8 +64,7 @@ class _SignUpOrSignInState extends State<SignUpOrSignIn> {
                     minimumSize: const Size(double.infinity, 56),
                     shadowColor: Colors.transparent,
                   ),
-                  child: const Text('Sign up for free',
-                      style: TextStyle(fontSize: 16)),
+                  child: const Text('Sign up for free', style: TextStyle(fontSize: 16)),
                 ),
                 Gaps.v14,
                 ElevatedButton(
@@ -79,13 +77,10 @@ class _SignUpOrSignInState extends State<SignUpOrSignIn> {
                   ),
                   child: const Text.rich(
                     TextSpan(children: [
-                      TextSpan(
-                          text: 'Already signed up? ',
-                          style: TextStyle(fontSize: 16)),
+                      TextSpan(text: 'Already signed up? ', style: TextStyle(fontSize: 16)),
                       TextSpan(
                           text: 'Log in',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold)),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ]),
                   ),
                 ),
