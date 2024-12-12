@@ -2,13 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bandy_flutter/pages/authentication/widget/form_button.dart';
 import 'package:bandy_flutter/pages/lectures/pronunciation_assessment_results.dart';
+import 'package:bandy_flutter/widgets/action_button.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_sound_record/flutter_sound_record.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 
 class ListenSpeak extends StatefulWidget {
@@ -58,8 +59,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
   }
 
   Future<void> _playAudio() async {
-    await _audioPlayer
-        .play(UrlSource(widget.expressionList[0]['expressionAudioPath']));
+    await _audioPlayer.play(UrlSource(widget.expressionList[0]['expressionAudioPath']));
     setState(() {
       _isPlaying = true;
     });
@@ -105,8 +105,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
   Future<String> convertM4aToWav(String inputPath) async {
     String outputPath = inputPath.replaceAll(".m4a", ".wav");
-    await FFmpegKit.execute(
-            "-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
+    await FFmpegKit.execute("-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
         .then((session) async {});
 
     return outputPath;
@@ -221,7 +220,133 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
   @override
   Widget build(BuildContext context) {
-    var recordingArea = Column(
+    return Scaffold(
+      appBar: AppBar(), // TODO: go to lecture
+      body: LayoutBuilder(builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        final double listenContainerHeight = viewportConstraints.maxHeight * 0.425;
+        final double recordingButtonSpace = viewportConstraints.maxHeight * 0.057;
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 30,
+          ),
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  const Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Listen and repeat",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Color(0xFF1A1A1A),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: double.infinity,
+                    height: listenContainerHeight,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: const Color(0xFFEAEAEA)),
+                      borderRadius: BorderRadius.circular(20.0),
+                      boxShadow: const <BoxShadow>[
+                        BoxShadow(
+                          color: Color(0x14000000),
+                          blurRadius: 12,
+                          spreadRadius: 4,
+                          offset: Offset(0, 4),
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: _toggleAudio,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // 오디오가 재생 중일 때 타원형 표시
+                              if (_isPlaying)
+                                Positioned(
+                                  child: Container(
+                                    width: 70,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: Colors.yellow.withOpacity(0.6), // 레몬색
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                ),
+                              if (_isPlaying)
+                                Positioned(
+                                  child: Container(
+                                    width: 120,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                      color: Colors.yellow.withOpacity(0.3),
+                                      borderRadius: BorderRadius.circular(35),
+                                    ),
+                                  ),
+                                ),
+                              SvgPicture.asset(
+                                'assets/svg/speaker.svg',
+                                colorFilter: ColorFilter.mode(
+                                    _isPlaying ? const Color(0xFFF2BC40) : const Color(0xFFBEBEBE),
+                                    BlendMode.srcIn),
+                                width: 48,
+                                height: 48,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          widget.expressionList[0]['korAnswer'],
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            widget.expressionList[0]['engAnswer'],
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: recordingButtonSpace),
+                  if (_showRecording) _buildRecordingView(),
+                ],
+              ),
+              if (_isRecordingCompleted)
+                ActionButton(
+                  text: 'Check result',
+                  onPressed: () => _onNextTap(),
+                ),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget _buildRecordingView() {
+    return Column(
       children: [
         if (!_isRecordingCompleted)
           Container(
@@ -234,7 +359,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
                 ? const Text(
                     'Listening...',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -242,7 +367,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
                 : const Text(
                     'Press and speak',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -252,8 +377,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
         GestureDetector(
           onTap: _toggleRecording,
           child: Container(
-            width: 60,
-            height: 60,
+            width: 84,
+            height: 84,
             decoration: BoxDecoration(
               color: _isRecording ? Colors.orange : Colors.grey[400],
               shape: BoxShape.circle,
@@ -261,7 +386,7 @@ class _ListenSpeakState extends State<ListenSpeak> {
             child: const Icon(
               Icons.keyboard_voice_rounded,
               color: Colors.white,
-              size: 40,
+              size: 64,
             ),
           ),
         ),
@@ -269,126 +394,15 @@ class _ListenSpeakState extends State<ListenSpeak> {
         if (_isRecordingCompleted)
           (fileName == "")
               ? const Center(child: CircularProgressIndicator())
-              : Column(
-                  children: [
-                    const Text(
-                      'Recording complete',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: _onNextTap,
-                      child: const FormButton(
-                        text: 'Check',
-                        disabled: false,
-                      ),
-                    ),
-                  ],
+              : const Text(
+                  'Recording complete',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
       ],
-    );
-    return Scaffold(
-      appBar: AppBar(), // TODO: go to lecture
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 30.0,
-          horizontal: 40.0,
-        ),
-        child: Column(
-          children: [
-            const Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "Listen and repeat",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              width: double.infinity,
-              height: 400,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: _toggleAudio,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        // 오디오가 재생 중일 때 타원형 표시
-                        if (_isPlaying)
-                          Positioned(
-                            child: Container(
-                              width: 70,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: Colors.yellow.withOpacity(0.6), // 레몬색
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          ),
-                        if (_isPlaying)
-                          Positioned(
-                            child: Container(
-                              width: 120,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                color: Colors.yellow.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(35),
-                              ),
-                            ),
-                          ),
-                        Icon(
-                          Icons.headphones,
-                          color: _isPlaying
-                              ? Colors.orange
-                              : Colors.grey, // 재생 중일 때 오렌지색
-                          size: 48,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    widget.expressionList[0]['korAnswer'],
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      widget.expressionList[0]['engAnswer'],
-                      style: const TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            if (_showRecording) recordingArea,
-          ],
-        ),
-      ),
     );
   }
 }
