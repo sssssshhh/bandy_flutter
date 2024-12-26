@@ -39,7 +39,8 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
         if (result.hasError) {
           showFirebaseErrorSnack(context, result.error);
         } else {
-          Navigator.pushNamedAndRemoveUntil(context, MainNavigation.routeName, (route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, MainNavigation.routeName, (route) => false);
 
           // 자동 로그인 설정
         }
@@ -70,7 +71,9 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
                 children: [
                   const Text('Sign In',
                       style: TextStyle(
-                          fontSize: 32, color: Color(0xFF1A1A1A), fontWeight: FontWeight.bold)),
+                          fontSize: 32,
+                          color: Color(0xFF1A1A1A),
+                          fontWeight: FontWeight.bold)),
                   Gaps.v16,
                   const Text('Lighting Up Your Korean Learning Journey',
                       style: TextStyle(fontSize: 21, color: Color(0xFF808080))),
@@ -81,10 +84,12 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
                         Gaps.v80,
                         TextFormField(
                           autofocus: true,
-                          onFieldSubmitted: (value) => _passwordFocusNode.requestFocus(),
+                          onFieldSubmitted: (value) =>
+                              _passwordFocusNode.requestFocus(),
                           decoration: const InputDecoration(
                             hintText: 'Email address',
-                            hintStyle: TextStyle(fontSize: 16, color: Color(0xFFBEBEBE)),
+                            hintStyle: TextStyle(
+                                fontSize: 16, color: Color(0xFFBEBEBE)),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFFEAEAEA)),
                             ),
@@ -94,7 +99,7 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
                           ),
                           validator: (value) {
                             if (value != null && value.isEmpty) {
-                              return "Plase write your email";
+                              return "Please write your email";
                             }
                             return null;
                           },
@@ -110,7 +115,8 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
                           focusNode: _passwordFocusNode,
                           decoration: const InputDecoration(
                             hintText: 'Password',
-                            hintStyle: TextStyle(fontSize: 16, color: Color(0xFFBEBEBE)),
+                            hintStyle: TextStyle(
+                                fontSize: 16, color: Color(0xFFBEBEBE)),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFFEAEAEA)),
                             ),
@@ -139,7 +145,8 @@ class _SignInEmailState extends ConsumerState<SignInEmail> {
                               Text.rich(TextSpan(children: [
                                 TextSpan(
                                   text: 'Forgot your password? ',
-                                  style: TextStyle(fontSize: 14, color: Color(0xFF808080)),
+                                  style: TextStyle(
+                                      fontSize: 14, color: Color(0xFF808080)),
                                 ),
                                 TextSpan(
                                   text: 'Retrieve it here',
