@@ -59,7 +59,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
   }
 
   Future<void> _playAudio() async {
-    await _audioPlayer.play(UrlSource(widget.expressionList[0]['expressionAudioPath']));
+    await _audioPlayer
+        .play(UrlSource(widget.expressionList[0]['expressionAudioPath']));
     setState(() {
       _isPlaying = true;
     });
@@ -105,7 +106,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
 
   Future<String> convertM4aToWav(String inputPath) async {
     String outputPath = inputPath.replaceAll(".m4a", ".wav");
-    await FFmpegKit.execute("-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
+    await FFmpegKit.execute(
+            "-i $inputPath -acodec pcm_s16le -ar 44100 $outputPath")
         .then((session) async {});
 
     return outputPath;
@@ -221,10 +223,13 @@ class _ListenSpeakState extends State<ListenSpeak> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(), // TODO: go to lecture
-      body: LayoutBuilder(builder: (BuildContext context, BoxConstraints viewportConstraints) {
-        final double listenContainerHeight = viewportConstraints.maxHeight * 0.425;
-        final double recordingButtonSpace = viewportConstraints.maxHeight * 0.057;
+      appBar: AppBar(),
+      body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        final double listenContainerHeight =
+            viewportConstraints.maxHeight * 0.425;
+        final double recordingButtonSpace =
+            viewportConstraints.maxHeight * 0.057;
 
         return Padding(
           padding: const EdgeInsets.symmetric(
@@ -279,7 +284,8 @@ class _ListenSpeakState extends State<ListenSpeak> {
                                     width: 70,
                                     height: 60,
                                     decoration: BoxDecoration(
-                                      color: Colors.yellow.withOpacity(0.6), // 레몬색
+                                      color:
+                                          Colors.yellow.withOpacity(0.6), // 레몬색
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                   ),
@@ -298,7 +304,9 @@ class _ListenSpeakState extends State<ListenSpeak> {
                               SvgPicture.asset(
                                 'assets/svg/speaker.svg',
                                 colorFilter: ColorFilter.mode(
-                                    _isPlaying ? const Color(0xFFF2BC40) : const Color(0xFFBEBEBE),
+                                    _isPlaying
+                                        ? const Color(0xFFF2BC40)
+                                        : const Color(0xFFBEBEBE),
                                     BlendMode.srcIn),
                                 width: 48,
                                 height: 48,
